@@ -1,4 +1,4 @@
-import geojson from './geojson'
+import * as geojson from './geojson'
 import wms from './wms'
 
 export default {

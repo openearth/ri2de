@@ -1,7 +1,5 @@
 import geojsonExtent from '@mapbox/geojson-extent'
 
-import layerFactory from '../../../lib/_mapbox/layer-factory'
-
 export const state = () => ({
   eventHandlers: {},
   features: [],
@@ -47,7 +45,7 @@ export const actions = {
     const map = rootGetters['mapbox/map']
 
     if(!map.getLayer(feature.id)) {
-      map.addLayer(layerFactory.parcel({ feature }))
+      map.addLayer(feature)
       commit('add', feature)
     }
   },

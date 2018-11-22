@@ -42,7 +42,7 @@ export default {
 }
 
 .side-panel {
-  width: 25%;
+  width: 35%;
 }
 
 .map-container {

@@ -1,6 +1,8 @@
 import mapboxgl from './_mapbox'
 import { MAP_CENTER, MAP_ZOOM, MAP_BASELAYER_DEFAULT } from './map-config'
 
+import addDefaultControlsToMap from './default-controls'
+
 export default function(container) {
   let mapLayers = []
 
@@ -28,6 +30,8 @@ export default function(container) {
     mapLayers = mapLayers.filter((layer) => layer.id !== id)
     _removeLayer(id)
   }
+
+  map.on('load', () => addDefaultControlsToMap(map))
 
   map.on('style.load', () => {
     mapLayers.forEach(layer => {
