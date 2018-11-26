@@ -55,4 +55,3 @@ export default {
   padding-top: var(--spacing-default);
 }
 </style>
-
