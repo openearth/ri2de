@@ -14,6 +14,7 @@
 <style>
   .side-panel {
     height: 100%;
+    width: var(--side-panel-width);
     overflow: auto;
     background-color: #E5EEF2;
     padding: 1rem 1rem 50px 1rem;
