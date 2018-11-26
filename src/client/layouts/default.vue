@@ -25,9 +25,6 @@ export default {
     MapboxMap,
     SidePanel
   },
-  computed: {
-
-  },
   methods: {
     initializeMap(map) {
       this.$store.dispatch('mapbox/initMap', map)
@@ -48,7 +45,6 @@ export default {
   }
 }
 </script>
-
 
 <style>
 @import '../components/app-core/index.css';
