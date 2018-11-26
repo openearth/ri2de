@@ -24,6 +24,12 @@ export default {
   methods: {
     initializeMap(map) {
       this.$store.dispatch('mapbox/initMap', map)
+      map.on('load', () => {
+        this.$store.dispatch('mapbox/addEventHandler', {
+          event: 'fitbounds',
+          handler: (event) => this.$store.dispatch('mapbox/features/fitToFeatures')
+        })
+      })
     }
   }
 }

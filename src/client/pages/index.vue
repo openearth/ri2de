@@ -2,9 +2,12 @@
   <portal to="side-panel">
     <div>
       <span>Selection panesz</span>
-      <button @click="editSelectedFeatures">
-        {{ editingSelectedFeatures? 'Stop the cut' : 'Cut road' }}
-      </button>
+      <infrastructure-list
+        :infrastructure="features"
+        @delete="deleteInfrastructure"
+        @mouseover="enterInfrastructureItem"
+        @mouseout="leaveInfrastructureItem"
+      />
     </div>
   </portal>
 </template>
@@ -19,37 +22,31 @@ import getFeatureInfo from '../lib/get-feature-info'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 
+import { InfrastructureList } from '../components'
+
 export default {
+  components: { InfrastructureList },
   mixins: [ initMapState ],
-  data() {
-    return {
-      editingSelectedFeatures: false,
-      featureSlice: {},
-    }
-  },
   computed: {
     ...mapState('mapbox/features', [ 'features' ]),
-    selectedFeature() {
-      return this.features[0]
-    }
   },
   methods: {
-    editSelectedFeatures() {
-      this.$store.dispatch('mapbox/removeEventHandler', { event: 'click' })
-      if(this.editingSelectedFeatures) {
-        this.$store.dispatch('mapbox/addEventHandler', {
-          event: 'click',
-          handler: (event) => this.mapClickHandler(event)
-        })
-        this.editingSelectedFeatures = false
-        this.featureSlice = {}
-      } else {
-        this.$store.dispatch('mapbox/addEventHandler', {
-          event: 'click',
-           handler: (event) => this.sliceFeature(event)
-        })
-        this.editingSelectedFeatures = true
-      }
+    deleteInfrastructure(id) {
+      this.$store.dispatch('mapbox/features/remove', id)
+    },
+    enterInfrastructureItem(id) {
+      this.$store.dispatch('mapbox/features/setStyle', {
+        id,
+        styleOption: 'line-color',
+        value: '#ff0000',
+      })
+    },
+    leaveInfrastructureItem(id) {
+      this.$store.dispatch('mapbox/features/setStyle', {
+        id,
+        styleOption: 'line-color',
+        value: '#898989',
+      })
     },
     initMapState() {
       const NAMESPACE = 'road'
@@ -75,14 +72,24 @@ export default {
         event: 'click',
         handler: (event) => this.mapClickHandler(event)
       })
-
+      this.features
+        .map(feature => feature.source.data)
+        .forEach(feature => {
+          this.$store.dispatch('mapbox/features/add', layers.geojson.line({
+            id: feature.properties.roadid,
+            data: feature,
+            paint: {
+              'line-width': 10,
+              'line-color': "#898989",
+              'line-opacity': 0.6,
+            },
+          }))
+        })
     },
     mapClickHandler({ point, target, ...rest }) {
       const canvas = target.getCanvas()
       const { _ne, _sw } = target.getBounds()
       const { x, y } = point
-
-      console.log('rest', rest)
 
       getFeatureInfo({
         layer: 'road:global_roads',
@@ -105,39 +112,13 @@ export default {
               data: feature,
               paint: {
                 'line-width': 10,
-                'line-color': "#ff0000",
-                'line-opacity': 0.7,
+                'line-color': "#898989",
+                'line-opacity': 0.6,
               },
             }))
           }
         })
     },
-    sliceFeature({ lngLat }) {
-      if(!this.featureSlice.start) {
-        this.featureSlice.start = [ lngLat.lng, lngLat.lat ]
-        return
-      } else if(!this.featureSlice.end) {
-        this.featureSlice.end = [ lngLat.lng, lngLat.lat ]
-      }
-
-      if(this.featureSlice.start && this.featureSlice.end) {
-        const slicedFeature = lineSlice(
-          this.featureSlice.start,
-          this.featureSlice.end,
-          flattenFeature(this.selectedFeature.source.data).features[0]
-        )
-
-        this.$store.dispatch('mapbox/features/add', layers.geojson.line({
-          id: `${slicedFeature.properties.roadid}-slice`,
-          data: slicedFeature,
-          paint: {
-            'line-width': 10,
-            'line-color': "#ff00ff",
-            'line-opacity': 0.7,
-          },
-        }))
-      }
-    }
   }
 }
 </script>

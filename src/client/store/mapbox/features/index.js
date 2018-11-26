@@ -65,7 +65,7 @@ export const actions = {
 
     const bounds = geojsonExtent({
       type: 'FeatureCollection',
-      features
+      features: features.map(feature => feature.source.data)
     })
 
     map.fitBounds(bounds, { padding: 20 })
