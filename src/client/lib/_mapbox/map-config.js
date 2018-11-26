@@ -9,7 +9,7 @@ export const MAP_CENTER = [
 export const MAP_ZOOM = 7
 
 export const MAP_BASELAYERS = [
-  'streets',
+  'light',
   'satellite',
 ].map(layer => ({
   style: `mapbox://styles/mapbox/${layer}-v9`,

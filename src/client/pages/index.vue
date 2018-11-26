@@ -76,7 +76,7 @@ export default {
         .map(feature => feature.source.data)
         .forEach(feature => {
           this.$store.dispatch('mapbox/features/add', layers.geojson.line({
-            id: feature.properties.roadid,
+            id: feature.properties.osm_id,
             data: feature,
             paint: {
               'line-width': 10,
@@ -108,7 +108,7 @@ export default {
             this.$store.dispatch('mapbox/features/remove', `${feature.properties.roadid}-slice`)
           } else {
             this.$store.dispatch('mapbox/features/add', layers.geojson.line({
-              id: feature.properties.roadid,
+              id: feature.properties.osm_id,
               data: feature,
               paint: {
                 'line-width': 10,

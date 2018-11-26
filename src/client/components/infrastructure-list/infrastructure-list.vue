@@ -8,9 +8,8 @@
       @mouseout="$emit('mouseout', infra.id)"
     >
       <span class="infrastructure-list__item-description">
-        {{ infra.source.data.properties.roadid }}
+        {{ infra.source.data.properties.name }}
         -
-        {{ infra.source.data.properties.length_km }}
       </span>
       <button @click="$emit('delete', infra.id)" >delete</button>
     </li>
