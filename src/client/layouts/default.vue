@@ -51,12 +51,12 @@ export default {
 }
 
 .side-panel {
-  width: 35%;
+  flex-grow: 1;
   height: calc(100% - 64px);
 }
 
 .map-container {
-  width: 65%;
+  flex-grow: 3;
   height: calc(100% - 64px);
 }
 </style>

@@ -3,7 +3,7 @@
     class="app-header"
     role="banner"
   >
-    <md-toolbar class="md-primary">
+    <md-toolbar class="md-primary app-header__md">
       <nuxt-link to="/">
         <h1 class="md-title">RI2DE</h1>
       </nuxt-link>
@@ -23,7 +23,8 @@ export default {
 </script>
 
 <style>
-  .app-header {
+  .app-header,
+  .app-header__md {
     height: 64px;
     flex-basis: 100%;
   }

@@ -24,6 +24,9 @@ import layers from '../lib/_mapbox/layers'
 
 import { InfrastructureList } from '../components'
 
+const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
+const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
+
 export default {
   components: { InfrastructureList },
   mixins: [ initMapState ],
@@ -38,14 +41,14 @@ export default {
       this.$store.dispatch('mapbox/features/setStyle', {
         id,
         styleOption: 'line-color',
-        value: '#ff0000',
+        value: INFRASTRUCTURE_HIGHLIGHT_COLOR,
       })
     },
     leaveInfrastructureItem(id) {
       this.$store.dispatch('mapbox/features/setStyle', {
         id,
         styleOption: 'line-color',
-        value: '#898989',
+        value: INFRASTRUCTURE_DEFAULT_COLOR,
       })
     },
     initMapState() {
@@ -80,7 +83,7 @@ export default {
             data: feature,
             paint: {
               'line-width': 10,
-              'line-color': "#898989",
+              'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
               'line-opacity': 0.6,
             },
           }))
@@ -111,7 +114,7 @@ export default {
               data: feature,
               paint: {
                 'line-width': 10,
-                'line-color': "#898989",
+                'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
                 'line-opacity': 0.6,
               },
             }))
