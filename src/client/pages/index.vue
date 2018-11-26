@@ -103,9 +103,8 @@ export default {
         .then(feature => {
           if(!feature) {
             console.log('No Feature')
-          } else if(target.getLayer(feature.properties.roadid)) {
-            this.$store.dispatch('mapbox/features/remove', feature.properties.roadid)
-            this.$store.dispatch('mapbox/features/remove', `${feature.properties.roadid}-slice`)
+          } else if(target.getLayer(feature.properties.osm_id)) {
+            this.$store.dispatch('mapbox/features/remove', feature.properties.osm_id)
           } else {
             this.$store.dispatch('mapbox/features/add', layers.geojson.line({
               id: feature.properties.osm_id,
