@@ -75,6 +75,19 @@ export default {
         event: 'click',
         handler: (event) => this.mapClickHandler(event)
       })
+      this.$store.dispatch('mapbox/addEventHandler', {
+        event: 'draw.create',
+        handler: (event) => this.updateDraw(event)
+      })
+      this.$store.dispatch('mapbox/addEventHandler', {
+        event: 'draw.delete',
+        handler: (event) => this.updateDraw(event)
+      })
+      this.$store.dispatch('mapbox/addEventHandler', {
+        event: 'draw.update',
+        handler: (event) => this.updateDraw(event)
+      })
+
       this.features
         .map(feature => feature.source.data)
         .forEach(feature => {
@@ -121,6 +134,9 @@ export default {
           }
         })
     },
+    updateDraw(e) {
+      console.log('Draw event', e)
+    }
   }
 }
 </script>
