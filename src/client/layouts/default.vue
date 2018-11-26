@@ -1,5 +1,6 @@
 <template>
   <main class="page-main">
+    <app-header />
     <side-panel>
       <portal-target
         name="side-panel"
@@ -14,10 +15,11 @@
 </template>
 
 <script>
-import { MapboxMap, SidePanel } from '../components'
+import { AppHeader, MapboxMap, SidePanel } from '../components'
 
 export default {
   components: {
+    AppHeader,
     MapboxMap,
     SidePanel
   },
@@ -45,13 +47,16 @@ export default {
   overflow: hidden;
   position: relative;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .side-panel {
   width: 35%;
+  height: calc(100% - 64px);
 }
 
 .map-container {
-  width: 75%;
+  width: 65%;
+  height: calc(100% - 64px);
 }
 </style>
