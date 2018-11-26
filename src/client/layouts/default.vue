@@ -51,7 +51,6 @@ export default {
 }
 
 .side-panel {
-  flex-grow: 1;
   height: calc(100% - 64px);
 }
 
