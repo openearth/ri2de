@@ -80,7 +80,7 @@ export const actions = {
   setStyle({ rootGetters }, { id, styleOption ,value }) {
     const map = rootGetters['mapbox/map']
 
-    if(map.getLayer(id)) {
+    if(map && map.getLayer(id)) {
       map.setPaintProperty(id, styleOption, value)
     }
   },
