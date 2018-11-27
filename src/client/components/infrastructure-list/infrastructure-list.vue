@@ -11,7 +11,7 @@
       @mouseover="$emit('mouseover', infra.id)"
       @mouseout="$emit('mouseout', infra.id)"
     >
-      <span class="infrastructure-list__item-description">
+      <span class="infrastructure-list__item-description md-body-2">
         {{ infra.source.data.properties.name || 'Unnamed road' }}
       </span>
       <md-button
