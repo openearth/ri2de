@@ -14,7 +14,7 @@
       <slot name="content" />
     </md-card-content>
 
-    <md-card-actions>
+    <md-card-actions v-if="isActive">
       <slot name="actions" />
     </md-card-actions>
   </md-card>

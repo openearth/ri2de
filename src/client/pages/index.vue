@@ -32,9 +32,9 @@
         :is-active="true"
         :title="'Hazard'"
       >
-        <hazard-list
+        <hazards-list
           slot="content"
-          :list="hazardList"
+          :hazards="hazardsList"
           @select="onSelect"
         />
         <md-button
@@ -59,17 +59,17 @@ import getFeatureInfo from '../lib/get-feature-info'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 
-import { InfrastructureList, ContentCard, HazardList } from '../components'
+import { InfrastructureList, ContentCard, HazardsList } from '../components'
 
 const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
 const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 
 export default {
-  components: { InfrastructureList, ContentCard, HazardList },
+  components: { InfrastructureList, ContentCard, HazardsList },
   mixins: [ initMapState ],
   data() {
     return {
-      hazardList: ['Erosion of culvert', 'Landslides', 'Earthquakes', 'Wind'],
+      hazardsList: [{ title: 'Erosion of culvert' }, { title: 'Landslides' }, { title: 'Earthquakes' }, { title: 'Wind' }],
     }
   },
   computed: {
