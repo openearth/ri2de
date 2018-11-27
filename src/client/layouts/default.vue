@@ -1,6 +1,6 @@
 <template>
   <main class="page-main">
-    <app-header />
+    <app-header @restart="restartApp" />
     <side-panel>
       <portal-target
         name="side-panel"
@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import { AppHeader, MapboxMap, SidePanel } from '../components'
 
 export default {
@@ -32,11 +34,17 @@ export default {
           handler: (event) => this.$store.dispatch('mapbox/features/fitToFeatures')
         })
       })
+    },
+    restartApp() {
+      this.$store.dispatch('mapbox/features/resetFeatures')
+      this.$store.dispatch('mapbox/addOnceEventHandler', {
+        event: 'resize',
+        handler: () => this.$store.dispatch('mapbox/moveMapToCenter')
+      })
     }
   }
 }
 </script>
-
 
 <style>
 @import '../components/app-core/index.css';
@@ -51,7 +59,6 @@ export default {
 }
 
 .side-panel {
-  flex-grow: 1;
   height: calc(100% - 64px);
 }
 

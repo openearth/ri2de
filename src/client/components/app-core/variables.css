@@ -1,0 +1,11 @@
+:root {
+  --side-panel-width: 370px;
+  --card-width: 320px;
+  --border-radius--small: 5px;
+
+  /* colors */
+  --neutral-color: #ddd;
+
+  /* spacing */
+  --spacing-default: 1rem;
+}
