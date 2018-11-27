@@ -21,7 +21,7 @@
   }
 
   .side-panel__bottom {
-    background-color: yellow;
+    background-color: #bbb;
     height: 50px;
     width: 100%;
     position: absolute;

@@ -22,8 +22,25 @@
 
         <md-button
           slot="actions"
-          class="md-raised md-primary bnt-save"
+          class="md-raised md-primary"
           @click="saveInfrastructure"
+        >
+          Save
+        </md-button>
+      </content-card>
+      <content-card
+        :is-active="true"
+        :title="'Hazard'"
+      >
+        <hazards-list
+          slot="content"
+          :hazards="hazardsList"
+          @select="onSelect"
+        />
+        <md-button
+          slot="actions"
+          class="md-raised md-primary bnt-save"
+          @click="saveHazard"
         >
           Save
         </md-button>
@@ -43,14 +60,19 @@ import { globalRoads } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 
-import { InfrastructureList, ContentCard } from '../components'
+import { InfrastructureList, ContentCard, HazardsList } from '../components'
 
 const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
 const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 
 export default {
-  components: { InfrastructureList, ContentCard },
+  components: { InfrastructureList, ContentCard, HazardsList },
   mixins: [ initMapState ],
+  data() {
+    return {
+      hazardsList: [{ title: 'Erosion of culvert' }, { title: 'Landslides' }, { title: 'Earthquakes' }, { title: 'Wind' }],
+    }
+  },
   computed: {
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
@@ -80,6 +102,12 @@ export default {
     },
     saveInfrastructure() {
       console.log('save')
+    },
+    saveHazard() {
+      console.log('save')
+    },
+    onSelect(index) {
+      console.log('selected', index)
     },
     initMapState() {
       this.$store.dispatch('mapbox/wms/add', globalRoads())
@@ -204,5 +232,7 @@ export default {
 </script>
 
 <style>
-
+.content-card {
+  margin-bottom: var(--spacing-default);
+}
 </style>
