@@ -1,5 +1,9 @@
 <template>
-  <ul class="infrastructure-list">
+  <transition-group
+    name="infra-list"
+    class="infrastructure-list"
+    tag="ul"
+  >
     <li
       v-for="infra in infrastructure"
       :key="infra.id"
@@ -7,13 +11,17 @@
       @mouseover="$emit('mouseover', infra.id)"
       @mouseout="$emit('mouseout', infra.id)"
     >
-      <span class="infrastructure-list__item-description">
-        {{ infra.source.data.properties.name }}
-        -
+      <span class="infrastructure-list__item-description md-body-2">
+        {{ infra.source.data.properties.name || 'Unnamed road' }}
       </span>
-      <button @click="$emit('delete', infra.id)" >delete</button>
+      <md-button
+        class="md-icon-button"
+        @click="$emit('delete', infra.id)"
+      >
+        <md-icon>delete</md-icon>
+      </md-button>
     </li>
-  </ul>
+  </transition-group>
 </template>
 
 <script>
@@ -30,17 +38,25 @@ export default {
 <style>
   .infrastructure-list {
     list-style: none;
-    margin: 1rem 0;
     padding: 0;
   }
 
   .infrastructure-list__item {
     display: flex;
-    margin-bottom: .5rem;
-    padding: .5rem;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .2rem;
   }
 
   .infrastructure-list__item-description {
     flex-grow: 2;
+  }
+
+  .infra-list-enter, .infra-list-leave-to {
+    opacity: 0;
+  }
+
+  .infra-list-enter-active, .infra-list-leave-active {
+    transition: opacity .5s;
   }
 </style>
