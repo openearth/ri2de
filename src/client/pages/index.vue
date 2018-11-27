@@ -99,8 +99,8 @@ export default {
     saveHazard() {
       console.log('save')
     },
-    onSelect(value) {
-      console.log('selected', value)
+    onSelect(index) {
+      console.log('selected', index)
     },
     initMapState() {
       const NAMESPACE = 'road'

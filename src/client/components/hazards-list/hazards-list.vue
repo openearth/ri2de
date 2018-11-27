@@ -2,7 +2,7 @@
   <ul class="hazards-list">
     <li
       v-for="(hazard, index) in hazards"
-      :key="index"
+      :key="hazard.title"
       class="hazards-list__list-item md-body"
     >
       <md-radio
