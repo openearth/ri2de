@@ -24,6 +24,7 @@
         <md-button
           slot="actions"
           class="md-raised md-primary bnt-save"
+          @click="saveInfrastructure"
         >
           Save
         </md-button>
@@ -70,6 +71,9 @@ export default {
         styleOption: 'line-color',
         value: INFRASTRUCTURE_DEFAULT_COLOR,
       })
+    },
+    saveInfrastructure() {
+      console.log('save')
     },
     initMapState() {
       const NAMESPACE = 'road'
