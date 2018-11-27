@@ -34,6 +34,9 @@ export const mutations = {
       }
     }
   },
+  resetFeatures(state) {
+    state.features = []
+  }
 }
 
 export const actions = {
@@ -73,9 +76,10 @@ export const actions = {
       if(map.getLayer(id)) {
         map.removeLayer(id)
         map.removeSource(id)
-        commit('remove', id)
       }
     })
+
+    commit('resetFeatures')
   },
   setStyle({ rootGetters }, { id, styleOption ,value }) {
     const map = rootGetters['mapbox/map']

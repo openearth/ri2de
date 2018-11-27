@@ -37,6 +37,7 @@ export default {
     },
     restartApp() {
       this.$store.dispatch('mapbox/features/resetFeatures')
+      this.$store.dispatch('mapbox/selections/reset')
       this.$store.dispatch('mapbox/addOnceEventHandler', {
         event: 'resize',
         handler: () => this.$store.dispatch('mapbox/moveMapToCenter')

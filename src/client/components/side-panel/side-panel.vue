@@ -1,9 +1,5 @@
 <template>
   <div class="side-panel">
-    <div>
-      <h3>Deltares</h3>
-      <h2>RI2DE</h2>
-    </div>
     <slot />
     <div class="side-panel__bottom">
       <slot name="panel-bottom" />

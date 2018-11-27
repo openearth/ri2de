@@ -5,7 +5,6 @@ const FORMAT = 'image/png'
 const VERSION = '1.1.1'
 const WIDTH = 256
 const HEIGHT = 256
-const SRS = 'EPSG:3857'
 const TRANSPARENT = true
 
 export default function({
@@ -18,7 +17,6 @@ export default function({
   width=WIDTH,
   height=HEIGHT,
   transparent=TRANSPARENT,
-  srs=SRS,
   bbox=BBOX,
   ...rest
 }) {
@@ -34,7 +32,6 @@ export default function({
     width,
     height,
     transparent,
-    srs,
     bbox,
     ...rest,
   }, { encode, sort: false })
