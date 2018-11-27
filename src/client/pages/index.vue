@@ -3,7 +3,7 @@
     <div>
       <span>Selection panesz</span>
       <content-card
-        :is-active="true"
+        :is-active="false"
         :title="'Infrastructure'"
       >
         <infrastructure-list
@@ -29,6 +29,7 @@
           Save
         </md-button>
       </content-card>
+      <susceptibility-list />
     </div>
   </portal>
 </template>
@@ -43,13 +44,13 @@ import getFeatureInfo from '../lib/get-feature-info'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 
-import { InfrastructureList, ContentCard } from '../components'
+import { InfrastructureList, ContentCard, SusceptibilityList } from '../components'
 
 const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
 const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 
 export default {
-  components: { InfrastructureList, ContentCard },
+  components: { InfrastructureList, ContentCard, SusceptibilityList },
   mixins: [ initMapState ],
   computed: {
     ...mapState('mapbox/features', [ 'features' ]),
