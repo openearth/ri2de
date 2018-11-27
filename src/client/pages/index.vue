@@ -2,12 +2,32 @@
   <portal to="side-panel">
     <div>
       <span>Selection panesz</span>
-      <infrastructure-list
-        :infrastructure="features"
-        @delete="deleteInfrastructure"
-        @mouseover="enterInfrastructureItem"
-        @mouseout="leaveInfrastructureItem"
-      />
+      <content-card
+        :is-active="true"
+        :title="'Infrastructure'"
+      >
+        <infrastructure-list
+          v-if="!!features.length"
+          slot="content"
+          :infrastructure="features"
+          @delete="deleteInfrastructure"
+          @mouseover="enterInfrastructureItem"
+          @mouseout="leaveInfrastructureItem"
+        />
+        <p
+          v-else
+          slot="content"
+        >
+          Select the infrastructure you want to conduct calculations on
+        </p>
+
+        <md-button
+          slot="actions"
+          class="md-raised md-primary bnt-save"
+        >
+          Save
+        </md-button>
+      </content-card>
     </div>
   </portal>
 </template>
@@ -22,13 +42,13 @@ import getFeatureInfo from '../lib/get-feature-info'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 
-import { InfrastructureList } from '../components'
+import { InfrastructureList, ContentCard } from '../components'
 
 const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
 const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 
 export default {
-  components: { InfrastructureList },
+  components: { InfrastructureList, ContentCard },
   mixins: [ initMapState ],
   computed: {
     ...mapState('mapbox/features', [ 'features' ]),
