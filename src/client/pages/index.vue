@@ -2,7 +2,7 @@
   <portal to="side-panel">
     <div>
       <content-card
-        :is-active="false"
+        :is-active="true"
         :title="'Infrastructure'"
       >
         <infrastructure-list
@@ -12,6 +12,7 @@
           @delete="deleteInfrastructure"
           @mouseover="enterInfrastructureItem"
           @mouseout="leaveInfrastructureItem"
+          @updateSelectionTitle="onUpdateSelectionTitle"
         />
         <p
           v-else
@@ -56,7 +57,7 @@
 <script>
 import combineFeatures from '@turf/combine'
 import geojsonExtent from '@mapbox/geojson-extent'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 import geoserverUrl from '../lib/geoserver-url'
 import getFeature from '../lib/get-feature'
@@ -84,6 +85,9 @@ export default {
     ...mapState('mapbox/selections', [ 'selections' ]),
   },
   methods: {
+    ...mapMutations({
+      onUpdateSelectionTitle: 'mapbox/selections/updateTitle',
+    }),
     deleteInfrastructure(index) {
       const selection = this.selections[index]
 
