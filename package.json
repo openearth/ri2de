@@ -35,6 +35,7 @@
     "@nuxtjs/axios": "^5.0.0",
     "@turf/bbox": "^6.0.1",
     "@turf/combine": "^6.0.1",
+    "@turf/explode": "^5.1.5",
     "@turf/helpers": "^6.1.4",
     "@turf/nearest-point-on-line": "^6.0.2",
     "@turf/points-within-polygon": "^5.1.5",

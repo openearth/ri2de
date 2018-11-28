@@ -59,10 +59,6 @@ export const actions = {
     if(!features.length) {
       return
     }
-
-    // const bounds = bbox(combineFeatures(features.map(feature => feature.source.data.features)))
-    // debugger
-    // map.fitBounds(bounds, { padding: 20 })
   },
   resetFeatures({ commit, state, rootGetters }) {
     const map = rootGetters['mapbox/map']
