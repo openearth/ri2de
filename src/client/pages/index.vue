@@ -6,9 +6,9 @@
         :title="'Infrastructure'"
       >
         <infrastructure-list
-          v-if="!!features.length"
+          v-if="features.length"
           slot="content"
-          :infrastructure="features"
+          :infrastructure="selections"
           @delete="deleteInfrastructure"
           @mouseover="enterInfrastructureItem"
           @mouseout="leaveInfrastructureItem"
@@ -54,12 +54,14 @@
 </template>
 
 <script>
-import flattenFeature from '@turf/flatten'
-import lineSlice from '@turf/line-slice'
+import combineFeatures from '@turf/combine'
+import geojsonExtent from '@mapbox/geojson-extent'
 import { mapState } from 'vuex'
 
 import geoserverUrl from '../lib/geoserver-url'
+import getFeature from '../lib/get-feature'
 import getFeatureInfo from '../lib/get-feature-info'
+import { globalRoads } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 
@@ -79,21 +81,31 @@ export default {
   },
   computed: {
     ...mapState('mapbox/features', [ 'features' ]),
+    ...mapState('mapbox/selections', [ 'selections' ]),
   },
   methods: {
-    deleteInfrastructure(id) {
-      this.$store.dispatch('mapbox/features/remove', id)
+    deleteInfrastructure(index) {
+      const selection = this.selections[index]
+
+      this.$store.dispatch('mapbox/selections/delete', selection.id)
+      selection.features.forEach(featureId => {
+        this.$store.dispatch('mapbox/features/remove', featureId)
+      })
     },
-    enterInfrastructureItem(id) {
+    enterInfrastructureItem(index) {
+      const infrastructure = this.selections[index]
+
       this.$store.dispatch('mapbox/features/setStyle', {
-        id,
+        id: infrastructure.features[0],
         styleOption: 'line-color',
         value: INFRASTRUCTURE_HIGHLIGHT_COLOR,
       })
     },
-    leaveInfrastructureItem(id) {
+    leaveInfrastructureItem(index) {
+      const infrastructure = this.selections[index]
+
       this.$store.dispatch('mapbox/features/setStyle', {
-        id,
+        id: infrastructure.features[0],
         styleOption: 'line-color',
         value: INFRASTRUCTURE_DEFAULT_COLOR,
       })
@@ -111,42 +123,38 @@ export default {
       console.log('item: ', this.susceptibilityList[index].title, 'weight factor: ', value)
     },
     initMapState() {
-      const NAMESPACE = 'road'
-      const LAYER = 'global_roads'
-
-      const url = geoserverUrl({
-        service: 'WMS',
-        request: 'GetMap',
-        layers: `${NAMESPACE}:${LAYER}`,
-        width: 256,
-        height: 256,
-        encode: false,
-      })
-
-      const layer = layers.wms({
-        id: LAYER,
-        tiles: [ url ],
-        tileSize: 256
-      })
-
-      this.$store.dispatch('mapbox/wms/add', layer)
+      this.$store.dispatch('mapbox/wms/add', globalRoads)
       this.$store.dispatch('mapbox/addEventHandler', {
-        event: 'click',
-        handler: (event) => this.mapClickHandler(event)
+        event: 'draw.create',
+        handler: (event) => this.createSelection(event)
       })
+      this.$store.dispatch('mapbox/addEventHandler', {
+        event: 'draw.delete',
+        handler: (event) => this.deleteSelection(event)
+      })
+      this.$store.dispatch('mapbox/addEventHandler', {
+        event: 'draw.update',
+        handler: (event) => this.updateSelection(event)
+      })
+
       this.features
-        .map(feature => feature.source.data)
         .forEach(feature => {
           this.$store.dispatch('mapbox/features/add', layers.geojson.line({
-            id: feature.properties.osm_id,
-            data: feature,
+            id: feature.id,
+            data: feature.source.data,
             paint: {
               'line-width': 10,
               'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
-              'line-opacity': 0.6,
+              'line-opacity': 0.8,
             },
           }))
         })
+
+        this.selections
+          .map(selection => selection.polygon[0])
+          .forEach(selection => {
+            this.$store.dispatch('mapbox/selections/draw', selection)
+          })
     },
     mapClickHandler({ point, target, ...rest }) {
       const canvas = target.getCanvas()
@@ -174,12 +182,59 @@ export default {
               paint: {
                 'line-width': 10,
                 'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
-                'line-opacity': 0.6,
+                'line-opacity': 0.8,
               },
             }))
           }
         })
     },
+    createSelection(event) {
+      const selectionId = event.features[0].id
+      const bounds = geojsonExtent({
+        type: 'FeatureCollection',
+        features: event.features
+      })
+        .map(bound => bound.toFixed(4))
+
+      // Go from lng-lat to lat-lng.
+      // This is needed for GeoServer, from version 1.1.0 and above.
+      const bbox = [ bounds[1], bounds[0], bounds[3], bounds[2] ].join(',')
+
+      getFeature({ layer: 'road:global_roads', bbox })
+        .then(featureCollection => {
+          this.$store.dispatch('mapbox/features/add', layers.geojson.line({
+              id: selectionId,
+              data: combineFeatures(featureCollection),
+              paint: {
+                'line-width': 10,
+                'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
+                'line-opacity': 0.8,
+              },
+            }))
+
+          this.$store.commit('mapbox/selections/add', {
+            title: 'Unnamed Selection',
+            id: selectionId,
+            features: [ selectionId ],
+            polygon: event.features
+          })
+        })
+    },
+    deleteSelection(event) {
+      const selectionId = event.features[0].id
+      const selection = this.selections.find(selection => selection.id === selectionId)
+
+      if(selection) {
+        this.$store.commit('mapbox/selections/remove', selectionId)
+        selection.features.forEach(featureId => {
+          this.$store.dispatch('mapbox/features/remove', featureId)
+        })
+      }
+    },
+    updateSelection(event) {
+      this.deleteSelection(event)
+      this.createSelection(event)
+    }
   }
 }
 </script>

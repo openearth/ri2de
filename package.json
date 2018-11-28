@@ -30,12 +30,15 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@mapbox/geojson-extent": "^0.3.2",
+    "@mapbox/mapbox-gl-draw": "^1.0.9",
     "@mapbox/mapbox-gl-geocoder": "^2.3.0",
     "@nuxtjs/axios": "^5.0.0",
-    "@turf/flatten": "^5.1.5",
-    "@turf/line-slice": "^5.1.5",
+    "@turf/bbox": "^6.0.1",
+    "@turf/combine": "^6.0.1",
+    "@turf/explode": "^5.1.5",
+    "@turf/helpers": "^6.1.4",
     "@turf/nearest-point-on-line": "^6.0.2",
+    "@turf/points-within-polygon": "^5.1.5",
     "cross-env": "^5.2.0",
     "file-saver": "^2.0.0",
     "mapbox-gl": "^0.51.0",

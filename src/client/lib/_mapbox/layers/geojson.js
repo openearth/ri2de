@@ -3,6 +3,7 @@ export default function geojson({ id, data, type, paint={}, layout={} }) {
     id,
     type,
     source: {
+      tolerance: 3.5,
       type: 'geojson',
       data
     },

@@ -9,6 +9,7 @@ export default ({ store }) => {
       key: 'app-state',
       paths: [
         'mapbox.features',
+        'mapbox.selections',
       ],
   })(store)
 }

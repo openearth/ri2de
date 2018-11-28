@@ -31,16 +31,14 @@ export default {
       map.on('load', () => {
         this.$store.dispatch('mapbox/addEventHandler', {
           event: 'fitbounds',
-          handler: (event) => this.$store.dispatch('mapbox/features/fitToFeatures')
+          handler: (event) => this.$store.dispatch('mapbox/selections/fitToFeatures')
         })
       })
     },
     restartApp() {
       this.$store.dispatch('mapbox/features/resetFeatures')
-      this.$store.dispatch('mapbox/addOnceEventHandler', {
-        event: 'resize',
-        handler: () => this.$store.dispatch('mapbox/moveMapToCenter')
-      })
+      this.$store.dispatch('mapbox/selections/reset')
+      this.$store.dispatch('mapbox/moveMapToCenter')
     }
   }
 }

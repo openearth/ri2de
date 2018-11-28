@@ -1,5 +1,3 @@
-import geojsonExtent from '@mapbox/geojson-extent'
-
 export const state = () => ({
   eventHandlers: {},
   features: [],
@@ -34,6 +32,9 @@ export const mutations = {
       }
     }
   },
+  resetFeatures(state) {
+    state.features = []
+  }
 }
 
 export const actions = {
@@ -58,13 +59,6 @@ export const actions = {
     if(!features.length) {
       return
     }
-
-    const bounds = geojsonExtent({
-      type: 'FeatureCollection',
-      features: features.map(feature => feature.source.data)
-    })
-
-    map.fitBounds(bounds, { padding: 20 })
   },
   resetFeatures({ commit, state, rootGetters }) {
     const map = rootGetters['mapbox/map']
@@ -73,9 +67,10 @@ export const actions = {
       if(map.getLayer(id)) {
         map.removeLayer(id)
         map.removeSource(id)
-        commit('remove', id)
       }
     })
+
+    commit('resetFeatures')
   },
   setStyle({ rootGetters }, { id, styleOption ,value }) {
     const map = rootGetters['mapbox/map']
