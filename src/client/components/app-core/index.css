@@ -6,5 +6,5 @@ body {
 }
 
 .side-panel {
-  overflow: visible;
+  overflow: visible !important;
 }
