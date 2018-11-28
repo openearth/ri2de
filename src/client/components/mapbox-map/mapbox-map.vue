@@ -58,11 +58,4 @@ export default {
     bottom: 10px;
     left: 5px;
   }
-
-  .mapboxgl-canvas {
-    cursor: crosshair;
-  }
-  .mapboxgl-canvas:active {
-    cursor: grabbing;
-  }
 </style>

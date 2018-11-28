@@ -14,12 +14,8 @@ const url = geoserverUrl({
   encode: false,
 })
 
-const layer = layers.wms({
+export const globalRoads = layers.wms({
   id: LAYER,
   tiles: [ url ],
   tileSize: 256
 })
-
-export function globalRoads() {
-  return layer
-}

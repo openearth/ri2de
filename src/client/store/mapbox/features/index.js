@@ -6,7 +6,7 @@ export const state = () => ({
 export const mutations = {
   add(state, feature) {
     if(!state.features.some(storedFeature => storedFeature.id == feature.id)) {
-      state.features = [ ...state.features, Object.freeze(feature) ]
+      state.features = [ ...state.features, feature ]
     }
   },
   addEventHandler(state, { id, event, handler }) {

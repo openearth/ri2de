@@ -89,6 +89,7 @@ export default {
     },
     enterInfrastructureItem(index) {
       const infrastructure = this.selections[index]
+
       this.$store.dispatch('mapbox/features/setStyle', {
         id: infrastructure.features[0],
         styleOption: 'line-color',
@@ -97,6 +98,7 @@ export default {
     },
     leaveInfrastructureItem(index) {
       const infrastructure = this.selections[index]
+
       this.$store.dispatch('mapbox/features/setStyle', {
         id: infrastructure.features[0],
         styleOption: 'line-color',
@@ -113,7 +115,7 @@ export default {
       console.log('selected', index)
     },
     initMapState() {
-      this.$store.dispatch('mapbox/wms/add', globalRoads())
+      this.$store.dispatch('mapbox/wms/add', globalRoads)
       this.$store.dispatch('mapbox/addEventHandler', {
         event: 'draw.create',
         handler: (event) => this.createSelection(event)
