@@ -8,8 +8,8 @@
       v-for="(infra, index) in infrastructure"
       :key="infra.id"
       class="infrastructure-list__item"
-      @mouseover="$emit('mouseover', infra.id)"
-      @mouseout="$emit('mouseout', infra.id)"
+      @mouseover="$emit('mouseover', index)"
+      @mouseout="$emit('mouseout', index)"
     >
       <span class="infrastructure-list__item-description md-body-2">
         {{ infra.title }}

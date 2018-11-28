@@ -20,6 +20,6 @@ export default function getFeature({ layer, bbox }) {
 
   return fetch(url)
     .then(response => response.json())
-    .then(featureResponse => featureResponse.features)
+    // .then(featureResponse => featureResponse.features)
     .catch(err => console.log('ERR', err))
 }

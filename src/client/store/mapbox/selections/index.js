@@ -1,3 +1,6 @@
+import bbox from '@turf/bbox'
+import { featureCollection } from '@turf/helpers'
+
 export const state = () => ({
   selections: [],
 })
@@ -25,7 +28,29 @@ export const actions = {
     const map = rootGetters['mapbox/map']
     map.__draw.add(selection)
   },
-  reset({ commit }) {
+  fitToFeatures({ state, rootGetters }) {
+    const map = rootGetters['mapbox/map']
+    const { selections } = state
+
+    if(!selections.length) {
+      return
+    }
+
+    const bounds = bbox(
+      featureCollection(
+        selections
+          .map(selection => selection.polygon[0])
+      )
+    )
+
+    map.fitBounds(bounds, { padding: 20 })
+  },
+  reset({ commit, state, rootGetters }) {
+    const map = rootGetters['mapbox/map']
+
+    state.selections
+      .forEach(selection => map.__draw.delete(selection.id))
+
     commit('reset')
   },
 }

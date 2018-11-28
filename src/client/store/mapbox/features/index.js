@@ -1,5 +1,3 @@
-import geojsonExtent from '@mapbox/geojson-extent'
-
 export const state = () => ({
   eventHandlers: {},
   features: [],
@@ -8,7 +6,7 @@ export const state = () => ({
 export const mutations = {
   add(state, feature) {
     if(!state.features.some(storedFeature => storedFeature.id == feature.id)) {
-      state.features = [ ...state.features, feature ]
+      state.features = [ ...state.features, Object.freeze(feature) ]
     }
   },
   addEventHandler(state, { id, event, handler }) {
@@ -62,12 +60,9 @@ export const actions = {
       return
     }
 
-    const bounds = geojsonExtent({
-      type: 'FeatureCollection',
-      features: features.map(feature => feature.source.data)
-    })
-
-    map.fitBounds(bounds, { padding: 20 })
+    // const bounds = bbox(combineFeatures(features.map(feature => feature.source.data.features)))
+    // debugger
+    // map.fitBounds(bounds, { padding: 20 })
   },
   resetFeatures({ commit, state, rootGetters }) {
     const map = rootGetters['mapbox/map']

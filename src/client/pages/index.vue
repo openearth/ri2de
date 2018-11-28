@@ -6,7 +6,7 @@
         :title="'Infrastructure'"
       >
         <infrastructure-list
-          v-if="!!features.length"
+          v-if="features.length"
           slot="content"
           :infrastructure="selections"
           @delete="deleteInfrastructure"
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import combineFeatures from '@turf/combine'
 import geojsonExtent from '@mapbox/geojson-extent'
 import { mapState } from 'vuex'
 
@@ -86,16 +87,18 @@ export default {
         this.$store.dispatch('mapbox/features/remove', featureId)
       })
     },
-    enterInfrastructureItem(id) {
+    enterInfrastructureItem(index) {
+      const infrastructure = this.selections[index]
       this.$store.dispatch('mapbox/features/setStyle', {
-        id,
+        id: infrastructure.features[0],
         styleOption: 'line-color',
         value: INFRASTRUCTURE_HIGHLIGHT_COLOR,
       })
     },
-    leaveInfrastructureItem(id) {
+    leaveInfrastructureItem(index) {
+      const infrastructure = this.selections[index]
       this.$store.dispatch('mapbox/features/setStyle', {
-        id,
+        id: infrastructure.features[0],
         styleOption: 'line-color',
         value: INFRASTRUCTURE_DEFAULT_COLOR,
       })
@@ -125,11 +128,10 @@ export default {
       })
 
       this.features
-        .map(feature => feature.source.data)
         .forEach(feature => {
           this.$store.dispatch('mapbox/features/add', layers.geojson.line({
-            id: feature.properties.osm_id,
-            data: feature,
+            id: feature.id,
+            data: feature.source.data,
             paint: {
               'line-width': 10,
               'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
@@ -189,11 +191,10 @@ export default {
       const bbox = [ bounds[1], bounds[0], bounds[3], bounds[2] ].join(',')
 
       getFeature({ layer: 'road:global_roads', bbox })
-        .then(features => {
-          const featureIds = features.map(feature => {
-            this.$store.dispatch('mapbox/features/add', layers.geojson.line({
-              id: feature.properties.osm_id,
-              data: feature,
+        .then(featureCollection => {
+          this.$store.dispatch('mapbox/features/add', layers.geojson.line({
+              id: selectionId,
+              data: combineFeatures(featureCollection),
               paint: {
                 'line-width': 10,
                 'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
@@ -201,13 +202,10 @@ export default {
               },
             }))
 
-            return feature.properties.osm_id
-          })
-
           this.$store.commit('mapbox/selections/add', {
             title: 'Unnamed Selection',
             id: selectionId,
-            features: featureIds,
+            features: [ selectionId ],
             polygon: event.features
           })
         })
