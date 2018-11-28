@@ -23,8 +23,15 @@ export default {
   mounted() {
     this.$store.commit('setActivePage', 'index')
   },
+  beforeDestroy() {
+    this.$store.dispatch('mapbox/removeEventHandler', { event: 'draw.create' })
+    this.$store.dispatch('mapbox/removeEventHandler', { event: 'draw.delete' })
+    this.$store.dispatch('mapbox/removeEventHandler', { event: 'draw.update' })
+    this.$store.dispatch('mapbox/selections/setMode', 'static')
+  },
   methods: {
     initMapState() {
+      this.$store.dispatch('mapbox/selections/setMode', 'simple_select')
       this.$store.dispatch('mapbox/addEventHandler', {
         event: 'draw.create',
         handler: (event) => this.createSelection(event)

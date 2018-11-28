@@ -38,6 +38,7 @@
         <hazards-list
           slot="content"
           :hazards="hazardsList"
+          :initial-selection="selectedHazardIndex"
           @select="selectHazard"
         />
         <md-button

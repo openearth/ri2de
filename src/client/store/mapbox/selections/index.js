@@ -53,4 +53,8 @@ export const actions = {
 
     commit('reset')
   },
+  setMode({ rootGetters }, mode) {
+    const map = rootGetters['mapbox/map']
+    map.__draw.changeMode(mode)
+  },
 }

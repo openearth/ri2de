@@ -7,6 +7,7 @@
     >
       <md-radio
         v-model="selectedHazard"
+        :checked="selectedHazard === hazard.title"
         :value="hazard.title"
         @change="() => $emit('select', index)"
       >
@@ -23,10 +24,20 @@
       type: Array,
       required: true,
     },
+    initialSelection: {
+      type: Number,
+      required: false,
+      default: undefined
+    }
   },
   data() {
+    const { hazards, initialSelection } = this
+    const selectedHazard = hazards[initialSelection]
+      ? hazards[initialSelection].title
+      : undefined
+
     return {
-      selectedHazard: '',
+      selectedHazard,
     }
   },
  }
