@@ -45,7 +45,10 @@
           Save
         </md-button>
       </content-card>
-      <susceptibility-list :factors="susceptibilityList"/>
+      <susceptibility-list
+        :factors="susceptibilityList"
+        @onSetWeightFactor="setWeightFactor"
+      />
     </div>
   </portal>
 </template>
@@ -103,6 +106,9 @@ export default {
     },
     onSelect(index) {
       console.log('selected', index)
+    },
+    setWeightFactor({ value, id }) {
+      console.log('id: ', id, 'weight factor: ', value)
     },
     initMapState() {
       const NAMESPACE = 'road'

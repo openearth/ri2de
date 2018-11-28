@@ -42,7 +42,7 @@ export default {
   },
   watch: {
     value(val) {
-      this.$emit('change', val)
+      this.$emit('onChange', val)
     },
   },
   methods: {

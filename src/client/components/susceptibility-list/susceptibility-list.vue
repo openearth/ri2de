@@ -31,7 +31,7 @@
           <weight-factor
             :min="factor.weightFactorOptions.min"
             :max="factor.weightFactorOptions.max"
-            @change="(value) => setWeightFactor(value, factor.id)"
+            @onChange="(value) => $emit('onSetWeightFactor', { value, id: factor.id })"
           />
         </div>
       </transition>
