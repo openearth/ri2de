@@ -2,16 +2,17 @@
   <portal to="side-panel">
     <div>
       <content-card
-        :is-active="false"
+        :is-active="true"
         :title="'Infrastructure'"
       >
         <infrastructure-list
-          v-if="features.length"
+          v-if="selections.length"
           slot="content"
           :infrastructure="selections"
           @delete="deleteInfrastructure"
           @mouseover="enterInfrastructureItem"
           @mouseout="leaveInfrastructureItem"
+          @updateSelectionTitle="onUpdateSelectionTitle"
         />
         <p
           v-else
@@ -56,7 +57,7 @@
 <script>
 import combineFeatures from '@turf/combine'
 import geojsonExtent from '@mapbox/geojson-extent'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 import geoserverUrl from '../lib/geoserver-url'
 import getFeature from '../lib/get-feature'
@@ -84,6 +85,9 @@ export default {
     ...mapState('mapbox/selections', [ 'selections' ]),
   },
   methods: {
+    ...mapMutations({
+      onUpdateSelectionTitle: 'mapbox/selections/updateTitle',
+    }),
     deleteInfrastructure(index) {
       const selection = this.selections[index]
 
@@ -121,6 +125,10 @@ export default {
     },
     onSetWeightFactor({ value, index }) {
       console.log('item: ', this.susceptibilityList[index].title, 'weight factor: ', value)
+    },
+    onupdateSelectionTitle({ selectionId, title }) {
+      console.log(name)
+      this.updateTitle({ selectionId, title })
     },
     initMapState() {
       this.$store.dispatch('mapbox/wms/add', globalRoads)

@@ -15,6 +15,10 @@ export const mutations = {
   reset(state) {
     state.selections = []
   },
+  updateTitle(state, { selectionId, title }) {
+    const selection = state.selections.find(item => item.id === selectionId)
+    selection.title = title
+  }
 }
 
 export const actions = {
