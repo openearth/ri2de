@@ -39,7 +39,6 @@ export default {
 <style>
 .md-card.content-card {
   border-radius: var(--border-radius--small);
-  width: var(--card-width);
 }
 
 .content-card--active .content-card__header {

@@ -6,7 +6,7 @@
     </md-subheader>
     <md-divider />
     <div
-      v-for="factor in factors"
+      v-for="(factor, index) in factors"
       :key="factor.id"
       class="susceptibility-list__list-item"
     >
@@ -17,21 +17,22 @@
         </span>
         <md-button
           class="md-icon-button"
-          @click="() => toggleSettings(factor.id)"
+          @click="() => toggleSettings(index)"
         >
           <md-icon>keyboard_arrow_right</md-icon>
         </md-button>
       </md-list-item>
       <transition name="fade">
         <div
-          v-if="selectedFactorId === factor.id"
+          v-if="selectedFactorIndex === index"
           class="list-item__settings"
         >
           {{ factor.id }}
           <weight-factor
             :min="factor.weightFactorOptions.min"
             :max="factor.weightFactorOptions.max"
-            @onChange="(value) => $emit('onSetWeightFactor', { value, id: factor.id })"
+            :step="factor.weightFactorOptions.step"
+            @onChange="(value) => $emit('setWeightFactor', { value, index })"
           />
         </div>
       </transition>
@@ -52,17 +53,17 @@ export default {
   },
   data() {
     return {
-      selectedFactorId: null,
+      selectedFactorIndex: null,
     }
   },
   methods: {
-    toggleSettings(id) {
-      if (this.selectedFactorId === id) {
-        this.selectedFactorId = null
+    toggleSettings(index) {
+      if (this.selectedFactorIndex === index) {
+        this.selectedFactorIndex = null
         return
       }
 
-      this.selectedFactorId = id
+      this.selectedFactorIndex = index
     },
   },
 }

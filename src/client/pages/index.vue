@@ -47,7 +47,7 @@
       </content-card>
       <susceptibility-list
         :factors="susceptibilityList"
-        @onSetWeightFactor="setWeightFactor"
+        @setWeightFactor="onSetWeightFactor"
       />
     </div>
   </portal>
@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       hazardsList: [{ title: 'Erosion of culvert' }, { title: 'Landslides' }, { title: 'Earthquakes' }, { title: 'Wind' }],
-      susceptibilityList: [{ title: 'Landuse', id: 1, weightFactorOptions: { min: 1, max: 50 } }, { title: 'Something else', id: 2, weightFactorOptions: { min: 1, max: 20 } }],
+      susceptibilityList: [{ title: 'Landuse', id: 1, weightFactorOptions: { min: 1, max: 50, step: 1 } }, { title: 'Something else', id: 2, weightFactorOptions: { min: 1, max: 20, step: 1 } }],
     }
   },
   computed: {
@@ -107,8 +107,8 @@ export default {
     onSelect(index) {
       console.log('selected', index)
     },
-    setWeightFactor({ value, id }) {
-      console.log('id: ', id, 'weight factor: ', value)
+    onSetWeightFactor({ value, index }) {
+      console.log('item: ', this.susceptibilityList[index].title, 'weight factor: ', value)
     },
     initMapState() {
       const NAMESPACE = 'road'

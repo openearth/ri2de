@@ -11,6 +11,7 @@
       v-model="value"
       :min="min"
       :max="max"
+      :step="step"
       type="number"
       class="input"
     >
@@ -31,6 +32,10 @@ export default {
       required: true,
     },
     max: {
+      type: Number,
+      required: true,
+    },
+    step: {
       type: Number,
       required: true,
     },
