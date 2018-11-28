@@ -126,10 +126,6 @@ export default {
     onSetWeightFactor({ value, index }) {
       console.log('item: ', this.susceptibilityList[index].title, 'weight factor: ', value)
     },
-    onupdateSelectionTitle({ selectionId, title }) {
-      console.log(name)
-      this.updateTitle({ selectionId, title })
-    },
     initMapState() {
       this.$store.dispatch('mapbox/wms/add', globalRoads)
       this.$store.dispatch('mapbox/addEventHandler', {
