@@ -28,7 +28,11 @@
           class="list-item__settings"
         >
           {{ factor.id }}
-
+          <weight-factor
+            :min="factor.weightFactorOptions.min"
+            :max="factor.weightFactorOptions.max"
+            @change="(value) => setWeightFactor(value, factor.id)"
+          />
         </div>
       </transition>
     </div>
@@ -36,7 +40,10 @@
 </template>
 
 <script>
+import WeightFactor from '../weight-factor'
+
 export default {
+  components: { WeightFactor },
   props: {
     factors: {
       type: Array,
@@ -56,8 +63,11 @@ export default {
       }
 
       this.selectedFactorId = id
+    },
+    setWeightFactor(value, id) {
+      console.log(id, 'weight factor: ', value)
     }
-  }
+  },
 }
 </script>
 
@@ -81,12 +91,13 @@ export default {
 
 .list-item__settings {
   position: absolute;
-  width: 100px;
-  height: 200px;
+  width: 250px;
+  height: 300px;
   background-color: #fff;
   top: 0;
-  right: -120px;
+  right: -275px;
   z-index: 1000000;
+  padding: var(--spacing-default);
 }
 
 .fade-enter, .fade-leave-to {

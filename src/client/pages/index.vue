@@ -45,7 +45,7 @@
           Save
         </md-button>
       </content-card>
-      <susceptibility-list :factors="[{ title: 'Landuse', id: 1 }, { title: 'Something else', id: 2 }]"/>
+      <susceptibility-list :factors="susceptibilityList"/>
     </div>
   </portal>
 </template>
@@ -71,6 +71,7 @@ export default {
   data() {
     return {
       hazardsList: [{ title: 'Erosion of culvert' }, { title: 'Landslides' }, { title: 'Earthquakes' }, { title: 'Wind' }],
+      susceptibilityList: [{ title: 'Landuse', id: 1, weightFactorOptions: { min: 1, max: 50 } }, { title: 'Something else', id: 2, weightFactorOptions: { min: 1, max: 20 } }],
     }
   },
   computed: {
