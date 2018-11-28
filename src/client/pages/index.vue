@@ -29,7 +29,7 @@
           Save
         </md-button>
       </content-card>
-      <susceptibility-list />
+      <susceptibility-list :factors="[{ title: 'Landuse', id: 1 }, { title: 'Something else', id: 2 }]"/>
     </div>
   </portal>
 </template>

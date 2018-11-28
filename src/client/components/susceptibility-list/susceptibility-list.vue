@@ -1,29 +1,104 @@
 <template>
-  <md-list>
+  <md-list class="susceptibility-list">
     <md-subheader class="susceptibility-list__header">
       Susceptibility factors
       <md-button class="md-dense">Reset</md-button>
     </md-subheader>
     <md-divider />
-    <md-list-item class="susceptibility-list__list-item">
-      <span class="md-caption">
-        <md-icon>remove_red_eye</md-icon>
-        Landuse types
-      </span>
-      <md-icon>keyboard_arrow_right</md-icon>
-    </md-list-item>
+    <div
+      v-for="factor in factors"
+      :key="factor.id"
+      class="susceptibility-list__list-item"
+    >
+      <md-list-item>
+        <span class="md-caption">
+          <md-icon class="icon-small">remove_red_eye</md-icon>
+          {{ factor.title }}
+        </span>
+        <md-button
+          class="md-icon-button"
+          @click="() => showSettings(factor.id)"
+        >
+          <md-icon>keyboard_arrow_right</md-icon>
+        </md-button>
+      </md-list-item>
+      <transition name="fade">
+        <div
+          v-if="selectedFactorId === factor.id"
+          class="list-item__settings"
+        >
+          {{ factor.id }}
+
+        </div>
+      </transition>
+    </div>
   </md-list>
 </template>
 
+<script>
+export default {
+  props: {
+    factors: {
+      type: Array,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      selectedFactorId: null,
+    }
+  },
+  methods: {
+    showSettings(id) {
+      if (this.selectedFactorId === id) {
+        this.selectedFactorId = null
+        return
+      }
+
+      this.selectedFactorId = id
+    }
+  }
+}
+</script>
+
+
 <style>
+.susceptibility-list {
+  position: relative;
+  z-index: 10000;
+}
+
 .susceptibility-list__header {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
 
-.md-icon {
-  font-size: 20px;
+.md-icon.icon-small {
+  font-size: 20px !important;
+  margin-right: 8px !important;
+}
+
+.list-item__settings {
+  position: absolute;
+  width: 100px;
+  height: 200px;
+  background-color: #fff;
+  top: 0;
+  right: -120px;
+  z-index: 1000000;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.susceptibility-list__list-item {
+  position: relative;
 }
 </style>
 
