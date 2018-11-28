@@ -68,7 +68,7 @@ export default {
   .infrastructure-list__input {
     padding: var(--spacing-half);
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid transparent;
     width: 100%;
   }
 
