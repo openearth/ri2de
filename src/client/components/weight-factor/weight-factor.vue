@@ -53,12 +53,12 @@ export default {
   methods: {
     increaseValue() {
       if (this.value < this.max) {
-        this.value = this.value + 1
+        this.value = this.value + this.step
       }
     },
     decreaseValue() {
       if (this.value > this.min) {
-        this.value = this.value - 1
+        this.value = this.value - this.step
       }
     }
   }

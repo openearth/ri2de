@@ -13,6 +13,7 @@
           @delete="deleteInfrastructure"
           @mouseover="(index) => updateInfrastructureStyle(index, infrastructureStyles.highlight)"
           @mouseout="(index) => updateInfrastructureStyle(index, infrastructureStyles.default)"
+          @updateSelectionTitle="onUpdateSelectionTitle"
         />
         <p
           v-else
@@ -61,7 +62,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 import { globalRoads } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
@@ -93,6 +94,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      onUpdateSelectionTitle: 'mapbox/selections/updateTitle',
+    }),
     deleteInfrastructure(index) {
       const selection = this.selections[index]
 
