@@ -6,7 +6,7 @@
         :title="'Infrastructure'"
       >
         <infrastructure-list
-          v-if="selections.length"
+          v-if="features.length"
           slot="content"
           :infrastructure="selections"
           @delete="deleteInfrastructure"
