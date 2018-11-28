@@ -3,7 +3,10 @@
     :class="{'content-card--active' : isActive }"
     class="content-card"
   >
-    <md-card-header class="content-card__header">
+    <md-card-header
+      class="content-card__header"
+      @click.native="$emit('selectCard', title)"
+    >
       <div class="md-body-2">{{ title }}</div>
     </md-card-header>
 

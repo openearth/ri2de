@@ -27,7 +27,7 @@
           v-if="selectedFactorIndex === index"
           class="list-item__settings"
         >
-          {{ factor.id }}
+          {{ factor.title }}
           <weight-factor
             :min="factor.weightFactorOptions.min"
             :max="factor.weightFactorOptions.max"

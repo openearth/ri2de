@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@mapbox/mapbox-gl-draw": "^1.0.9",
+    "@mapbox/mapbox-gl-draw-static-mode": "^1.0.1",
     "@mapbox/mapbox-gl-geocoder": "^2.3.0",
     "@nuxtjs/axios": "^5.0.0",
     "@turf/bbox": "^6.0.1",
