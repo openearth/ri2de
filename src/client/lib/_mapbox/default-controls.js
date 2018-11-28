@@ -7,6 +7,8 @@ import { BaselayerControl, DrawControl, FitboundsControl, GeocoderControl } from
 export default function(map) {
   map.__draw = DrawControl()
 
+  console.log("DRAW", map.__draw)
+
   map.addControl(map.__draw, 'top-left')
   map.addControl(GeocoderControl(), 'top-right')
   map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
