@@ -17,7 +17,7 @@
         </span>
         <md-button
           class="md-icon-button"
-          @click="() => showSettings(factor.id)"
+          @click="() => toggleSettings(factor.id)"
         >
           <md-icon>keyboard_arrow_right</md-icon>
         </md-button>
@@ -56,7 +56,7 @@ export default {
     }
   },
   methods: {
-    showSettings(id) {
+    toggleSettings(id) {
       if (this.selectedFactorId === id) {
         this.selectedFactorId = null
         return
@@ -64,9 +64,6 @@ export default {
 
       this.selectedFactorId = id
     },
-    setWeightFactor(value, id) {
-      console.log(id, 'weight factor: ', value)
-    }
   },
 }
 </script>
