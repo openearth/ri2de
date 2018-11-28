@@ -14,7 +14,7 @@
       <slot name="content" />
     </md-card-content>
 
-    <md-card-actions>
+    <md-card-actions v-if="isActive">
       <slot name="actions" />
     </md-card-actions>
   </md-card>
@@ -55,6 +55,6 @@ export default {
 }
 
 .md-card-header+.md-card-content.content-card__content {
-  padding-top: var(--spacing-default);
+  padding-bottom: 0;
 }
 </style>
