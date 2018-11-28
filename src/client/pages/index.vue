@@ -67,6 +67,7 @@ import { mapState, mapMutations } from 'vuex'
 import { globalRoads } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
+import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
 
 import { InfrastructureList, ContentCard, HazardsList, SusceptibilityList } from '../components'
 
@@ -76,16 +77,17 @@ const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 export default {
   components: { InfrastructureList, ContentCard, HazardsList, SusceptibilityList },
   mixins: [ initMapState ],
-  data() {
-    return {
-      hazardsList: [{ title: 'Erosion of culvert' }, { title: 'Landslides' }, { title: 'Earthquakes' }, { title: 'Wind' }],
-      susceptibilityList: [{ title: 'Landuse', id: 1, weightFactorOptions: { min: 1, max: 50, step: 1 } }, { title: 'Something else', id: 2, weightFactorOptions: { min: 1, max: 20, step: 0.1 } }],
-    }
-  },
   computed: {
     ...mapState([ 'activePage', 'selectedHazardIndex' ]),
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
+    hazardsList() {
+      return getHazards()
+    },
+    susceptibilityList() {
+      const hazard = this.hazardsList[this.selectedHazardIndex]
+      return getSusceptibilityFactors(hazard.title).layers
+    },
     infrastructureStyles() {
       return {
         default: INFRASTRUCTURE_DEFAULT_COLOR,
