@@ -2,7 +2,7 @@
   <portal to="side-panel">
     <div>
       <content-card
-        :is-active="true"
+        :is-active="false"
         :title="'Infrastructure'"
       >
         <infrastructure-list
@@ -45,6 +45,10 @@
           Save
         </md-button>
       </content-card>
+      <susceptibility-list
+        :factors="susceptibilityList"
+        @setWeightFactor="onSetWeightFactor"
+      />
     </div>
   </portal>
 </template>
@@ -59,17 +63,18 @@ import getFeatureInfo from '../lib/get-feature-info'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 
-import { InfrastructureList, ContentCard, HazardsList } from '../components'
+import { InfrastructureList, ContentCard, HazardsList, SusceptibilityList } from '../components'
 
 const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
 const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 
 export default {
-  components: { InfrastructureList, ContentCard, HazardsList },
+  components: { InfrastructureList, ContentCard, HazardsList, SusceptibilityList },
   mixins: [ initMapState ],
   data() {
     return {
       hazardsList: [{ title: 'Erosion of culvert' }, { title: 'Landslides' }, { title: 'Earthquakes' }, { title: 'Wind' }],
+      susceptibilityList: [{ title: 'Landuse', id: 1, weightFactorOptions: { min: 1, max: 50, step: 1 } }, { title: 'Something else', id: 2, weightFactorOptions: { min: 1, max: 20, step: 1 } }],
     }
   },
   computed: {
@@ -101,6 +106,9 @@ export default {
     },
     onSelect(index) {
       console.log('selected', index)
+    },
+    onSetWeightFactor({ value, index }) {
+      console.log('item: ', this.susceptibilityList[index].title, 'weight factor: ', value)
     },
     initMapState() {
       const NAMESPACE = 'road'
