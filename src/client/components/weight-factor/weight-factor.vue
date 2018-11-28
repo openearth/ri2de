@@ -74,5 +74,3 @@ input[type=number]::-webkit-outer-spin-button {
   text-align: center;
 }
 </style>
-
-
