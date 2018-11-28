@@ -18,10 +18,10 @@ export const mutations = {
   updateTitle(state, { selectionId, title }) {
     state.selections = state.selections.map(item => {
       if (item.id === selectionId) {
-        item.title = title
+        return { ...item, title: title }
       }
 
-      return item
+      return { ...item }
     })
   }
 }
