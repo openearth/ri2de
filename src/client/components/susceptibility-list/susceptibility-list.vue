@@ -27,13 +27,9 @@
           v-if="selectedFactorIndex === index"
           class="list-item__settings"
         >
-          {{ factor.title }}
-          <weight-factor
-            :min="factor.weightFactorOptions.min"
-            :max="factor.weightFactorOptions.max"
-            :step="factor.weightFactorOptions.step"
-            @onChange="(value) => $emit('setWeightFactor', { value, index })"
-          />
+          <span>{{ factor.title }}</span>
+          <weight-factor @onChange="(value) => $emit('setWeightFactor', { value, index })" />
+          <layer-legend :legend-url="factor.legendUrl" />
         </div>
       </transition>
     </div>
@@ -41,10 +37,14 @@
 </template>
 
 <script>
+import { LayerLegend } from '../'
 import WeightFactor from '../weight-factor'
 
 export default {
-  components: { WeightFactor },
+  components: {
+    LayerLegend,
+    WeightFactor
+  },
   props: {
     factors: {
       type: Array,

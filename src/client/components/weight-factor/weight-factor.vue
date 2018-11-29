@@ -29,20 +29,23 @@ export default {
   props: {
     min: {
       type: Number,
-      required: true,
+      required: false,
+      default: 0,
     },
     max: {
       type: Number,
-      required: true,
+      required: false,
+      default: 1,
     },
     step: {
       type: Number,
-      required: true,
+      required: false,
+      default: 0.1,
     },
   },
   data() {
     return {
-      value: this.min,
+      value: this.max,
     }
   },
   watch: {
@@ -52,13 +55,17 @@ export default {
   },
   methods: {
     increaseValue() {
-      if (this.value < this.max) {
-        this.value = this.value + this.step
+      const newValue = Number(Number(this.value) + Number(this.step)).toFixed(1)
+
+      if (newValue <= this.max) {
+        this.value = newValue
       }
     },
     decreaseValue() {
-      if (this.value > this.min) {
-        this.value = this.value - this.step
+      const newValue = Number(Number(this.value) - Number(this.step)).toFixed(1)
+
+      if (newValue >= this.min) {
+        this.value = newValue
       }
     }
   }
