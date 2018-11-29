@@ -5,7 +5,10 @@
 <script>
 import { mapState } from 'vuex'
 
+import initMapState from '../../lib/mixins/init-map-state'
+
 export default {
+  mixins: [ initMapState ],
   computed: {
     ...mapState([ 'activePage' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
@@ -17,5 +20,10 @@ export default {
       this.$router.replace({ path: '/' })
     }
   },
+  methods: {
+    initMapState() {
+      this.$store.dispatch('mapbox/selections/setMode', 'static')
+    }
+  }
 }
 </script>

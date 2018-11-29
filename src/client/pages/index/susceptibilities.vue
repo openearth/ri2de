@@ -5,6 +5,8 @@
 <script>
 import { mapState } from 'vuex'
 
+import initMapState from '../../lib/mixins/init-map-state'
+
 export default {
   computed: {
     ...mapState([ 'selectedHazardIndex' ]),
@@ -17,6 +19,11 @@ export default {
       this.$router.replace({ path: '/hazards' })
     } else {
       this.$router.replace({ path: '/' })
+    }
+  },
+  methods: {
+    initMapState() {
+      this.$store.dispatch('mapbox/selections/setMode', 'static')
     }
   }
 }
