@@ -1,5 +1,6 @@
 @import './a11y.css';
 @import './variables.css';
+@import './mapbox-draw.css';
 
 body {
   margin: 0;

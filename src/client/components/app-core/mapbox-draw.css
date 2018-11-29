@@ -1,0 +1,20 @@
+.mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon.active {
+  border: solid 3px #008FC5;
+  transition: background .1s ease;
+}
+
+.mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon:disabled {
+  background-color: rgba(0, 0, 0, 0.05);
+  cursor: not-allowed;
+  position: relative;
+}
+.mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon:disabled:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #fff;
+  opacity: .6;
+  width: 30px;
+  height: 30px;
+}
