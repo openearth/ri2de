@@ -1,4 +1,4 @@
-.mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon:active {
+.mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon.active {
   background-color: #E5EEF2;
   transition: background .1s ease;
 }
