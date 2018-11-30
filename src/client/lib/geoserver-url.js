@@ -1,15 +1,12 @@
 import { stringify } from 'query-string'
 
-const WIDTH = 256
-const HEIGHT = 256
-
 export default function({
   url,
   service,
   request,
   encode=true,
-  width=WIDTH,
-  height=HEIGHT,
+  width=256,
+  height=256,
   ...rest
 }) {
   if (!service || !request) {

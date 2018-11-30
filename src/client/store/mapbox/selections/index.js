@@ -47,8 +47,7 @@ export const actions = {
 
     const bounds = bbox(
       featureCollection(
-        selections
-          .map(selection => selection.polygon[0])
+        selections.map(selection => selection.polygon[0])
       )
     )
 
