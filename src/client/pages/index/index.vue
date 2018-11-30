@@ -48,7 +48,7 @@ export default {
         .features[0]
         .geometry
         .coordinates[0]
-        .map(coordinate => coordinate.reverse().join(' '))
+        .map(coordinate => [ ...coordinate ].reverse().join(' '))
         .join(', ')
 
       getFeature({
