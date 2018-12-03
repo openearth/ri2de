@@ -1,4 +1,4 @@
-const { getHazards } = require('~/lib/mock-api')
+import { getHazards } from '~/lib/mock-api'
 
 export const state = () => ({
   hazards: [],
