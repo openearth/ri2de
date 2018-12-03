@@ -1,24 +1,17 @@
 import geoServerUrl from './geoserver-url'
 
-const OUTPUT_FORMAT = 'application/json'
-const SERVICE = 'wfs'
-const VERSION = '2.0.0'
-const REQUEST = 'GetFeature'
-const SRS = 'EPSG:4326'
-
-export default function getFeature({ layer, bbox }) {
+export default function getFeature({ layer='', ...rest }) {
   const url = geoServerUrl({
-    encode: false,
-    service: SERVICE,
-    version: VERSION,
-    request: REQUEST,
-    outputFormat: OUTPUT_FORMAT,
-    srsName: SRS,
+    service: 'wfs',
+    request: 'GetFeature',
+    version: '2.0.0',
+    outputFormat: 'application/json',
+    srsName: 'EPSG:4326',
     typeName: layer,
-    bbox,
+    ...rest
   })
 
   return fetch(url)
     .then(response => response.json())
-    .catch(err => console.log('ERR', err))
+    .catch(err => console.log('Error while getting GeoJson features:', err))
 }
