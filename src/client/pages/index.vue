@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 import { globalRoads } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
@@ -81,12 +81,12 @@ export default {
     ...mapState([ 'activePage', 'selectedHazardIndex' ]),
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
+    ...mapState('hazards', ['hazards']),
     hazardsList() {
       return getHazards()
     },
     susceptibilityList() {
-      const hazard = this.hazardsList[this.selectedHazardIndex]
-      return getSusceptibilityFactors(hazard.title).layers
+      return this.hazards[this.selectedHazardIndex].susceptibilityFactors
     },
     infrastructureStyles() {
       return {
@@ -95,9 +95,16 @@ export default {
       }
     }
   },
+  mounted() {
+    this.bootstrapHazardsList()
+  },
   methods: {
     ...mapMutations({
       onUpdateSelectionTitle: 'mapbox/selections/updateTitle',
+      setWeightFactor: 'hazards/updateWeightFactor',
+    }),
+    ...mapActions({
+      bootstrapHazardsList: 'hazards/bootstrapHazards'
     }),
     deleteInfrastructure(index) {
       const selection = this.selections[index]
@@ -133,8 +140,10 @@ export default {
     selectHazard(index) {
       this.$store.commit('selectHazard', index)
     },
-    onSetWeightFactor({ value, index }) {
-      console.log('item: ', this.susceptibilityList[index].title, 'weight factor: ', value)
+    onSetWeightFactor({ value, title }) {
+      const hazardTitle = this.hazards[this.selectedHazardIndex].title
+
+      this.setWeightFactor({ hazardTitle, susceptibilityFactorTitle: title, weightFactor: value })
     },
     initMapState() {
       this.$store.dispatch('mapbox/wms/add', globalRoads)
