@@ -24,7 +24,6 @@ const appData = [
 ]
 
 const hazards = appData
-  .map((item, index) => ({ name: item.name, id: index, title: item.name }))
 
 const susceptibilityFactors = appData
   .reduce((factors, { name, layers }) => ({ ...factors, [ name ]: { id: name, name, layers } }), {})

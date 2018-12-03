@@ -6,14 +6,14 @@
     </md-subheader>
     <md-divider />
     <div
-      v-for="(key, index) in Object.keys(factors)"
-      :key="factors[key].id"
+      v-for="(factor, index) in factors"
+      :key="factor.id"
       class="susceptibility-list__list-item"
     >
       <md-list-item>
         <span class="md-caption">
           <md-icon class="icon-small">remove_red_eye</md-icon>
-          {{ factors[key].title }}
+          {{ factor.title }}
         </span>
         <md-button
           class="md-icon-button"
@@ -27,15 +27,15 @@
           v-if="selectedFactorIndex === index"
           class="list-item__settings"
         >
-          <span>{{ factors[key].title }}</span>
+          <span>{{ factor.title }}</span>
           <weight-factor
-            :min="factors[key].min"
-            :max="factors[key].max"
-            :step="factors[key].step"
-            :weight-factor="factors[key].weightFactor"
-            @onChange="(value) => $emit('setWeightFactor', { value, title: factors[key].title })"
+            :min="factor.min"
+            :max="factor.max"
+            :step="factor.step"
+            :weight-factor="factor.weightFactor"
+            @onChange="(value) => $emit('setWeightFactor', { value, index })"
           />
-          <layer-legend :legend-url="factors[key].legendUrl" />
+          <layer-legend :legend-url="factor.legendUrl" />
         </div>
       </transition>
     </div>
@@ -53,7 +53,7 @@ export default {
   },
   props: {
     factors: {
-      type: Object,
+      type: Array,
       required: true,
     },
   },

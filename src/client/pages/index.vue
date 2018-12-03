@@ -38,7 +38,7 @@
       >
         <hazards-list
           slot="content"
-          :hazards="hazardsList"
+          :hazards="hazards"
           :initial-selection="selectedHazardIndex"
           @select="selectHazard"
         />
@@ -53,7 +53,7 @@
       </content-card>
       <susceptibility-list
         v-if="activePage === 'susceptibilities'"
-        :factors="susceptibilityList"
+        :factors="currentSusceptibilityFactors"
         @setWeightFactor="onSetWeightFactor"
       />
       <nuxt-child/>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 
 import { globalRoads } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
@@ -78,16 +78,11 @@ export default {
   components: { InfrastructureList, ContentCard, HazardsList, SusceptibilityList },
   mixins: [ initMapState ],
   computed: {
-    ...mapState([ 'activePage', 'selectedHazardIndex' ]),
+    ...mapState([ 'activePage' ]),
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
-    ...mapState('hazards', ['hazards']),
-    hazardsList() {
-      return getHazards()
-    },
-    susceptibilityList() {
-      return this.hazards[this.selectedHazardIndex].susceptibilityFactors
-    },
+    ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors' ]),
+    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
     infrastructureStyles() {
       return {
         default: INFRASTRUCTURE_DEFAULT_COLOR,
@@ -101,7 +96,8 @@ export default {
   methods: {
     ...mapMutations({
       onUpdateSelectionTitle: 'mapbox/selections/updateTitle',
-      setWeightFactor: 'hazards/updateWeightFactor',
+      selectHazard: 'hazards/selectHazard',
+      updateWeightFactor: 'hazards/updateWeightFactor',
     }),
     ...mapActions({
       bootstrapHazardsList: 'hazards/bootstrapHazards'
@@ -137,13 +133,12 @@ export default {
         this.$router.push({ path: '/susceptibilities' })
       }
     },
-    selectHazard(index) {
-      this.$store.commit('selectHazard', index)
-    },
-    onSetWeightFactor({ value, title }) {
-      const hazardTitle = this.hazards[this.selectedHazardIndex].title
-
-      this.setWeightFactor({ hazardTitle, susceptibilityFactorTitle: title, weightFactor: value })
+    onSetWeightFactor({ value, index }) {
+      this.updateWeightFactor({
+        hazardIndex: this.selectedHazardIndex,
+        susceptibilityIndex: index,
+        weightFactor: value
+      })
     },
     initMapState() {
       this.$store.dispatch('mapbox/wms/add', globalRoads)
