@@ -9,7 +9,7 @@ import initMapState from '../../lib/mixins/init-map-state'
 
 export default {
   computed: {
-    ...mapState([ 'selectedHazardIndex' ]),
+    ...mapState('hazards', [ 'selectedHazardIndex' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
   },
   mounted() {

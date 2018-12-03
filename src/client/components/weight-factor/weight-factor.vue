@@ -42,10 +42,15 @@ export default {
       required: false,
       default: 0.1,
     },
+    weightFactor: {
+      type: Number,
+      required: false,
+      default: null,
+    }
   },
   data() {
     return {
-      value: this.max,
+      value: this.weightFactor || this.max,
     }
   },
   watch: {

@@ -28,7 +28,13 @@
           class="list-item__settings"
         >
           <span>{{ factor.title }}</span>
-          <weight-factor @onChange="(value) => $emit('setWeightFactor', { value, index })" />
+          <weight-factor
+            :min="factor.min"
+            :max="factor.max"
+            :step="factor.step"
+            :weight-factor="factor.weightFactor"
+            @onChange="(value) => $emit('setWeightFactor', { value, index })"
+          />
           <layer-legend :legend-url="factor.legendUrl" />
         </div>
       </transition>
@@ -68,7 +74,6 @@ export default {
   },
 }
 </script>
-
 
 <style>
 .susceptibility-list {
