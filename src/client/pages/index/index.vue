@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import combineFeatures from '@turf/combine'
 import { mapState } from 'vuex'
 
 import getFeature from '../../lib/get-feature'

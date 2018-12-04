@@ -20,7 +20,7 @@ export const globalRoads = layers.wms({
   tileSize: 256
 })
 
-export const generateWmsLayer = ({ url, id, layer, style='' }) => {
+export const generateWmsLayer = ({ url, id, layer, style='', paint={} }) => {
   const tile = geoserverUrl({
     url,
     service: 'WMS',
@@ -39,6 +39,7 @@ export const generateWmsLayer = ({ url, id, layer, style='' }) => {
   return layers.wms({
     id,
     tiles: [ tile ],
-    tileSize: 256
+    tileSize: 256,
+    paint
   })
 }

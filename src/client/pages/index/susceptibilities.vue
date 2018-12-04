@@ -41,7 +41,7 @@ export default {
       const selectionPolygons = this.selections.map(selection => selection.polygon[0])
       const currentFactors = this.currentSusceptibilityFactors
 
-      currentFactors.forEach(async factor => {
+      currentFactors.forEach(async (factor, index) => {
         const factorLayers = selectionPolygons.map(async polygon => {
           const wpsResponse = await wps({
             functionId: factor.wpsFunctionId,
@@ -58,7 +58,8 @@ export default {
             url: baseUrl,
             layer: layerName,
             id: layerId,
-            style
+            paint: { 'raster-opacity': 1 },
+            style,
           })
 
           this.$store.dispatch('mapbox/wms/add', wmsLayer)
@@ -66,8 +67,10 @@ export default {
         })
 
         try {
-          const resolved = await Promise.all(factorLayers)
-          factor.factorLayers = resolved
+          this.$store.commit('hazards/updateFactorLayers', {
+            index,
+            factorLayers: await Promise.all(factorLayers)
+          })
         } catch(e) {
           console.log('Error: ', e)
         }

@@ -22,6 +22,15 @@ export const mutations = {
   setSusceptibilityFactors(state, susceptibilityFactors) {
     state.susceptibilityFactors = susceptibilityFactors
   },
+  updateFactorLayers(state, { factorLayers, index }) {
+    const { selectedHazardIndex, susceptibilityFactors } = state
+    const newFactor = {
+      ...susceptibilityFactors[selectedHazardIndex][index],
+      factorLayers,
+    }
+
+    susceptibilityFactors[selectedHazardIndex][index] = newFactor
+  },
   updateWeightFactor(state, { hazardIndex, susceptibilityIndex, weightFactor }) {
     const newFactors = [ ...state.susceptibilityFactors ]
     newFactors[hazardIndex][susceptibilityIndex].weightFactor = Number(weightFactor)
