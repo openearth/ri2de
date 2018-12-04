@@ -10,6 +10,9 @@ export const mutations = {
   },
   remove(state, id) {
     state.layers = state.layers.filter(layer => layer.id !== id)
+  },
+  resetLayers(state) {
+    state.layers = []
   }
 }
 
@@ -29,7 +32,7 @@ export const actions = {
       map.setPaintProperty(id, 'raster-opacity', opacity)
     }
   },
-  remove({ rootGetters }, id) {
+  remove({ commit, rootGetters }, id) {
     const map = rootGetters['mapbox/map']
 
     if(map.getLayer(id)) {
@@ -37,5 +40,17 @@ export const actions = {
       map.removeSource(id)
       commit('remove', id)
     }
+  },
+  resetLayers({ commit, rootGetters, state }, id) {
+    const map = rootGetters['mapbox/map']
+
+    state.layers.forEach(({ id }) => {
+      if(map.getLayer(id)) {
+        map.removeLayer(id)
+        map.removeSource(id)
+      }
+    })
+
+    commit('resetLayers')
   }
 }

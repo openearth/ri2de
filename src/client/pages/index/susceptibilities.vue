@@ -25,38 +25,52 @@ export default {
       this.$router.replace({ path: '/' })
     }
   },
+  beforeDestroy() {
+    if(!this.currentSusceptibilityFactors) {
+      return
+    }
+
+    this.currentSusceptibilityFactors.forEach(factor => {
+      if(factor.factorLayers) {
+        factor.factorLayers.forEach(layer => this.$store.dispatch('mapbox/wms/remove', layer))
+      }
+    })
+  },
   methods: {
     getSelectionLayers() {
-      const polygons = this.selections.map(selection => selection.polygon[0])
-      const factors = this.currentSusceptibilityFactors.map(factor => ({
-        classes: factor.classes,
-        layername: factor.layerName,
-        owsurl: factor.owsUrl
-      }))
+      const selectionPolygons = this.selections.map(selection => selection.polygon[0])
+      const currentFactors = this.currentSusceptibilityFactors
 
-      console.log('polygons', polygons)
-      console.log('factors', factors)
+      currentFactors.forEach(async factor => {
+        const factorLayers = selectionPolygons.map(async polygon => {
+          const wpsResponse = await wps({
+            functionId: factor.wpsFunctionId,
+            requestData: {
+              classes: factor.classes,
+              layername: factor.layerName,
+              owsurl: factor.owsUrl
+            },
+            polygon
+          })
+          const { baseUrl, layerName, style } = wpsResponse.data
+          const layerId = `${polygon.id}-${factor.title}`
+          const wmsLayer = generateWmsLayer({
+            url: baseUrl,
+            layer: layerName,
+            id: layerId,
+            style
+          })
 
-      const sus = this.currentSusceptibilityFactors[0]
-      wps({
-        functionId: sus.wpsFunctionId,
-        requestData: {
-          classes: sus.classes,
-				  layername: sus.layerName,
-				  owsurl: sus.owsUrl
-        },
-        polygon: polygons[0]
-      })
-      .then(res => {
-        const { baseUrl, layerName, style } = res.data
-        const wmsLayer = generateWmsLayer({
-          url: baseUrl,
-          layer: layerName,
-          id: layerName,
-          style
+          this.$store.dispatch('mapbox/wms/add', wmsLayer)
+          return layerId
         })
 
-        this.$store.dispatch('mapbox/wms/add', wmsLayer)
+        try {
+          const resolved = await Promise.all(factorLayers)
+          factor.factorLayers = resolved
+        } catch(e) {
+          console.log('Error: ', e)
+        }
       })
     },
     initMapState() {

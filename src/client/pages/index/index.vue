@@ -44,21 +44,12 @@ export default {
     },
     createSelection(event) {
       const selectionId = event.features[0].id
-      const coordinates = event
-        .features[0]
-        .geometry
-        .coordinates[0]
-        .map(coordinate => [ ...coordinate ].reverse().join(' '))
-        .join(', ')
 
-      getFeature({
-        layer: 'road:global_roads',
-        cql_filter: `INTERSECTS(wkb_geometry, POLYGON((${coordinates})))`
-      })
+      getFeature(event.features[0])
         .then(featureCollection => {
           this.$store.dispatch('mapbox/features/add', layers.geojson.line({
             id: selectionId,
-            data: combineFeatures(featureCollection),
+            data: featureCollection,
             paint: {
               'line-width': 10,
               'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
