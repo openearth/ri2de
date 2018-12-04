@@ -11,10 +11,15 @@
       class="susceptibility-list__list-item"
     >
       <md-list-item>
-        <span class="md-caption">
-          <md-icon class="icon-small">remove_red_eye</md-icon>
-          {{ factor.title }}
-        </span>
+        <md-button
+          class="md-icon-button"
+          @click="toggleFactorActivity(index)"
+        >
+          <md-icon :disabled="!activeFactorIndexes[index]">
+            remove_red_eye
+          </md-icon>
+        </md-button>
+        <span>{{ factor.title }}</span>
         <md-button
           class="md-icon-button"
           @click="() => toggleSettings(index)"
@@ -59,10 +64,16 @@ export default {
   },
   data() {
     return {
+      activeFactorIndexes: [],
       selectedFactorIndex: null,
     }
   },
   methods: {
+    toggleFactorActivity(index) {
+      const activeFactors = [ ...this.activeFactorIndexes ]
+      activeFactors[index] = !activeFactors[index]
+      this.activeFactorIndexes = activeFactors
+    },
     toggleSettings(index) {
       if (this.selectedFactorIndex === index) {
         this.selectedFactorIndex = null
