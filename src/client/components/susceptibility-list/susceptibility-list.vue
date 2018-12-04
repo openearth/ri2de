@@ -54,7 +54,7 @@ import WeightFactor from '../weight-factor'
 export default {
   components: {
     LayerLegend,
-    WeightFactor
+    WeightFactor,
   },
   props: {
     factors: {
