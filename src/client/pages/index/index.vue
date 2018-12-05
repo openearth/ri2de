@@ -1,5 +1,10 @@
 <template>
-  <span/>
+  <portal
+    v-if="errorMessage"
+    to="map-notification"
+  >
+    <error-bar :error-message="errorMessage" />
+  </portal>
 </template>
 
 <script>
@@ -9,10 +14,18 @@ import getFeature from '../../lib/get-feature'
 import initMapState from '../../lib/mixins/init-map-state'
 import layers from '../../lib/_mapbox/layers'
 
+import { ErrorBar } from '../../components'
+
 const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
 
 export default {
+  components: { ErrorBar },
   mixins: [ initMapState ],
+  data() {
+    return {
+      errorMessage: undefined,
+    }
+  },
   computed: {
     ...mapState('mapbox/selections', [ 'selections' ]),
   },
@@ -45,12 +58,19 @@ export default {
       const selectionId = event.features[0].id
 
       getFeature(event.features[0])
-        .then(featureCollection => {
+        .then(({ featureCollection, error }) => {
+          if(error) {
+            this.errorMessage = error
+            this.$store.dispatch('mapbox/selections/delete', selectionId)
+            setTimeout(() => { this.errorMessage = undefined }, 4000)
+            return
+          }
+
           this.$store.dispatch('mapbox/features/add', layers.geojson.line({
             id: selectionId,
             data: featureCollection,
             paint: {
-              'line-width': 10,
+              'line-width': 5,
               'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
               'line-opacity': 0.8,
             },
