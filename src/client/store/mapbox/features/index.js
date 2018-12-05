@@ -1,3 +1,6 @@
+import bbox from '@turf/bbox'
+import { featureCollection } from '@turf/helpers'
+
 export const state = () => ({
   eventHandlers: {},
   features: [],
@@ -59,6 +62,17 @@ export const actions = {
     if(!features.length) {
       return
     }
+
+    const bounds = bbox(
+      featureCollection(
+        features.map(feature => ({
+          geometry: feature.source.data,
+          type: 'Feature'
+        }))
+      )
+    )
+
+    map.fitBounds(bounds, { padding: 50 })
   },
   resetFeatures({ commit, state, rootGetters }) {
     const map = rootGetters['mapbox/map']

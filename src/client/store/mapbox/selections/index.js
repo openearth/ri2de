@@ -51,7 +51,7 @@ export const actions = {
       )
     )
 
-    map.fitBounds(bounds, { padding: 20 })
+    map.fitBounds(bounds, { padding: 50 })
   },
   reset({ commit, state, rootGetters }) {
     const map = rootGetters['mapbox/map']
