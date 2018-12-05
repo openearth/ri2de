@@ -51,7 +51,7 @@ export async function wmsLayerFromFactor({ factor, polygon }) {
     requestData: {
       classes: factor.classes,
       layername: factor.layerName,
-      owsurl: factor.owsUrl
+      owsurl: factor.owsUrl,
     },
     polygon
   })
