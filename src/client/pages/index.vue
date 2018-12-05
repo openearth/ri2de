@@ -67,7 +67,7 @@
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 
-import { globalRoads } from '../lib/project-layers'
+import { globalRoads, wmsSelectionFromFactor } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
@@ -107,27 +107,6 @@ export default {
       bootstrapHazardsList: 'hazards/bootstrapHazards',
       onResetSusceptibilityFactors: 'hazards/resetSusceptibilityFactors'
     }),
-    deleteInfrastructure(index) {
-      const selection = this.selections[index]
-
-      if(!selection) return
-
-      this.$store.dispatch('mapbox/selections/delete', selection.id)
-      selection.features.forEach(featureId => {
-        this.$store.dispatch('mapbox/features/remove', featureId)
-      })
-    },
-    updateInfrastructureStyle(index, style) {
-      const infrastructure = this.selections[index]
-
-      if(!infrastructure) return
-
-      this.$store.dispatch('mapbox/features/setStyle', {
-        id: infrastructure.features[0],
-        styleOption: 'line-color',
-        value: style,
-      })
-    },
     completeInfrastructure() {
       if(this.selections.length) {
         this.$router.push({ path: '/hazards' })
@@ -138,11 +117,14 @@ export default {
         this.$router.push({ path: '/susceptibilities' })
       }
     },
-    onSetWeightFactor({ value, index }) {
-      this.updateWeightFactor({
-        hazardIndex: this.selectedHazardIndex,
-        susceptibilityIndex: index,
-        weightFactor: value
+    deleteInfrastructure(index) {
+      const selection = this.selections[index]
+
+      if(!selection) return
+
+      this.$store.dispatch('mapbox/selections/delete', selection.id)
+      selection.features.forEach(featureId => {
+        this.$store.dispatch('mapbox/features/remove', featureId)
       })
     },
     initMapState() {
@@ -167,6 +149,21 @@ export default {
           this.$store.dispatch('mapbox/selections/draw', selection)
         })
     },
+    onSetWeightFactor({ value, index }) {
+      this.updateWeightFactor({
+        hazardIndex: this.selectedHazardIndex,
+        susceptibilityIndex: index,
+        weightFactor: value,
+      })
+    },
+    onUpdateClasses(classes, index) {
+      this.updateClasses({
+        hazardIndex: this.selectedHazardIndex,
+        susceptibilityIndex: index,
+        classes,
+      })
+      this.updateSusceptibilityLayers({ susceptibilityIndex: index })
+    },
     selectCard(title) {
       switch (title) {
         case 'Infrastructure':
@@ -181,13 +178,6 @@ export default {
           break
       }
     },
-    onUpdateClasses(classes, index) {
-      this.updateClasses({
-        hazardIndex: this.selectedHazardIndex,
-        susceptibilityIndex: index,
-        classes,
-      })
-    },
     toggleSusceptibilityLayer({ index, active }) {
       const factor = this.currentSusceptibilityFactors[index]
       if(factor.factorLayers) {
@@ -198,7 +188,29 @@ export default {
           })
         })
       }
-    }
+    },
+    async updateSusceptibilityLayers({ susceptibilityIndex }) {
+      const selectionPolygons = this.selections.map(selection => selection.polygon[0])
+      const susceptibility = this.currentSusceptibilityFactors[susceptibilityIndex]
+      const layerPromises = selectionPolygons.map(polygon => {
+        this.$store.dispatch('mapbox/wms/remove', `${polygon.id}-${susceptibility.title}`)
+        return wmsSelectionFromFactor({ polygon, factor: susceptibility })
+      })
+      const layers = await Promise.all(layerPromises)
+
+      layers.forEach(layer => this.$store.dispatch('mapbox/wms/add', layer))
+    },
+    updateInfrastructureStyle(index, style) {
+      const infrastructure = this.selections[index]
+
+      if(!infrastructure) return
+
+      this.$store.dispatch('mapbox/features/setStyle', {
+        id: infrastructure.features[0],
+        styleOption: 'line-color',
+        value: style,
+      })
+    },
   },
 }
 </script>

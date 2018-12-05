@@ -1,4 +1,5 @@
 import wps from '../../lib/wps'
+import { wmsSelectionFromFactor } from '../../lib/project-layers'
 
 export const state = () => ({
   hazards: [],

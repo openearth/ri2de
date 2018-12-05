@@ -5,7 +5,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 
-import { generateWmsLayer } from '../../lib/project-layers'
+import { generateWmsLayer, wmsSelectionFromFactor } from '../../lib/project-layers'
 import initMapState from '../../lib/mixins/init-map-state'
 import wps from '../../lib/wps'
 
@@ -13,7 +13,7 @@ export default {
   computed: {
     ...mapState('hazards', [ 'selectedHazardIndex' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
-    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ])
+    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
   },
   mounted() {
     if(this.selections.length && typeof this.selectedHazardIndex !== 'undefined') {
@@ -43,27 +43,9 @@ export default {
 
       currentFactors.forEach(async (factor, index) => {
         const factorLayers = selectionPolygons.map(async polygon => {
-          const wpsResponse = await wps({
-            functionId: factor.wpsFunctionId,
-            requestData: {
-              classes: factor.classes,
-              layername: factor.layerName,
-              owsurl: factor.owsUrl
-            },
-            polygon
-          })
-          const { baseUrl, layerName, style } = wpsResponse.data
-          const layerId = `${polygon.id}-${factor.title}`
-          const wmsLayer = generateWmsLayer({
-            url: baseUrl,
-            layer: layerName,
-            id: layerId,
-            paint: { 'raster-opacity': 1 },
-            style,
-          })
-
+          const wmsLayer = await wmsSelectionFromFactor({ factor, polygon })
           this.$store.dispatch('mapbox/wms/add', wmsLayer)
-          return layerId
+          return wmsLayer.id
         })
 
         try {
