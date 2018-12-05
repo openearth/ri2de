@@ -55,6 +55,7 @@
         v-if="activePage === 'susceptibilities'"
         :factors="currentSusceptibilityFactors"
         @setWeightFactor="onSetWeightFactor"
+        @change="({ value, index }) => onChange(value, index)"
       />
       <nuxt-child/>
     </div>
@@ -175,6 +176,9 @@ export default {
         default:
           break
       }
+    },
+    onChange(value, index) {
+      console.log(value, index)
     }
   }
 }

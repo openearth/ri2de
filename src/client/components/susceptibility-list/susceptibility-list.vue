@@ -27,13 +27,16 @@
           v-if="selectedFactorIndex === index"
           class="list-item__settings"
         >
-          <span>{{ factor.title }}</span>
           <weight-factor
             :min="factor.min"
             :max="factor.max"
             :step="factor.step"
             :weight-factor="factor.weightFactor"
             @onChange="(value) => $emit('setWeightFactor', { value, index })"
+          />
+          <input-range
+            :label="'Classes'"
+            @change="value => $emit('change', { value, index })"
           />
           <layer-legend :legend-url="factor.legendUrl" />
         </div>
@@ -45,11 +48,13 @@
 <script>
 import { LayerLegend } from '../'
 import WeightFactor from '../weight-factor'
+import InputRange from '../input-range'
 
 export default {
   components: {
     LayerLegend,
-    WeightFactor
+    WeightFactor,
+    InputRange,
   },
   props: {
     factors: {
@@ -95,12 +100,12 @@ export default {
 .list-item__settings {
   position: absolute;
   width: 250px;
-  height: 300px;
   background-color: #fff;
   top: 0;
   right: -275px;
   z-index: 1000000;
   padding: var(--spacing-default);
+  box-shadow: 1px 1px 10px #ccc;
 }
 
 .fade-enter, .fade-leave-to {
