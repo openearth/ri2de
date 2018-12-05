@@ -1,5 +1,6 @@
 import geoserverUrl from './geoserver-url'
 import layers from './_mapbox/layers'
+import wps from './wps'
 
 const globalRoadsUrl = geoserverUrl({
   service: 'WMS',
@@ -41,5 +42,28 @@ export const generateWmsLayer = ({ url, id, layer, style='', paint={} }) => {
     tiles: [ tile ],
     tileSize: 256,
     paint
+  })
+}
+
+export async function wmsLayerFromFactor({ factor, polygon }) {
+  const wpsResponse = await wps({
+    functionId: factor.wpsFunctionId,
+    requestData: {
+      classes: factor.classes,
+      layername: factor.layerName,
+      owsurl: factor.owsUrl
+    },
+    polygon
+  })
+
+  const { baseUrl, layerName, style } = wpsResponse.data
+  const layerId = `${polygon.id}-${factor.title}`
+
+  return generateWmsLayer({
+    url: baseUrl,
+    layer: layerName,
+    id: layerId,
+    paint: { 'raster-opacity': 1 },
+    style,
   })
 }

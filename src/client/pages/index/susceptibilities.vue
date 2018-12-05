@@ -5,7 +5,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 
-import { generateWmsLayer } from '../../lib/project-layers'
+import { generateWmsLayer, wmsLayerFromFactor } from '../../lib/project-layers'
 import initMapState from '../../lib/mixins/init-map-state'
 import wps from '../../lib/wps'
 
@@ -43,27 +43,9 @@ export default {
 
       currentFactors.forEach(async (factor, index) => {
         const factorLayers = selectionPolygons.map(async polygon => {
-          const wpsResponse = await wps({
-            functionId: factor.wpsFunctionId,
-            requestData: {
-              classes: factor.classes,
-              layername: factor.layerName,
-              owsurl: factor.owsUrl
-            },
-            polygon
-          })
-          const { baseUrl, layerName, style } = wpsResponse.data
-          const layerId = `${polygon.id}-${factor.title}`
-          const wmsLayer = generateWmsLayer({
-            url: baseUrl,
-            layer: layerName,
-            id: layerId,
-            paint: { 'raster-opacity': 1 },
-            style,
-          })
-
+          const wmsLayer = await wmsLayerFromFactor({ factor, polygon })
           this.$store.dispatch('mapbox/wms/add', wmsLayer)
-          return layerId
+          return wmsLayer.id
         })
 
         try {
