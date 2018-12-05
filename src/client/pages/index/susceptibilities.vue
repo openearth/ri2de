@@ -13,7 +13,7 @@ export default {
   computed: {
     ...mapState('hazards', [ 'selectedHazardIndex' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
-    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ])
+    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
   },
   mounted() {
     if(this.selections.length && typeof this.selectedHazardIndex !== 'undefined') {
