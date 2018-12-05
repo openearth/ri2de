@@ -1,5 +1,12 @@
 <template>
-  <span/>
+  <portal
+    v-if="errorMessage"
+    to="error-panel"
+  >
+    <div class="error-bar">
+      <div class="error-bar__message">{{ errorMessage }}</div>
+    </div>
+  </portal>
 </template>
 
 <script>
@@ -13,6 +20,11 @@ const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
 
 export default {
   mixins: [ initMapState ],
+  data() {
+    return {
+      errorMessage: undefined,
+    }
+  },
   computed: {
     ...mapState('mapbox/selections', [ 'selections' ]),
   },
@@ -45,12 +57,19 @@ export default {
       const selectionId = event.features[0].id
 
       getFeature(event.features[0])
-        .then(featureCollection => {
+        .then(({ featureCollection, error }) => {
+          if(error) {
+            this.errorMessage = error
+            this.$store.dispatch('mapbox/selections/delete', selectionId)
+            setTimeout(() => { this.errorMessage = undefined }, 4000)
+            return
+          }
+
           this.$store.dispatch('mapbox/features/add', layers.geojson.line({
             id: selectionId,
             data: featureCollection,
             paint: {
-              'line-width': 10,
+              'line-width': 5,
               'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
               'line-opacity': 0.8,
             },
@@ -82,3 +101,23 @@ export default {
   }
 }
 </script>
+
+<style>
+  .error-bar {
+    position: absolute;
+    z-index: 3;
+    top: 1rem;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .error-bar__message {
+    color: #D8000C;
+    background-color: #FFD2D2;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: .5rem 1rem;
+  }
+</style>

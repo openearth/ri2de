@@ -8,6 +8,9 @@
       />
     </side-panel>
     <div class="map-container">
+      <portal-target
+        name="error-panel"
+      />
       <mapbox-map @mapCreated="initializeMap" />
     </div>
     <nuxt/>
@@ -68,5 +71,6 @@ export default {
 .map-container {
   flex-grow: 3;
   height: calc(100% - 64px);
+  position: relative;
 }
 </style>

@@ -181,7 +181,10 @@ export default {
       const factor = this.currentSusceptibilityFactors[index]
       if(factor.factorLayers) {
         factor.factorLayers.forEach(layer => {
-          this.$store.dispatch('mapbox/wms/setOpacity', { id: layer, opacity: active ? 1 : 0 })
+          this.$store.dispatch('mapbox/wms/setOpacity', {
+            id: layer,
+            opacity: active ? 1 : 0
+          })
         })
       }
     }
