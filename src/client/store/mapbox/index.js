@@ -1,4 +1,4 @@
-import { NETHERLANDS_CENTER_LATITUDE, NETHERLANDS_CENTER_LONGITUDE, MAP_ZOOM } from '../../lib/_mapbox/map-config'
+import { MAP_CENTER, MAP_ZOOM } from '../../lib/_mapbox/map-config'
 
 export const state = () => ({
   mapObject: {},
@@ -41,7 +41,7 @@ export const actions = {
   },
   moveMapToCenter({ state }) {
     state.mapObject.map.flyTo({
-      center:[ NETHERLANDS_CENTER_LONGITUDE, NETHERLANDS_CENTER_LATITUDE ],
+      center:MAP_CENTER,
       zoom: MAP_ZOOM
     })
   },
