@@ -151,7 +151,7 @@ export default {
       this.updateWeightFactor({
         hazardIndex: this.selectedHazardIndex,
         susceptibilityIndex: index,
-        weightFactor: value
+        weightFactor: value,
       })
     },
     onUpdateClasses(classes, index) {
