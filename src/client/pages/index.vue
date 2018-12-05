@@ -66,7 +66,7 @@
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 
-import { globalRoads, wmsLayerFromFactor } from '../lib/project-layers'
+import { globalRoads, wmsSelectionFromFactor } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
@@ -192,7 +192,7 @@ export default {
       const susceptibility = this.currentSusceptibilityFactors[susceptibilityIndex]
       const layerPromises = selectionPolygons.map(polygon => {
         this.$store.dispatch('mapbox/wms/remove', `${polygon.id}-${susceptibility.title}`)
-        return wmsLayerFromFactor({ polygon, factor: susceptibility })
+        return wmsSelectionFromFactor({ polygon, factor: susceptibility })
       })
       const layers = await Promise.all(layerPromises)
 

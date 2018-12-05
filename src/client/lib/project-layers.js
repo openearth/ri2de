@@ -45,7 +45,7 @@ export const generateWmsLayer = ({ url, id, layer, style='', paint={} }) => {
   })
 }
 
-export async function wmsLayerFromFactor({ factor, polygon }) {
+export async function wmsSelectionFromFactor({ factor, polygon }) {
   const wpsResponse = await wps({
     functionId: factor.wpsFunctionId,
     requestData: {
