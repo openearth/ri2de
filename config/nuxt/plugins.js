@@ -6,4 +6,5 @@ module.exports = [
   { src: '~/plugins/resize-directive', ssr: false },
   { src: '~/plugins/vue-material.js', ssr: true },
   { src: '~/plugins/vue-portal', ssr: true },
+  { src: '~/plugins/vue-slider-component', ssr: false }
 ]
