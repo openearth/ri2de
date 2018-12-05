@@ -20,7 +20,7 @@ export default {
   .error-bar {
     position: absolute;
     z-index: 3;
-    top: 1rem;
+    top: var(--spacing-default);
     left: 0;
     width: 100%;
     text-align: center;
@@ -32,6 +32,6 @@ export default {
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
-    padding: .5rem 1rem;
+    padding: var(--spacing-half) var(--spacing-default);
   }
 </style>

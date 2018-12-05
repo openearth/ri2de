@@ -8,7 +8,6 @@
     <div
       v-for="(factor, index) in factors"
       :key="factor.id"
-      class="susceptibility-list__list-item"
     >
       <md-list-item>
         <md-button
@@ -19,8 +18,9 @@
             remove_red_eye
           </md-icon>
         </md-button>
-        <span>{{ factor.title }}</span>
+        <span class="susceptibility-list__item-title">{{ factor.title }}</span>
         <md-button
+          :class="{ 'md-raised md-primary' : selectedFactorIndex === index }"
           class="md-icon-button"
           @click="() => toggleSettings(index)"
         >
@@ -32,13 +32,20 @@
           v-if="selectedFactorIndex === index"
           class="list-item__settings"
         >
-          <span>{{ factor.title }}</span>
           <weight-factor
             :min="factor.min"
             :max="factor.max"
             :step="factor.step"
             :weight-factor="factor.weightFactor"
             @onChange="(value) => $emit('setWeightFactor', { value, index })"
+          />
+          <input-range
+            v-if="factor.classes && (factor.classes.length === 4)"
+            :label="'Classes'"
+            :value="[factor.classes[1], factor.classes[2]]"
+            :min="factor.classes[0]"
+            :max="factor.classes[3]"
+            @updateClasses="classes => $emit('updateClasses', { classes, index })"
           />
           <layer-legend :legend-url="factor.legendUrl" />
         </div>
@@ -50,11 +57,13 @@
 <script>
 import { LayerLegend } from '../'
 import WeightFactor from '../weight-factor'
+import InputRange from '../input-range'
 
 export default {
   components: {
     LayerLegend,
     WeightFactor,
+    InputRange,
   },
   props: {
     factors: {
@@ -99,6 +108,11 @@ export default {
   width: 100%;
 }
 
+.susceptibility-list__item-title {
+  margin-left: var(--spacing-default);
+  margin-right: auto;
+}
+
 .md-icon.icon-small {
   font-size: 20px !important;
   margin-right: 8px !important;
@@ -107,12 +121,16 @@ export default {
 .list-item__settings {
   position: absolute;
   width: 250px;
-  height: 300px;
   background-color: #fff;
   top: 0;
   right: -275px;
   z-index: 1000000;
   padding: var(--spacing-default);
+  box-shadow: 1px 1px 10px #ccc;
+}
+
+.list-item__settings .md-subheader {
+  padding: 0;
 }
 
 .fade-enter, .fade-leave-to {
@@ -121,9 +139,5 @@ export default {
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
-}
-
-.susceptibility-list__list-item {
-  position: relative;
 }
 </style>

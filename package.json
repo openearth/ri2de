@@ -45,6 +45,7 @@
     "query-string": "^6.2.0",
     "vue-material": "^1.0.0-beta-10.2",
     "vue-resize-directive": "^1.1.4",
+    "vue-slider-component": "^2.8.2",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {

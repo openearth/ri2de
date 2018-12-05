@@ -22,6 +22,11 @@ export const mutations = {
   setSusceptibilityFactors(state, susceptibilityFactors) {
     state.susceptibilityFactors = susceptibilityFactors
   },
+  updateClasses(state, { hazardIndex, susceptibilityIndex, classes }) {
+    const newFactors = [ ...state.susceptibilityFactors ]
+    newFactors[hazardIndex][susceptibilityIndex].classes = [ ...classes ]
+    state.susceptibilityFactors = newFactors
+  },
   updateFactorLayers(state, { factorLayers, index }) {
     const { selectedHazardIndex, susceptibilityFactors } = state
     const newFactor = {

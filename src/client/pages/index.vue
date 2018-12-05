@@ -55,6 +55,7 @@
         v-if="activePage === 'susceptibilities'"
         :factors="currentSusceptibilityFactors"
         @setWeightFactor="onSetWeightFactor"
+        @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
         @toggleFactorActivity="toggleSusceptibilityLayer"
       />
       <nuxt-child/>
@@ -99,6 +100,7 @@ export default {
       onUpdateSelectionTitle: 'mapbox/selections/updateTitle',
       selectHazard: 'hazards/selectHazard',
       updateWeightFactor: 'hazards/updateWeightFactor',
+      updateClasses: 'hazards/updateClasses',
     }),
     ...mapActions({
       bootstrapHazardsList: 'hazards/bootstrapHazards'
@@ -176,6 +178,13 @@ export default {
         default:
           break
       }
+    },
+    onUpdateClasses(classes, index) {
+      this.updateClasses({
+        hazardIndex: this.selectedHazardIndex,
+        susceptibilityIndex: index,
+        classes,
+      })
     },
     toggleSusceptibilityLayer({ index, active }) {
       const factor = this.currentSusceptibilityFactors[index]
