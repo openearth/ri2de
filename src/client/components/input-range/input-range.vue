@@ -10,8 +10,8 @@
         :width="options.width"
         :height="options.height"
         :tooltip-style="options.tooltipStyles"
-        :min-range="0"
-        :max-range="300"
+        :min-range="min"
+        :max-range="max"
         tooltip="always"
       />
     </div>
@@ -26,21 +26,21 @@ export default {
       required: true,
     },
     value: {
-      type: [Number, String],
-      default: 0,
+      type: Array,
+      required: true,
     },
     min: {
       type: Number,
-      default: 0,
+      required: true,
     },
     max: {
       type: Number,
-      default: 1,
+      required: true
     },
   },
   data() {
     return {
-      val: [20, 50],
+      val: this.value,
       options: {
         width: '100%',
         height: 8,
@@ -52,7 +52,7 @@ export default {
   },
   watch: {
     val(value) {
-      this.$emit('change', value)
+      this.$emit('updateClasses', [this.min, value[0], value[1], this.max])
     }
   },
 }

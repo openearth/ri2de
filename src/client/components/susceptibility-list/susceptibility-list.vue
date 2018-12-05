@@ -40,8 +40,12 @@
             @onChange="(value) => $emit('setWeightFactor', { value, index })"
           />
           <input-range
+            v-if="factor.classes.length"
             :label="'Classes'"
-            @change="value => $emit('change', { value, index })"
+            :value="[factor.classes[1], factor.classes[2]]"
+            :min="factor.classes[0]"
+            :max="factor.classes[3]"
+            @updateClasses="classes => $emit('updateClasses', { classes, index })"
           />
           <layer-legend :legend-url="factor.legendUrl" />
         </div>
