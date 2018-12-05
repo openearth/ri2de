@@ -39,6 +39,6 @@ export default {
 .layer-legend__square {
   width: 20px;
   height: 20px;
-  margin-right: .5rem;
+  margin-right: var(--spacing-half);
 }
 </style>
