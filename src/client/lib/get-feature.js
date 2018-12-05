@@ -1,17 +1,10 @@
-import geoServerUrl from './geoserver-url'
+import wps from './wps'
 
-export default function getFeature({ layer='', ...rest }) {
-  const url = geoServerUrl({
-    service: 'wfs',
-    request: 'GetFeature',
-    version: '2.0.0',
-    outputFormat: 'application/json',
-    srsName: 'EPSG:4326',
-    typeName: layer,
-    ...rest
+export default function(polygon) {
+  return wps({
+    functionId: 'ri2de_calc_roads',
+    polygon
   })
-
-  return fetch(url)
-    .then(response => response.json())
-    .catch(err => console.log('Error while getting GeoJson features:', err))
+    .then(({ data }) => JSON.parse(data)[0])
+    .then(data => JSON.parse(data.st_asgeojson))
 }

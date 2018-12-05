@@ -1,24 +1,49 @@
 const appData = [
   {
-    type: 'hazard',
-    name: 'erosion of culverts',
-    layers: [
-      { title: 'landuse', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:zluse_reclass_filled&styles=&bbox={bbox-epsg-3857}&width=768&height=621&srs=EPSG:28992&format=image/png', legendUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:zluse_reclass_filled' },
-      { title: 'watercourse', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:zwaterlopen&styles=&bbox={bbox-epsg-3857}&width=768&height=621&srs=EPSG:28992&format=image/png', legendUrl:'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:zwaterlopen' },
-      { title: 'slope', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:ahn_f25_roadbuf_slope_reclass&styles=&bbox={bbox-epsg-3857}&width=768&height=621&srs=EPSG:4326&format=image/png', legendUrl:'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:ahn_f25_roadbuf_slope_reclass' },
-      { title: 'soil', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:zgrondsoorten_buffered&styles=&bbox={bbox-epsg-3857}&width=768&height=414&srs=EPSG:28992&format=image/png', legendUrl:'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:zgrondsoorten_buffered' },
-      { title: 'culvert', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:zduikers&styles=&bbox={bbox-epsg-3857}&width=768&height=621&srs=EPSG:28992&format=image/png', legendUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:zduikers' },
+    "type": "hazard",
+    "name": "erosion of culverts",
+    "layers": [
+      {
+        "title": "slope",
+        "wpsFunctionId": "ri2de_calc_slope",
+        "classes": [5,10,15],
+        "layerName": "Global_Base_Maps:SRTM30_GEBCO",
+        "owsUrl": "https://fast.openearth.eu/geoserver/ows?"
+      },
+      {
+        "title": "soil",
+        "wpsFunctionId": "ri2de_calc_soil",
+        "classes": [],
+        "layerName": "",
+        "owsUrl": "http://data.isric.org/geoserver/ows?"
+      },
+      {
+        "title": "watercourse",
+        "wpsFunctionId": "ri2de_calc_watercourse",
+        "classes": [30, 100, 300],
+        "layerName": "",
+        "owsUrl": ""
+      }
     ]
   },
   {
-    type: 'hazard',
-    name: 'lightning',
-    layers: [
-      { title: 'landuse', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:zluse_reclass_filled&styles=&bbox={bbox-epsg-3857}&width=768&height=621&srs=EPSG:28992&format=image/png', legendUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:zluse_reclass_filled' },
-      { title: 'watercourse', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:zwaterlopen&styles=&bbox={bbox-epsg-3857}&width=768&height=621&srs=EPSG:28992&format=image/png', legendUrl:'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:zwaterlopen' },
-      { title: 'slope', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:ahn_f25_roadbuf_slope_reclass&styles=&bbox={bbox-epsg-3857}&width=768&height=621&srs=EPSG:4326&format=image/png', legendUrl:'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:ahn_f25_roadbuf_slope_reclass' },
-      { title: 'soil', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:zgrondsoorten_buffered&styles=&bbox={bbox-epsg-3857}&width=768&height=414&srs=EPSG:28992&format=image/png', legendUrl:'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:zgrondsoorten_buffered' },
-      { title: 'culvert', wmsUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?service=WMS&version=1.1.0&request=GetMap&layers=limburg:zduikers&styles=&bbox={bbox-epsg-3857}&width=768&height=621&srs=EPSG:28992&format=image/png', legendUrl: 'https://ri2de.openearth.eu/geoserver/limburg/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=limburg:zduikers' },
+    "type": "hazard",
+    "name": "lightning",
+    "layers": [
+      {
+        "title": "slope",
+        "wpsFunctionId": "ri2de_calc_slope",
+        "classes": [5,10,15],
+        "layerName": "Global_Base_Maps:SRTM30_GEBCO",
+        "owsUrl": "https://fast.openearth.eu/geoserver/ows?"
+      },
+      {
+        "title": "soil",
+        "wpsFunctionId": "ri2de_calc_soil",
+        "classes": [],
+        "layerName": "",
+        "owsUrl": "http://data.isric.org/geoserver/ows?"
+      }
     ]
   }
 ]
