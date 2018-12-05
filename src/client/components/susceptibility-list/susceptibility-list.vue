@@ -8,7 +8,6 @@
     <div
       v-for="(factor, index) in factors"
       :key="factor.id"
-      class="susceptibility-list__list-item"
     >
       <md-list-item>
         <md-button
@@ -19,8 +18,9 @@
             remove_red_eye
           </md-icon>
         </md-button>
-        <span>{{ factor.title }}</span>
+        <span class="susceptibility-list__item-title">{{ factor.title }}</span>
         <md-button
+          :class="{ 'md-raised md-primary' : selectedFactorIndex === index }"
           class="md-icon-button"
           @click="() => toggleSettings(index)"
         >
@@ -108,6 +108,11 @@ export default {
   width: 100%;
 }
 
+.susceptibility-list__item-title {
+  margin-left: var(--spacing-default);
+  margin-right: auto;
+}
+
 .md-icon.icon-small {
   font-size: 20px !important;
   margin-right: 8px !important;
@@ -130,9 +135,5 @@ export default {
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
-}
-
-.susceptibility-list__list-item {
-  position: relative;
 }
 </style>
