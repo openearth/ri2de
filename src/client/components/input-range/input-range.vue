@@ -9,7 +9,9 @@
         v-model="val"
         :width="options.width"
         :height="options.height"
-        :tooltip-style="options.tooltipStyles"
+        :tooltip-style="options.tooltipStyle"
+        :process-style="options.processStyle"
+        :bg-style="options.bgStyle"
         :min-range="min"
         :max-range="max"
         tooltip="always"
@@ -44,10 +46,18 @@ export default {
       options: {
         width: '100%',
         height: 8,
-        tooltipStyles: {
-          "height": "25px"
+        tooltipStyle: {
+          "height": "25px",
+          "backgroundColor": "#008FC5",
+          "borderColor": "#008FC5",
         },
-      }
+        processStyle: {
+          "backgroundColor": "#ccc",
+        },
+        bgStyle: {
+          "backgroundColor": "#ccc",
+        },
+      },
     }
   },
   watch: {

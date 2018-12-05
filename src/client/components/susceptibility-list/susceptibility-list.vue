@@ -40,7 +40,7 @@
             @onChange="(value) => $emit('setWeightFactor', { value, index })"
           />
           <input-range
-            v-if="factor.classes.length"
+            v-if="factor.classes.length && (factor.classes.length === 4)"
             :label="'Classes'"
             :value="[factor.classes[1], factor.classes[2]]"
             :min="factor.classes[0]"
@@ -127,6 +127,10 @@ export default {
   z-index: 1000000;
   padding: var(--spacing-default);
   box-shadow: 1px 1px 10px #ccc;
+}
+
+.list-item__settings .md-subheader {
+  padding: 0;
 }
 
 .fade-enter, .fade-leave-to {
