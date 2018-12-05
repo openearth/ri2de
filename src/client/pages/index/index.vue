@@ -1,11 +1,9 @@
 <template>
   <portal
     v-if="errorMessage"
-    to="error-panel"
+    to="map-notification"
   >
-    <div class="error-bar">
-      <div class="error-bar__message">{{ errorMessage }}</div>
-    </div>
+    <error-bar :error-message="errorMessage" />
   </portal>
 </template>
 
@@ -16,9 +14,12 @@ import getFeature from '../../lib/get-feature'
 import initMapState from '../../lib/mixins/init-map-state'
 import layers from '../../lib/_mapbox/layers'
 
+import { ErrorBar } from '../../components'
+
 const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
 
 export default {
+  components: { ErrorBar },
   mixins: [ initMapState ],
   data() {
     return {
@@ -101,23 +102,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .error-bar {
-    position: absolute;
-    z-index: 3;
-    top: 1rem;
-    left: 0;
-    width: 100%;
-    text-align: center;
-  }
-
-  .error-bar__message {
-    color: #D8000C;
-    background-color: #FFD2D2;
-    display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
-    padding: .5rem 1rem;
-  }
-</style>

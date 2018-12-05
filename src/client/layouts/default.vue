@@ -9,7 +9,7 @@
     </side-panel>
     <div class="map-container">
       <portal-target
-        name="error-panel"
+        name="map-notification"
       />
       <mapbox-map @mapCreated="initializeMap" />
     </div>
