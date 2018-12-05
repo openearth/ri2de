@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
+
 export default {
   props: {
     label: {
@@ -61,9 +63,9 @@ export default {
     }
   },
   watch: {
-    val(value) {
+    val: debounce(function(value) {
       this.$emit('updateClasses', [this.min, value[0], value[1], this.max])
-    }
+    }, 1000)
   },
 }
 </script>
