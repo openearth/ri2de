@@ -8,6 +8,9 @@
       />
     </side-panel>
     <div class="map-container">
+      <portal-target
+        name="map-notification"
+      />
       <mapbox-map @mapCreated="initializeMap" />
     </div>
     <nuxt/>
@@ -16,6 +19,8 @@
 
 <script>
 import { mapState } from 'vuex'
+
+import { globalRoads } from '../lib/project-layers'
 
 import { AppHeader, MapboxMap, SidePanel } from '../components'
 
@@ -36,9 +41,12 @@ export default {
       })
     },
     restartApp() {
+      this.$store.dispatch('mapbox/wms/resetLayers')
+      this.$store.dispatch('mapbox/wms/add', globalRoads)
       this.$store.dispatch('mapbox/features/resetFeatures')
       this.$store.dispatch('mapbox/selections/reset')
       this.$store.dispatch('mapbox/moveMapToCenter')
+      this.$router.replace({ path: '/' })
     }
   }
 }
@@ -63,5 +71,6 @@ export default {
 .map-container {
   flex-grow: 3;
   height: calc(100% - 64px);
+  position: relative;
 }
 </style>

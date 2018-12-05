@@ -11,10 +11,15 @@
       class="susceptibility-list__list-item"
     >
       <md-list-item>
-        <span class="md-caption">
-          <md-icon class="icon-small">remove_red_eye</md-icon>
-          {{ factor.title }}
-        </span>
+        <md-button
+          class="md-icon-button"
+          @click="toggleFactorActivity(index)"
+        >
+          <md-icon :disabled="!activeFactorIndexes[index]">
+            remove_red_eye
+          </md-icon>
+        </md-button>
+        <span>{{ factor.title }}</span>
         <md-button
           class="md-icon-button"
           @click="() => toggleSettings(index)"
@@ -49,7 +54,7 @@ import WeightFactor from '../weight-factor'
 export default {
   components: {
     LayerLegend,
-    WeightFactor
+    WeightFactor,
   },
   props: {
     factors: {
@@ -59,10 +64,17 @@ export default {
   },
   data() {
     return {
+      activeFactorIndexes: this.factors.map(factor => true),
       selectedFactorIndex: null,
     }
   },
   methods: {
+    toggleFactorActivity(index) {
+      const activeFactors = [ ...this.activeFactorIndexes ]
+      activeFactors[index] = !activeFactors[index]
+      this.activeFactorIndexes = activeFactors
+      this.$emit('toggleFactorActivity', { index, active: activeFactors[index] })
+    },
     toggleSettings(index) {
       if (this.selectedFactorIndex === index) {
         this.selectedFactorIndex = null

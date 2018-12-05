@@ -55,6 +55,7 @@
         v-if="activePage === 'susceptibilities'"
         :factors="currentSusceptibilityFactors"
         @setWeightFactor="onSetWeightFactor"
+        @toggleFactorActivity="toggleSusceptibilityLayer"
       />
       <nuxt-child/>
     </div>
@@ -149,7 +150,7 @@ export default {
             id: feature.id,
             data: feature.source.data,
             paint: {
-              'line-width': 10,
+              'line-width': 5,
               'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
               'line-opacity': 0.8,
             },
@@ -175,8 +176,19 @@ export default {
         default:
           break
       }
+    },
+    toggleSusceptibilityLayer({ index, active }) {
+      const factor = this.currentSusceptibilityFactors[index]
+      if(factor.factorLayers) {
+        factor.factorLayers.forEach(layer => {
+          this.$store.dispatch('mapbox/wms/setOpacity', {
+            id: layer,
+            opacity: active ? 1 : 0
+          })
+        })
+      }
     }
-  }
+  },
 }
 </script>
 
