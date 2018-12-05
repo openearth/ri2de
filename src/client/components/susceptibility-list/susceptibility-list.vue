@@ -2,7 +2,12 @@
   <md-list class="susceptibility-list">
     <md-subheader class="susceptibility-list__header">
       Susceptibility factors
-      <md-button class="md-dense">Reset</md-button>
+      <md-button
+        class="md-dense"
+        @click="() => $emit('reset')"
+      >
+        Reset
+      </md-button>
     </md-subheader>
     <md-divider />
     <div
@@ -47,7 +52,7 @@
             :max="factor.classes[3]"
             @updateClasses="classes => $emit('updateClasses', { classes, index })"
           />
-          <layer-legend :legend-url="factor.legendUrl" />
+          <layer-legend />
         </div>
       </transition>
     </div>

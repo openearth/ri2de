@@ -56,6 +56,7 @@
         :factors="currentSusceptibilityFactors"
         @setWeightFactor="onSetWeightFactor"
         @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
+        @reset="onResetSusceptibilityFactors"
         @toggleFactorActivity="toggleSusceptibilityLayer"
       />
       <nuxt-child/>
@@ -103,7 +104,8 @@ export default {
       updateClasses: 'hazards/updateClasses',
     }),
     ...mapActions({
-      bootstrapHazardsList: 'hazards/bootstrapHazards'
+      bootstrapHazardsList: 'hazards/bootstrapHazards',
+      onResetSusceptibilityFactors: 'hazards/resetSusceptibilityFactors'
     }),
     deleteInfrastructure(index) {
       const selection = this.selections[index]
