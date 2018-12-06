@@ -58,7 +58,7 @@ export default {
       const selectionId = event.features[0].id
 
       getFeature(event.features[0])
-        .then(({ featureCollection, error }) => {
+        .then(({ featureCollection, roadsIdentifier, error }) => {
           if(error) {
             this.errorMessage = error
             this.$store.dispatch('mapbox/selections/delete', selectionId)
@@ -74,13 +74,15 @@ export default {
               'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
               'line-opacity': 0.8,
             },
+            identifier: roadsIdentifier,
           }))
 
           this.$store.commit('mapbox/selections/add', {
             title: 'Unnamed Selection',
             id: selectionId,
             features: [ selectionId ],
-            polygon: event.features
+            polygon: event.features,
+            identifier: roadsIdentifier,
           })
         })
     },
