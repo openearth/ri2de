@@ -188,11 +188,11 @@ export default {
       }
     },
     async updateSusceptibilityLayers({ susceptibilityIndex }) {
-      const selectionPolygons = this.selections.map(selection => selection.polygon[0])
+      const selectionPolygons = this.selections.map(selection => ({ polygon: selection.polygon[0], identifier: selection.identifier }))
       const susceptibility = this.currentSusceptibilityFactors[susceptibilityIndex]
       const layerPromises = selectionPolygons.map(polygon => {
-        this.$store.dispatch('mapbox/wms/remove', `${polygon.id}-${susceptibility.title}`)
-        return wmsSelectionFromFactor({ polygon, factor: susceptibility })
+        this.$store.dispatch('mapbox/wms/remove', `${polygon.polygon.id}-${susceptibility.title}`)
+        return wmsSelectionFromFactor({ polygon: polygon.polygon, factor: susceptibility, identifier: polygon.identifier })
       })
       const layers = await Promise.all(layerPromises)
 
