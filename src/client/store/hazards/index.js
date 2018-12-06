@@ -28,13 +28,7 @@ export const mutations = {
     if (newFactors[hazardIndex][susceptibilityIndex].classes) {
       newFactors[hazardIndex][susceptibilityIndex].classes = [ ...classes ]
     }
-    newFactors[hazardIndex][susceptibilityIndex].weightFactor = 1
     state.susceptibilityFactors = newFactors
-  },
-  resetSusceptibilityFactors(state) {
-    const newFactors = [ ...state.susceptibilityFactors ]
-    newFactors[state.selectedHazardIndex].forEach(factor => factor.classes = [...factor.initialClasses])
-    state.susceptibilityFactorS = newFactors
   },
   updateFactorLayers(state, { factorLayers, index }) {
     const { selectedHazardIndex, susceptibilityFactors } = state
@@ -63,27 +57,27 @@ export const actions = {
     commit('setSusceptibilityFactors', susceptibilityFactors)
   },
   resetSusceptibilityFactors({ commit, dispatch, state, rootState }) {
-    const selections = rootState.mapbox.selections.selections
-    const selectionPolygons = selections.map(selection => selection.polygon[0])
-    const currentFactors = state.susceptibilityFactors[state.selectedHazardIndex]
+    const { susceptibilityFactors, selectedHazardIndex } = state
+    const currentFactors = susceptibilityFactors[selectedHazardIndex]
 
     currentFactors.forEach(async (factor, index) => {
-      const factorLayers = selectionPolygons.map(async polygon => {
-        const wmsLayer = await wmsSelectionFromFactor({ factor, polygon })
-        dispatch('mapbox/wms/remove', wmsLayer.id, { root: true })
-      })
-
-      try {
-        commit('updateFactorLayers', {
-          index,
-          factorLayers: await Promise.all(factorLayers)
+      if(factor.factorLayers) {
+        factor.factorLayers.forEach(layer => {
+          dispatch('mapbox/wms/remove', layer, { root: true })
         })
-      } catch(e) {
-        console.log('Error: ', e)
       }
-    })
 
-    dispatch('resetSusceptibilityFactors')
+      commit('updateClasses', {
+        hazardIndex: selectedHazardIndex,
+        susceptibilityIndex: index,
+        classes: [ ...factor.initialClasses ],
+      })
+      commit('updateWeightFactor', {
+        hazardIndex: selectedHazardIndex,
+        susceptibilityIndex: index,
+        weightFactor: 1,
+      })
+    })
   },
 }
 
