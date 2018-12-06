@@ -12,7 +12,7 @@ export default function(polygon) {
     })
     .then(data => {
       return data.errMsg
-        ? { error: data.errMsg, featureCollection: undefined }
-        : { error: undefined, featureCollection: JSON.parse(data[0].st_asgeojson) }
+        ? { error: data.errMsg, featureCollection: undefined, roadsIdentifier: undefined }
+        : { error: undefined, featureCollection: JSON.parse(JSON.parse(data.roadsCollection)[0].st_asgeojson), roadsIdentifier: data.roadsIdentifier }
     })
 }

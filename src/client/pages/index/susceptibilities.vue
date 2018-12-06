@@ -38,12 +38,12 @@ export default {
   },
   methods: {
     getSelectionLayers() {
-      const selectionPolygons = this.selections.map(selection => selection.polygon[0])
+      const selectionPolygons = this.selections.map(selection => ({ polygon: selection.polygon[0], identifier: selection.identifier }))
       const currentFactors = this.currentSusceptibilityFactors
 
       currentFactors.forEach(async (factor, index) => {
         const factorLayers = selectionPolygons.map(async polygon => {
-          const wmsLayer = await wmsSelectionFromFactor({ factor, polygon })
+          const wmsLayer = await wmsSelectionFromFactor({ polygon: polygon.polygon, factor, identifier: polygon.identifier })
           this.$store.dispatch('mapbox/wms/add', wmsLayer)
           return wmsLayer.id
         })
