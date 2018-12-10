@@ -2,7 +2,8 @@
   <portal to="side-panel">
     <div>
       <content-card
-        :is-active="activePage === 'index'"
+        :is-expanded="activePage === 'index'"
+        :is-completed="selections.length"
         title="Infrastructure"
         @selectCard="selectCard"
       >
@@ -22,34 +23,42 @@
           Select the infrastructure you want to conduct calculations on
         </p>
 
-        <md-button
+        <button
           slot="actions"
           :disabled="selections.length === 0"
-          class="md-raised md-primary"
+          class="button button--primary"
           @click="completeInfrastructure"
         >
           Next
-        </md-button>
+        </button>
       </content-card>
       <content-card
-        :is-active="activePage === 'hazards'"
+        :is-expanded="activePage === 'hazards'"
+        :is-completed="typeof selectedHazardIndex === 'number'"
         title="Hazards"
         @selectCard="selectCard"
       >
+        <div
+          v-if="typeof selectedHazardIndex === 'number'"
+          slot="info"
+          class="info"
+        >
+          {{ hazards[selectedHazardIndex].title }}
+        </div>
         <hazards-list
           slot="content"
           :hazards="hazards"
           :initial-selection="selectedHazardIndex"
           @select="selectHazard"
         />
-        <md-button
+        <button
           slot="actions"
           :disabled="typeof selectedHazardIndex !== 'number'"
-          class="md-raised md-primary bnt-save"
+          class="md-raised md-accent button button--primary"
           @click="completeHazards"
         >
           Next
-        </md-button>
+        </button>
       </content-card>
       <susceptibility-list
         v-if="activePage === 'susceptibilities'"
@@ -216,5 +225,11 @@ export default {
 <style>
 .content-card {
   margin-bottom: var(--spacing-default);
+}
+
+.info {
+  margin-left: auto;
+  margin-right: var(--spacing-default);
+  color: rgba(255,255,255,.5);
 }
 </style>
