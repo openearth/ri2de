@@ -5,51 +5,53 @@
       <md-button class="md-dense">Reset</md-button>
     </md-subheader>
     <md-divider />
-    <div
-      v-for="(factor, index) in factors"
-      :key="factor.id"
-    >
-      <md-list-item>
-        <md-button
-          class="md-icon-button"
-          @click="toggleFactorActivity(index)"
-        >
-          <md-icon :disabled="!activeFactorIndexes[index]">
-            remove_red_eye
-          </md-icon>
-        </md-button>
-        <span class="susceptibility-list__item-title">{{ factor.title }}</span>
-        <md-button
-          :class="{ 'md-raised md-primary' : selectedFactorIndex === index }"
-          class="md-icon-button"
-          @click="() => toggleSettings(index)"
-        >
-          <md-icon>keyboard_arrow_right</md-icon>
-        </md-button>
-      </md-list-item>
-      <transition name="fade">
-        <div
-          v-if="selectedFactorIndex === index"
-          class="list-item__settings"
-        >
-          <weight-factor
-            :min="factor.min"
-            :max="factor.max"
-            :step="factor.step"
-            :weight-factor="factor.weightFactor"
-            @onChange="(value) => $emit('setWeightFactor', { value, index })"
-          />
-          <input-range
-            v-if="factor.classes && (factor.classes.length === 4)"
-            :label="'Classes'"
-            :value="[factor.classes[1], factor.classes[2]]"
-            :min="factor.classes[0]"
-            :max="factor.classes[3]"
-            @updateClasses="classes => $emit('updateClasses', { classes, index })"
-          />
-          <layer-legend :legend-url="factor.legendUrl" />
-        </div>
-      </transition>
+    <div class="susceptibility-list__list">
+      <div
+        v-for="(factor, index) in factors"
+        :key="factor.id"
+      >
+        <md-list-item>
+          <md-button
+            class="md-icon-button"
+            @click="toggleFactorActivity(index)"
+          >
+            <md-icon :disabled="!activeFactorIndexes[index]">
+              {{ activeFactorIndexes[index] ? 'visibility' : 'visibility_off' }}
+            </md-icon>
+          </md-button>
+          <span class="susceptibility-list__item-title">{{ factor.title }}</span>
+          <md-button
+            :class="{ 'md-raised md-primary' : selectedFactorIndex === index }"
+            class="md-icon-button"
+            @click="() => toggleSettings(index)"
+          >
+            <md-icon>keyboard_arrow_right</md-icon>
+          </md-button>
+        </md-list-item>
+        <transition name="fade">
+          <div
+            v-if="selectedFactorIndex === index"
+            class="list-item__settings"
+          >
+            <weight-factor
+              :min="factor.min"
+              :max="factor.max"
+              :step="factor.step"
+              :weight-factor="factor.weightFactor"
+              @onChange="(value) => $emit('setWeightFactor', { value, index })"
+            />
+            <input-range
+              v-if="factor.classes && (factor.classes.length === 4)"
+              :label="'Classes'"
+              :value="[factor.classes[1], factor.classes[2]]"
+              :min="factor.classes[0]"
+              :max="factor.classes[3]"
+              @updateClasses="classes => $emit('updateClasses', { classes, index })"
+            />
+            <layer-legend />
+          </div>
+        </transition>
+      </div>
     </div>
   </md-list>
 </template>
@@ -98,7 +100,6 @@ export default {
 
 <style>
 .susceptibility-list {
-  position: relative;
   z-index: 10000;
 }
 
@@ -106,6 +107,10 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.susceptibility-list__list {
+  position: relative;
 }
 
 .susceptibility-list__item-title {
