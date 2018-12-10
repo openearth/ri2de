@@ -6,7 +6,8 @@
   /* colors */
   --neutral-color: #ddd;
   --primary-color: #008FC5;
-  --accent-color: #709DB1;
+  --primary-color--light: #709DB1;
+  --accent-color: #FF7200;
 
   /* spacing */
   --spacing-default: 1rem;
