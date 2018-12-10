@@ -56,11 +56,11 @@ export const actions = {
     commit('setHazards', hazards)
     commit('setSusceptibilityFactors', susceptibilityFactors)
   },
-  resetSusceptibilityFactors({ commit, dispatch, state, rootState }) {
+  resetSusceptibilityFactors({ commit, dispatch, state }) {
     const { susceptibilityFactors, selectedHazardIndex } = state
     const currentFactors = susceptibilityFactors[selectedHazardIndex]
 
-    currentFactors.forEach(async (factor, index) => {
+    currentFactors.forEach((factor, index) => {
       if(factor.factorLayers) {
         factor.factorLayers.forEach(layer => {
           dispatch('mapbox/wms/remove', layer, { root: true })
