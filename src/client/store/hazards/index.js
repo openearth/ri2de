@@ -10,8 +10,8 @@ export const mutations = {
   addHazard(state, hazard) {
     state.hazards = [ ...state.hazards, hazard ]
   },
-  addSusceptibilityFactors(state, susceptibilityFactors) {
-    state.susceptibilityFactors = [ ...state.susceptibilityFactors, susceptibilityFactors ]
+  addSusceptibilityFactor(state, susceptibilityFactor) {
+    state.susceptibilityFactors = [ ...state.susceptibilityFactors, susceptibilityFactor ]
   },
   selectHazard(state, index) {
     state.selectedHazardIndex = index
@@ -25,20 +25,25 @@ export const mutations = {
   updateClasses(state, { hazardIndex, susceptibilityIndex, classes }) {
     const newFactors = [ ...state.susceptibilityFactors ]
     newFactors[hazardIndex][susceptibilityIndex].classes = [ ...classes ]
+
     state.susceptibilityFactors = newFactors
   },
-  updateFactorLayers(state, { factorLayers, index }) {
-    const { selectedHazardIndex, susceptibilityFactors } = state
-    const newFactor = {
-      ...susceptibilityFactors[selectedHazardIndex][index],
-      factorLayers,
-    }
+  updateFactorLayers(state, { hazardIndex, factorLayers, index }) {
+    const newFactors = [ ...state.susceptibilityFactors ]
+    newFactors[hazardIndex][index].factorLayers = factorLayers
 
-    susceptibilityFactors[selectedHazardIndex][index] = newFactor
+    state.susceptibilityFactors = newFactors
+  },
+  updateFactorVisibility(state, { hazardIndex, index, visible }) {
+    const newFactors = [ ...state.susceptibilityFactors ]
+    newFactors[hazardIndex][index].visible = visible
+
+    state.susceptibilityFactors = newFactors
   },
   updateWeightFactor(state, { hazardIndex, susceptibilityIndex, weightFactor }) {
     const newFactors = [ ...state.susceptibilityFactors ]
     newFactors[hazardIndex][susceptibilityIndex].weightFactor = Number(weightFactor)
+
     state.susceptibilityFactors = newFactors
   }
 }
@@ -48,7 +53,7 @@ export const actions = {
     const wpsResponse = await wps({ functionId: 'ri2de_calc_init' })
     const hazardsList = wpsResponse.data
     const hazards = hazardsList.map(({ name }) => ({ name, title: name, id: name }))
-    const susceptibilityFactors = hazardsList.map(({ layers }) => layers.map(layer => ({ ...layer, weightFactor: 1 })) )
+    const susceptibilityFactors = hazardsList.map(({ layers }) => layers.map(layer => ({ ...layer, weightFactor: 1, visible: false })) )
 
     commit('setHazards', hazards)
     commit('setSusceptibilityFactors', susceptibilityFactors)

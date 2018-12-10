@@ -64,7 +64,6 @@ export async function wmsSelectionFromFactor({ factor, polygon, identifier }) {
     url: baseUrl,
     layer: layerName,
     id: layerId,
-    paint: { 'raster-opacity': 1 },
     style,
   })
 }

@@ -14,8 +14,8 @@
           class="md-icon-button"
           @click="toggleFactorActivity(index)"
         >
-          <md-icon :disabled="!activeFactorIndexes[index]">
-            remove_red_eye
+          <md-icon :disabled="!factor.visible">
+            {{ factor.visible ? 'visibility' : 'visibility_off' }}
           </md-icon>
         </md-button>
         <span class="susceptibility-list__item-title">{{ factor.title }}</span>
@@ -73,16 +73,12 @@ export default {
   },
   data() {
     return {
-      activeFactorIndexes: this.factors.map(factor => true),
       selectedFactorIndex: null,
     }
   },
   methods: {
     toggleFactorActivity(index) {
-      const activeFactors = [ ...this.activeFactorIndexes ]
-      activeFactors[index] = !activeFactors[index]
-      this.activeFactorIndexes = activeFactors
-      this.$emit('toggleFactorActivity', { index, active: activeFactors[index] })
+      this.$emit('toggleFactorActivity', { index, active: !this.factors[index].visible })
     },
     toggleSettings(index) {
       if (this.selectedFactorIndex === index) {

@@ -39,19 +39,26 @@ export default {
   methods: {
     getSelectionLayers() {
       const selectionPolygons = this.selections.map(selection => ({ polygon: selection.polygon[0], identifier: selection.identifier }))
-      const currentFactors = this.currentSusceptibilityFactors
 
-      currentFactors.forEach(async (factor, index) => {
+      this.currentSusceptibilityFactors.forEach(async (factor, index) => {
         const factorLayers = selectionPolygons.map(async polygon => {
           const wmsLayer = await wmsSelectionFromFactor({ polygon: polygon.polygon, factor, identifier: polygon.identifier })
-          this.$store.dispatch('mapbox/wms/add', wmsLayer)
+
+          this.$store.dispatch('mapbox/wms/add', {
+            ...wmsLayer,
+            paint: { 'raster-opacity': index === 0 ? 1 : 0 }
+          })
+
           return wmsLayer.id
         })
 
         try {
+          const hazardIndex = this.selectedHazardIndex
+          this.$store.commit('hazards/updateFactorVisibility', {
+            index, hazardIndex, visible: index === 0 ? true : false
+          })
           this.$store.commit('hazards/updateFactorLayers', {
-            index,
-            factorLayers: await Promise.all(factorLayers)
+            index, hazardIndex, factorLayers: await Promise.all(factorLayers)
           })
         } catch(e) {
           console.log('Error: ', e)
