@@ -1,5 +1,5 @@
 <template>
-  <md-list class="susceptibility-list">
+  <md-list class="susceptibility-list card">
     <md-subheader class="susceptibility-list__header">
       Susceptibility factors
       <md-button class="md-dense">Reset</md-button>
@@ -21,8 +21,8 @@
           </md-button>
           <span class="susceptibility-list__item-title">{{ factor.title }}</span>
           <md-button
-            :class="{ 'md-raised md-primary' : selectedFactorIndex === index }"
-            class="md-icon-button"
+            :class="{ 'md-raised' : selectedFactorIndex === index }"
+            class="md-icon-button md-accent"
             @click="() => toggleSettings(index)"
           >
             <md-icon>keyboard_arrow_right</md-icon>
