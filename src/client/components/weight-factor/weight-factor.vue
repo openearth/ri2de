@@ -8,12 +8,13 @@
       <md-icon>remove</md-icon>
     </md-button>
     <input
-      v-model="value"
+      :value="value"
       :min="min"
       :max="max"
       :step="step"
       type="number"
       class="input"
+      @change="onChange"
     >
     <md-button
       class="md-icon-button input-control"
@@ -45,18 +46,19 @@ export default {
     weightFactor: {
       type: Number,
       required: false,
-      default: null,
+      default: 1,
     }
   },
   data() {
     return {
-      value: this.weightFactor || this.max,
+      value: this.weightFactor
     }
   },
   watch: {
-    value(val) {
-      this.$emit('onChange', val)
-    },
+    weightFactor(newWeightFactor) {
+      console.log('newWeightFactor', newWeightFactor)
+      this.value = newWeightFactor
+    }
   },
   methods: {
     increaseValue() {
@@ -64,6 +66,7 @@ export default {
 
       if (newValue <= this.max) {
         this.value = newValue
+        this.$emit('onChange', newValue)
       }
     },
     decreaseValue() {
@@ -71,9 +74,13 @@ export default {
 
       if (newValue >= this.min) {
         this.value = newValue
+        this.$emit('onChange', newValue)
       }
+    },
+    onChange(e) {
+      this.$emit('onChange', e.target.value)
     }
-  }
+  },
 }
 </script>
 

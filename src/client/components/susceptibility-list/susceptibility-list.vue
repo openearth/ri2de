@@ -38,15 +38,12 @@
           class="list-item__settings"
         >
           <weight-factor
-            :min="factor.min"
-            :max="factor.max"
-            :step="factor.step"
             :weight-factor="factor.weightFactor"
             @onChange="(value) => $emit('setWeightFactor', { value, index })"
           />
           <input-range
             v-if="factor.classes && (factor.classes.length === 4)"
-            :label="'Classes'"
+            label="Classes"
             :value="[factor.classes[1], factor.classes[2]]"
             :min="factor.classes[0]"
             :max="factor.classes[3]"

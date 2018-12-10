@@ -85,4 +85,9 @@ export const getters = {
   currentSusceptibilityFactors({ selectedHazardIndex, susceptibilityFactors }) {
     return susceptibilityFactors[selectedHazardIndex]
   },
+  factors: state => index => {
+    console.log(state.susceptibilityFactors)
+    console.log(index)
+    return state.susceptibilityFactors[index]
+  },
 }

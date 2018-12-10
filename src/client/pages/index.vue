@@ -85,7 +85,7 @@ export default {
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
     ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors' ]),
-    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
+    ...mapGetters('hazards', [ 'currentSusceptibilityFactors', 'factors' ]),
     infrastructureStyles() {
       return {
         default: INFRASTRUCTURE_DEFAULT_COLOR,
