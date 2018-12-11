@@ -85,7 +85,7 @@ export default {
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
     ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors' ]),
-    ...mapGetters('hazards', [ 'currentSusceptibilityFactors', 'factors' ]),
+    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
     infrastructureStyles() {
       return {
         default: INFRASTRUCTURE_DEFAULT_COLOR,
@@ -105,7 +105,7 @@ export default {
     }),
     ...mapActions({
       bootstrapHazardsList: 'hazards/bootstrapHazards',
-      onResetSusceptibilityFactors: 'hazards/resetSusceptibilityFactors'
+      resetSusceptibilityFactors: 'hazards/resetSusceptibilityFactors'
     }),
     completeInfrastructure() {
       if(this.selections.length) {
@@ -163,6 +163,14 @@ export default {
         classes,
       })
       this.updateSusceptibilityLayers({ susceptibilityIndex: index })
+    },
+    onResetSusceptibilityFactors() {
+      this.resetSusceptibilityFactors()
+      this.currentSusceptibilityFactors.map(factor => {
+        factor.factorLayers.forEach(layer => {
+          this.$store.dispatch('mapbox/wms/remove', layer)
+        })
+      })
     },
     selectCard(title) {
       switch (title) {

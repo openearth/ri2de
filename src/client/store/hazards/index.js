@@ -25,7 +25,7 @@ export const mutations = {
   },
   updateClasses(state, { hazardIndex, susceptibilityIndex, classes }) {
     const newFactors = [ ...state.susceptibilityFactors ]
-    if (newFactors[hazardIndex][susceptibilityIndex].classes) {
+    if (newFactors[hazardIndex][susceptibilityIndex]) {
       newFactors[hazardIndex][susceptibilityIndex].classes = [ ...classes ]
     }
     state.susceptibilityFactors = newFactors
@@ -41,7 +41,9 @@ export const mutations = {
   },
   updateWeightFactor(state, { hazardIndex, susceptibilityIndex, weightFactor }) {
     const newFactors = [ ...state.susceptibilityFactors ]
-    newFactors[hazardIndex][susceptibilityIndex].weightFactor = Number(weightFactor)
+    if (newFactors[hazardIndex][susceptibilityIndex]) {
+      newFactors[hazardIndex][susceptibilityIndex].weightFactor = Number(weightFactor)
+    }
     state.susceptibilityFactors = newFactors
   }
 }
@@ -56,17 +58,11 @@ export const actions = {
     commit('setHazards', hazards)
     commit('setSusceptibilityFactors', susceptibilityFactors)
   },
-  resetSusceptibilityFactors({ commit, dispatch, state }) {
+  resetSusceptibilityFactors({ commit, state }) {
     const { susceptibilityFactors, selectedHazardIndex } = state
     const currentFactors = susceptibilityFactors[selectedHazardIndex]
 
     currentFactors.forEach((factor, index) => {
-      if(factor.factorLayers) {
-        factor.factorLayers.forEach(layer => {
-          dispatch('mapbox/wms/remove', layer, { root: true })
-        })
-      }
-
       commit('updateClasses', {
         hazardIndex: selectedHazardIndex,
         susceptibilityIndex: index,
@@ -84,10 +80,5 @@ export const actions = {
 export const getters = {
   currentSusceptibilityFactors({ selectedHazardIndex, susceptibilityFactors }) {
     return susceptibilityFactors[selectedHazardIndex]
-  },
-  factors: state => index => {
-    console.log(state.susceptibilityFactors)
-    console.log(index)
-    return state.susceptibilityFactors[index]
   },
 }

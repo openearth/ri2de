@@ -43,10 +43,10 @@
           />
           <input-range
             v-if="factor.classes && (factor.classes.length === 4)"
-            label="Classes"
             :value="[factor.classes[1], factor.classes[2]]"
             :min="factor.classes[0]"
             :max="factor.classes[3]"
+            label="Classes"
             @updateClasses="classes => $emit('updateClasses', { classes, index })"
           />
           <layer-legend />
