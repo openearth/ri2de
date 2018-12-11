@@ -8,6 +8,7 @@
       @click.native="$emit('selectCard', title)"
     >
       <div class="md-body-2">{{ title }}</div>
+      <slot name="info" />
       <div
         v-if="isCompleted"
         class="content-card__header__icon"

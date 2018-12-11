@@ -56,7 +56,7 @@ export default {
     background-color: white;
     outline: 0;
     border: 0;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
 }
 </style>

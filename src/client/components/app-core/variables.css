@@ -1,15 +1,22 @@
 :root {
-  --side-panel-width: 370px;
+  --border-radius: 4px;
+  --border-radius--small: 2px;
   --card-width: 320px;
-  --border-radius--small: 5px;
+  --side-panel-width: 370px;
 
   /* colors */
-  --neutral-color: #ddd;
+  --accent-color: #FF7200;
+  --neutral-color: #B3B2B3;
+  --neutral-color--light: #EDEDED;
   --primary-color: #008FC5;
   --primary-color--light: #709DB1;
-  --accent-color: #FF7200;
+  --text-color: #2F2D2E;
 
   /* spacing */
-  --spacing-default: 1rem;
   --spacing-half: .5rem;
+  --spacing-default: 1rem;
+  --spacing-medium: 1.25rem;
+
+  /* fonts */
+  --font-size-default: 14px;
 }
