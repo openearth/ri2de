@@ -1,5 +1,5 @@
 <template>
-  <div
+  <md-card
     :class="{'content-card--completed' : isCompleted, 'content-card--expanded' : isExpanded }"
     class="content-card card"
   >
@@ -8,7 +8,6 @@
       @click.native="$emit('selectCard', title)"
     >
       <div class="md-body-2">{{ title }}</div>
-      <slot name="info" />
       <div
         v-if="isCompleted"
         class="content-card__header__icon"
@@ -30,7 +29,7 @@
     >
       <slot name="actions" />
     </div>
-  </div>
+  </md-card>
 </template>
 
 <script>
@@ -54,12 +53,18 @@ export default {
 </script>
 
 <style>
-.md-card.content-card {
+.content-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--neutral-color);
+  color: #fff;
   border-radius: var(--border-radius--small);
 }
 
-.content-card--completed .content-card__header {
-  background-color: #008FC5;
+.content-card--completed .content-card__header,
+.content-card--expanded .content-card__header {
+  background-color: var(--primary-color);
 }
 
 .content-card--expanded .content-card__header {
@@ -67,40 +72,25 @@ export default {
   border-bottom-right-radius: 0;
 }
 
-.content-card__header {
-  background-color: var(--neutral-color);
-  color: white;
-  border-radius: var(--border-radius--small);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .md-card-header+.md-card-content.content-card__content {
   padding-bottom: 0;
 }
 
 .content-card__actions {
-  padding: 20px;
-}
-
-.card {
-  background-color: #fff;
-  box-shadow: 0px 0px 8px #ccc;
-  border-radius: 4px;
+  padding: var(--spacing-medium);
 }
 
 .content-card__content {
-  padding: 0 20px;
+  padding: 0 var(--spacing-medium);
 }
 
 .content-card__header__icon {
-  background-color: #fff;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 25px;
+  height: 25px;
+  background-color: #fff;
+  border-radius: 50%;
 }
 </style>
