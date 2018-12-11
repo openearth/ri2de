@@ -9,12 +9,14 @@
     >
       <div class="md-body-2">{{ title }}</div>
       <slot name="info" />
-      <div
-        v-if="isCompleted"
-        class="content-card__header__icon"
-      >
-        <md-icon >done</md-icon>
-      </div>
+      <transition name="bounce">
+        <div
+          v-if="isCompleted"
+          class="content-card__header__icon"
+        >
+          <md-icon >done</md-icon>
+        </div>
+      </transition>
     </md-card-header>
 
     <div
@@ -93,5 +95,14 @@ export default {
   height: 25px;
   background-color: #fff;
   border-radius: 50%;
+}
+
+.bounce-enter, .bounce-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.bounce-enter-active, .bounce-leave-active {
+  transition: transform .5s cubic-bezier(0,1.33,.44,.98);
 }
 </style>
