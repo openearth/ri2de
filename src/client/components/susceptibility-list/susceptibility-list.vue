@@ -75,16 +75,12 @@ export default {
   },
   data() {
     return {
-      activeFactorIndexes: this.factors.map(factor => true),
       selectedFactorIndex: null,
     }
   },
   methods: {
     toggleFactorActivity(index) {
-      const activeFactors = [ ...this.activeFactorIndexes ]
-      activeFactors[index] = !activeFactors[index]
-      this.activeFactorIndexes = activeFactors
-      this.$emit('toggleFactorActivity', { index, active: activeFactors[index] })
+      this.$emit('toggleFactorActivity', { index, active: !this.factors[index].visible })
     },
     toggleSettings(index) {
       if (this.selectedFactorIndex === index) {

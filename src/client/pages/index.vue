@@ -187,6 +187,9 @@ export default {
     },
     toggleSusceptibilityLayer({ index, active }) {
       const factor = this.currentSusceptibilityFactors[index]
+      this.$store.commit('hazards/updateFactorVisibility', {
+        hazardIndex: this.selectedHazardIndex, index, visible: active ? true : false
+      })
       if(factor.factorLayers) {
         factor.factorLayers.forEach(layer => {
           this.$store.dispatch('mapbox/wms/setOpacity', {

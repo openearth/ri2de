@@ -12,8 +12,8 @@
         :tooltip-style="options.tooltipStyle"
         :process-style="options.processStyle"
         :bg-style="options.bgStyle"
-        :min-range="min"
-        :max-range="max"
+        :min="min"
+        :max="max"
         tooltip="always"
       />
     </div>
