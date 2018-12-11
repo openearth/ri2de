@@ -13,6 +13,6 @@ export default function(polygon) {
     .then(data => {
       return data.errMsg
         ? { error: data.errMsg, featureCollection: undefined, roadsIdentifier: undefined }
-        : { error: undefined, featureCollection: JSON.parse(JSON.parse(data.roadsCollection)[0].st_asgeojson), roadsIdentifier: data.roadsIdentifier }
+        : { error: undefined, featureCollection: data.roadsCollection, roadsIdentifier: data.roadsIdentifier }
     })
 }
