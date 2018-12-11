@@ -13,12 +13,19 @@
     >
       <span class="infrastructure-list__item-description">
         <input
+          :ref="infra.id"
           :value="infra.title"
           type="text"
           class="infrastructure-list__input md-body-2"
           @change="(e) => $emit('updateSelectionTitle', { title: e.target.value, selectionId: infra.id })"
         >
       </span>
+      <md-button
+        class="md-icon-button"
+        @click="() => focus(infra.id)"
+      >
+        <md-icon>edit</md-icon>
+      </md-button>
       <md-button
         class="md-icon-button"
         @click="$emit('delete', index)"
@@ -36,7 +43,13 @@ export default {
       type: Array,
       default: () => []
     }
-  }
+  },
+  methods: {
+    focus(id) {
+      const element = this.$refs[id][0]
+      element.focus()
+    }
+  },
 }
 </script>
 
@@ -50,11 +63,11 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: .2rem;
+    margin-bottom: var(--spacing-half);
   }
 
   .infrastructure-list__item-description {
-    flex-grow: 2;
+    flex-grow: 1;
   }
 
   .infra-list-enter, .infra-list-leave-to {
@@ -67,13 +80,13 @@ export default {
 
   .infrastructure-list__input {
     padding: var(--spacing-half);
+    width: 100%;
     border: none;
     border-bottom: 1px solid transparent;
-    width: 100%;
   }
 
   .infrastructure-list__input:focus {
     outline: none;
-    border-bottom-color: #008FC5;
+    border-bottom-color: var(--primary-color);
   }
 </style>
