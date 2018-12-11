@@ -30,7 +30,7 @@ body {
   transition: all .1s ease-in-out;
 }
 
-.button:hover:after {
+.button:not(:disabled):hover:after {
   content: '';
   width: 100%;
   height: 100%;
@@ -42,6 +42,10 @@ body {
 
 .button:hover {
   cursor: pointer;
+}
+
+.button:disabled {
+  cursor: not-allowed;
 }
 
 .button--primary {
