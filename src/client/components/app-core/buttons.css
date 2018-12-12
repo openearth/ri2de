@@ -15,7 +15,8 @@
   transition: all .1s ease-in-out;
 }
 
-.button:not(:disabled):hover:after {
+.button:not(:disabled):hover:after,
+.button:not(:disabled):focus:after {
   content: '';
   width: 100%;
   height: 100%;
