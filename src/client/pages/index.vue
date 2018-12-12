@@ -1,64 +1,76 @@
 <template>
   <portal to="side-panel">
     <div>
-      <content-card
-        :is-active="activePage === 'index'"
-        title="Infrastructure"
-        @selectCard="selectCard"
-      >
-        <infrastructure-list
-          v-if="features.length"
-          slot="content"
-          :infrastructure="selections"
-          @delete="deleteInfrastructure"
-          @mouseover="(index) => updateInfrastructureStyle(index, infrastructureStyles.highlight)"
-          @mouseout="(index) => updateInfrastructureStyle(index, infrastructureStyles.default)"
-          @updateSelectionTitle="onUpdateSelectionTitle"
+      <div class="selection-steps">
+        <content-card
+          :is-expanded="activePage === 'index'"
+          :is-completed="!!selections.length"
+          title="Infrastructure"
+          @selectCard="selectCard"
+        >
+          <div
+            v-if="selections.length"
+            slot="info"
+            class="content-card__header__info"
+          >
+            {{ `${selections.length} selected area${selections.length > 1 ? 's' : ''}` }}
+          </div>
+          <infrastructure-list
+            slot="content"
+            :infrastructure="selections"
+            @delete="deleteInfrastructure"
+            @mouseover="(index) => updateInfrastructureStyle(index, infrastructureStyles.highlight)"
+            @mouseout="(index) => updateInfrastructureStyle(index, infrastructureStyles.default)"
+            @updateSelectionTitle="onUpdateSelectionTitle"
+          />
+          <button
+            slot="actions"
+            :disabled="selections.length === 0"
+            class="button button--primary"
+            @click="completeInfrastructure"
+          >
+            Next
+          </button>
+        </content-card>
+        <content-card
+          :is-expanded="activePage === 'hazards'"
+          :is-completed="typeof selectedHazardIndex === 'number'"
+          title="Hazards"
+          @selectCard="selectCard"
+        >
+          <div
+            v-if="typeof selectedHazardIndex === 'number'"
+            slot="info"
+            class="content-card__header__info"
+          >
+            {{ hazards[selectedHazardIndex].title }}
+          </div>
+          <hazards-list
+            slot="content"
+            :hazards="hazards"
+            :initial-selection="selectedHazardIndex"
+            @select="selectHazard"
+          />
+          <button
+            slot="actions"
+            :disabled="typeof selectedHazardIndex !== 'number'"
+            class="button button--primary"
+            @click="completeHazards"
+          >
+            Next
+          </button>
+        </content-card>
+      </div>
+      <div class="calculate-steps">
+        <susceptibility-list
+          v-if="activePage === 'susceptibilities'"
+          :factors="currentSusceptibilityFactors"
+          @setWeightFactor="onSetWeightFactor"
+          @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
+          @toggleFactorActivity="toggleSusceptibilityLayer"
         />
-        <p
-          v-else
-          slot="content"
-        >
-          Select the infrastructure you want to conduct calculations on
-        </p>
-
-        <md-button
-          slot="actions"
-          :disabled="selections.length === 0"
-          class="md-raised md-primary"
-          @click="completeInfrastructure"
-        >
-          Next
-        </md-button>
-      </content-card>
-      <content-card
-        :is-active="activePage === 'hazards'"
-        title="Hazards"
-        @selectCard="selectCard"
-      >
-        <hazards-list
-          slot="content"
-          :hazards="hazards"
-          :initial-selection="selectedHazardIndex"
-          @select="selectHazard"
-        />
-        <md-button
-          slot="actions"
-          :disabled="typeof selectedHazardIndex !== 'number'"
-          class="md-raised md-primary bnt-save"
-          @click="completeHazards"
-        >
-          Next
-        </md-button>
-      </content-card>
-      <susceptibility-list
-        v-if="activePage === 'susceptibilities'"
-        :factors="currentSusceptibilityFactors"
-        @setWeightFactor="onSetWeightFactor"
-        @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
-        @toggleFactorActivity="toggleSusceptibilityLayer"
-      />
-      <nuxt-child/>
+        <nuxt-child/>
+      </div>
     </div>
   </portal>
 </template>
@@ -217,7 +229,28 @@ export default {
 </script>
 
 <style>
-.content-card {
-  margin-bottom: var(--spacing-default);
+.selection-steps {
+  background-color: var(--neutral-color--light);
+  padding: var(--spacing-default);
+  position: relative;
+  --triangle-height: 30px;
+  --triangle-width: 25px;
+  margin-bottom: var(--triangle-height);
+}
+
+.selection-steps:after {
+  position: absolute;
+  bottom: calc(var(--triangle-height) * -1);
+  left: calc(50% - calc(var(--triangle-width)/2));
+  content: '';
+  width: var(--triangle-width);
+  height: var(--triangle-height);
+  border-top: calc(var(--triangle-height)/2) solid var(--neutral-color--light);
+  border-left: calc(var(--triangle-width)/2) solid transparent;
+  border-right: calc(var(--triangle-width)/2) solid transparent;
+}
+
+.calculate-steps {
+  padding: 0 var(--spacing-default);
 }
 </style>

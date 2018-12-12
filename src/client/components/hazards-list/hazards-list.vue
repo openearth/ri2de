@@ -9,6 +9,7 @@
         v-model="selectedHazard"
         :checked="selectedHazard === hazard.title"
         :value="hazard.title"
+        class="md-primary"
         @change="() => $emit('select', index)"
       >
         {{ hazard.title }}

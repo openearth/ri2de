@@ -1,9 +1,13 @@
 @import './a11y.css';
 @import './variables.css';
+@import './transitions.css';
 @import './mapbox-draw.css';
+@import './material-override.css';
+@import './buttons.css';
 
 body {
   margin: 0;
+  color: var(--text-color);
 }
 
 .side-panel {

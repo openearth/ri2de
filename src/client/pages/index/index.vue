@@ -1,9 +1,14 @@
 <template>
   <portal
-    v-if="errorMessage"
     to="map-notification"
+    slim
   >
-    <error-bar :error-message="errorMessage" />
+    <transition name="fade">
+      <error-bar
+        v-if="errorMessage"
+        :error-message="errorMessage"
+      />
+    </transition>
   </portal>
 </template>
 

@@ -9,23 +9,21 @@
 
 <style>
   .side-panel {
+    position: relative;
+    overflow: auto;
+    box-sizing: border-box;
+    z-index: 1;
     height: 100%;
     width: var(--side-panel-width);
-    overflow: auto;
-    background-color: #E5EEF2;
-    padding: 1rem 1rem 50px 1rem;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 1;
+    background-color: #FDFDFD;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   }
 
   .side-panel__bottom {
-    background-color: #bbb;
-    height: 50px;
-    width: 100%;
     position: absolute;
     bottom: 0;
     left: 0;
+    height: 50px;
+    width: 100%;
   }
 </style>

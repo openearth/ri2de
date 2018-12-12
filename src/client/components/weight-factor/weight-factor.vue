@@ -81,13 +81,18 @@ export default {
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
+  appearance: none;
   margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .input {
   height: 40px;
   width: 40px;
-  font-size: 14px;
+  font-size: var(--font-size-default);
   text-align: center;
 }
 </style>

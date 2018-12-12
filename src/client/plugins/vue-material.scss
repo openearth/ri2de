@@ -6,7 +6,7 @@
 
 @include md-register-theme("default", (
   primary: #008FC5, // The primary color of your brand
-  accent: #709DB1 // The secondary color of your brand
+  accent: #FF7200 // The secondary color of your brand
 ));
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
