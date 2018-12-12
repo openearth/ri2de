@@ -11,7 +11,7 @@
     <portal to="map-notification">
       <map-notification
         v-if="calculatingSusceptibilityLayers"
-        message="Calculating susceptibility layers..."
+        :message="calculatingMessage"
       />
       <map-notification
         v-else-if="errorCalculatingSusceptibilityLayers"
@@ -37,6 +37,7 @@ export default {
     return {
       errorMessage: undefined,
       errorCalculatingSusceptibilityLayers: false,
+      calculatingMessage: 'Calculating susceptibility layers...',
       calculatingSusceptibilityLayers: false,
     }
   },
@@ -72,24 +73,18 @@ export default {
     },
     getSelectionLayers() {
       this.calculatingSusceptibilityLayers = true
-      const selectionPolygons = this.selections.map(selection => ({
-        polygon: selection.polygon,
-        identifier: selection.identifier,
-        id: selection.id
-      }))
 
       this.currentSusceptibilityFactors.forEach(async (factor, index) => {
-        const factorLayers = selectionPolygons.map(async polygon => {
-          const customFactorLayer = await selectionToCustomFactorLayer({ polygon: polygon.polygon, factor, identifier: polygon.identifier })
+        const factorLayers = this.selections.map(async selection => {
+          const customFactorLayer = await selectionToCustomFactorLayer({ polygon: selection.polygon, factor, identifier: selection.identifier })
           const wmsLayer = generateWmsLayer(customFactorLayer)
 
           this.$store.dispatch('mapbox/wms/add', {
             ...wmsLayer,
             paint: { 'raster-opacity': index === 0 ? 1 : 0 }
           })
-
           this.$store.commit('susceptibility-layers/addLayerToSelection', {
-            selectionId: polygon.id,
+            selectionId: selection.id,
             layer: { ...customFactorLayer, susceptibility: factor.title },
            })
 
@@ -109,8 +104,8 @@ export default {
           this.errorCalculatingSusceptibilityLayers = true
           console.log('Error: ', e)
         }
-        this.calculatingSusceptibilityLayers = false
       })
+      this.calculatingSusceptibilityLayers = false
     },
     initMapState() {
       this.$store.dispatch('mapbox/selections/setMode', 'static')

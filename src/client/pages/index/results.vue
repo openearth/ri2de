@@ -2,7 +2,7 @@
   <portal to="map-notification">
     <map-notification
       v-if="calculating"
-      message="Calculating the total susceptibility map..."
+      :message="calculatingMessage"
     />
     <map-notification
       v-else-if="errorFetchingTotals"
@@ -27,6 +27,7 @@ export default {
   data() {
     return {
       calculating: true,
+      calculatingMessage: 'Calculating the total susceptibility map...',
       errorMessage: undefined,
       errorFetchingTotals: false,
     }
