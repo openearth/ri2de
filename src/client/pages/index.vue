@@ -70,9 +70,9 @@
           @toggleFactorActivity="toggleSusceptibilityLayer"
         />
         <nuxt-link
-          v-if="activePage === 'results'"
+          v-if="activePage === 'results' && totalsLayers && totalsLayers.length"
           :to="'/susceptibilities'"
-          class="update-susceptibilities"
+          class="update-susceptibilities md-accent"
         >
           Update susceptibility settings
         </nuxt-link>
@@ -102,6 +102,7 @@ export default {
     ...mapState([ 'activePage' ]),
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
+    ...mapState('susceptibility-layers', [ 'totalsLayers' ]),
     ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors' ]),
     ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
     infrastructureStyles() {
