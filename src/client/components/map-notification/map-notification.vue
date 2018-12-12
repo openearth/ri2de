@@ -45,9 +45,5 @@ export default {
   .map-notification__message--error {
     color: #D8000C;
     background-color: #FFD2D2;
-    display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
-    padding: var(--spacing-half) var(--spacing-default);
   }
 </style>
