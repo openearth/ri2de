@@ -27,23 +27,27 @@ export default {
   .map-notification {
     position: absolute;
     z-index: 3;
-    top: var(--spacing-default);
+    top: 10px;
     left: 0;
     width: 100%;
     text-align: center;
   }
 
   .map-notification__message {
-    color: var(--md-theme-default-primary);
-    background-color: #E5EEF2;
+    color: #7e671a;
+    background-color: #f8edbb;
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
-    padding: var(--spacing-half) var(--spacing-default);
+    padding: var(--spacing-default);
+    box-shadow: 1px 1px 5px 0 #ccc;
+    min-height: 50px;
+    border-left: 5px solid #E8BF3A;
   }
 
   .map-notification__message--error {
     color: #D8000C;
     background-color: #FFD2D2;
+    border-left: 5px solid #D8000C;
   }
 </style>
