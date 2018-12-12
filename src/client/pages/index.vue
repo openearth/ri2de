@@ -235,7 +235,7 @@ export default {
 </script>
 
 <style>
-.content-card {
+.content-card:not(:last-child) {
   margin-bottom: var(--spacing-default);
 }
 
