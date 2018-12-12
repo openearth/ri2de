@@ -27,7 +27,7 @@ export default {
   .map-notification {
     position: absolute;
     z-index: 3;
-    top: var(--spacing-default);
+    top: 10px;
     left: 0;
     width: 100%;
     text-align: center;
