@@ -33,22 +33,30 @@
               v-if="selectedFactorIndex === index"
               class="susceptibility-list__list-item__settings"
             >
-              <weight-factor
-                :min="factor.min"
-                :max="factor.max"
-                :step="factor.step"
-                :weight-factor="factor.weightFactor"
-                @onChange="(value) => $emit('setWeightFactor', { value, index })"
-              />
-              <input-range
-                v-if="factor.classes && (factor.classes.length === 4)"
-                :value="[factor.classes[1], factor.classes[2]]"
-                :min="factor.classes[0]"
-                :max="factor.classes[3]"
-                label="Classes"
-                @updateClasses="classes => $emit('updateClasses', { classes, index })"
-              />
-              <layer-legend />
+              <div class="susceptibility-list__list-item__settings-wrapper">
+                <md-button
+                  class="md-icon-button md-dense susceptibility-list__list-item__settings__button"
+                  @click="selectedFactorIndex = null"
+                >
+                  <md-icon>clear</md-icon>
+                </md-button>
+                <weight-factor
+                  :min="factor.min"
+                  :max="factor.max"
+                  :step="factor.step"
+                  :weight-factor="factor.weightFactor"
+                  @onChange="(value) => $emit('setWeightFactor', { value, index })"
+                />
+                <input-range
+                  v-if="factor.classes && (factor.classes.length === 4)"
+                  :value="[factor.classes[1], factor.classes[2]]"
+                  :min="factor.classes[0]"
+                  :max="factor.classes[3]"
+                  label="Classes"
+                  @updateClasses="classes => $emit('updateClasses', { classes, index })"
+                />
+                <layer-legend />
+              </div>
             </div>
           </transition>
         </div>
@@ -131,5 +139,16 @@ export default {
 
 .susceptibility-list__list-item__settings .md-subheader {
   padding: 0;
+}
+
+.susceptibility-list__list-item__settings-wrapper {
+  position: relative;
+}
+
+.susceptibility-list__list-item__settings__button {
+  position: absolute !important;
+  top: calc(calc(var(--spacing-default) - 10px) * -1);
+  right: calc(calc(var(--spacing-default) - 10px) * -1);
+  margin: 0 !important;
 }
 </style>
