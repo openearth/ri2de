@@ -81,7 +81,7 @@ export default {
 
           this.$store.dispatch('mapbox/wms/add', {
             ...wmsLayer,
-            paint: { 'raster-opacity': index === 0 ? 1 : 0 }
+            paint: { 'raster-opacity': index === 0 ? 1 : 0 },
           })
           this.$store.commit('susceptibility-layers/addLayerToSelection', {
             selectionId: selection.id,
