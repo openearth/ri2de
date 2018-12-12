@@ -12,6 +12,7 @@ const globalRoadsUrl = geoserverUrl({
   transparent: true,
   bbox: '{bbox-epsg-3857}',
   format: 'image/png',
+  tiled: true,
   encode: false
 })
 
@@ -45,6 +46,27 @@ export const generateWmsLayer = ({ url, id, layer, style='', paint={} }) => {
   })
 }
 
+export async function selectionToCustomFactorLayer({ factor, polygon, identifier }) {
+  const wpsResponse = await wps({
+    functionId: factor.wpsFunctionId,
+    requestData: {
+      classes: factor.classes,
+      layername: factor.layerName,
+      owsurl: factor.owsUrl,
+    },
+    polygon,
+    roadsIdentifier: identifier,
+  })
+
+  const { baseUrl, layerName, style } = wpsResponse
+  return {
+    style,
+    id: `${polygon.id}-${factor.title}`,
+    layer: layerName,
+    url: baseUrl,
+  }
+}
+
 export async function wmsSelectionFromFactor({ factor, polygon, identifier }) {
   const wpsResponse = await wps({
     functionId: factor.wpsFunctionId,
@@ -52,12 +74,12 @@ export async function wmsSelectionFromFactor({ factor, polygon, identifier }) {
       classes: factor.classes,
       layername: factor.layerName,
       owsurl: factor.owsUrl,
-      identifier,
     },
     polygon,
+    roadsIdentifier: identifier
   })
 
-  const { baseUrl, layerName, style } = wpsResponse.data
+  const { baseUrl, layerName, style } = wpsResponse
   const layerId = `${polygon.id}-${factor.title}`
 
   return generateWmsLayer({

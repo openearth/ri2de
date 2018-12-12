@@ -16,7 +16,7 @@ import layers from '../../lib/_mapbox/layers'
 
 import { ErrorBar } from '../../components'
 
-const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
+const INFRASTRUCTURE_DEFAULT_COLOR = '#502D56'
 
 export default {
   components: { ErrorBar },
@@ -37,9 +37,15 @@ export default {
     this.$store.dispatch('mapbox/removeEventHandler', { event: 'draw.delete' })
     this.$store.dispatch('mapbox/removeEventHandler', { event: 'draw.update' })
     this.$store.dispatch('mapbox/selections/setMode', 'static')
+    this.$store.dispatch('mapbox/selections/hideAll')
   },
   methods: {
     initMapState() {
+      this.selections
+        .map(selection => selection.polygon)
+        .forEach(selection => {
+          this.$store.dispatch('mapbox/selections/draw', selection)
+        })
       this.$store.dispatch('mapbox/selections/setMode', 'simple_select')
       this.$store.dispatch('mapbox/addEventHandler', {
         event: 'draw.create',
@@ -74,14 +80,13 @@ export default {
               'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
               'line-opacity': 0.8,
             },
-            identifier: roadsIdentifier,
           }))
 
           this.$store.commit('mapbox/selections/add', {
             title: 'Unnamed Selection',
             id: selectionId,
             features: [ selectionId ],
-            polygon: event.features,
+            polygon: event.features[0],
             identifier: roadsIdentifier,
           })
         })
