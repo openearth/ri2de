@@ -8,7 +8,10 @@
       @click.native="$emit('selectCard', title)"
     >
       <div class="md-body-2">{{ title }}</div>
-      <slot name="info" />
+      <slot
+        name="info"
+        class="content-card__header__info"
+      />
       <transition name="bounce">
         <div
           v-if="isCompleted"
@@ -56,6 +59,10 @@ export default {
 </script>
 
 <style>
+.content-card:not(:last-child) {
+  margin-bottom: var(--spacing-default);
+}
+
 .content-card__header {
   display: flex;
   justify-content: space-between;
@@ -73,6 +80,13 @@ export default {
 .content-card--expanded .content-card__header {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+.content-card__header__info {
+  margin-left: auto;
+  margin-right: var(--spacing-default);
+  color: #fff;
+  opacity: .5;
 }
 
 .md-card-header+.md-card-content.content-card__content {

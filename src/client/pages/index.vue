@@ -8,8 +8,14 @@
           title="Infrastructure"
           @selectCard="selectCard"
         >
+          <div
+            v-if="selections.length"
+            slot="info"
+            class="content-card__header__info"
+          >
+            {{ `${selections.length} selected area${selections.length > 1 ? 's' : ''}` }}
+          </div>
           <infrastructure-list
-            v-if="features.length"
             slot="content"
             :infrastructure="selections"
             @delete="deleteInfrastructure"
@@ -17,18 +23,6 @@
             @mouseout="(index) => updateInfrastructureStyle(index, infrastructureStyles.default)"
             @updateSelectionTitle="onUpdateSelectionTitle"
           />
-          <div
-            v-else
-            slot="content"
-            class="infrastructure-list__description"
-          >
-            <md-icon
-              :md-src="'/images/polygon.svg'"
-              class="infrastructure-list__description-icon"
-            />
-            <p>Select the infrastructure you want to conduct calculations on</p>
-          </div>
-
           <button
             slot="actions"
             :disabled="selections.length === 0"
@@ -47,7 +41,7 @@
           <div
             v-if="typeof selectedHazardIndex === 'number'"
             slot="info"
-            class="info"
+            class="content-card__header__info"
           >
             {{ hazards[selectedHazardIndex].title }}
           </div>
@@ -235,35 +229,6 @@ export default {
 </script>
 
 <style>
-.content-card:not(:last-child) {
-  margin-bottom: var(--spacing-default);
-}
-
-.info {
-  margin-left: auto;
-  margin-right: var(--spacing-default);
-  color: #fff;
-  opacity: .5;
-}
-
-.infrastructure-list__description {
-  display: flex;
-  padding: var(--spacing-default) 0;
-}
-
-.infrastructure-list__description p {
-  margin: 0;
-}
-
-.infrastructure-list__description-icon {
-  margin: 0;
-  margin-right: var(--spacing-half);
-}
-
-.infrastructure-list__description-icon svg {
-  fill: #6D6D6D !important;
-}
-
 .selection-steps {
   background-color: var(--neutral-color--light);
   padding: var(--spacing-default);

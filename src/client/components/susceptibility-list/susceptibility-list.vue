@@ -19,7 +19,7 @@
                 {{ factor.visible ? 'visibility' : 'visibility_off' }}
               </md-icon>
             </md-button>
-            <span class="susceptibility-list__item-title">{{ factor.title }}</span>
+            <span class="susceptibility-list__list-item__title">{{ factor.title }}</span>
             <md-button
               :class="{ 'md-raised' : selectedFactorIndex === index }"
               class="md-icon-button md-accent"
@@ -31,7 +31,7 @@
           <transition name="fade">
             <div
               v-if="selectedFactorIndex === index"
-              class="list-item__settings"
+              class="susceptibility-list__list-item__settings"
             >
               <weight-factor
                 :min="factor.min"
@@ -111,13 +111,13 @@ export default {
   padding: var(--spacing-default) 0;
 }
 
-.susceptibility-list__item-title {
+.susceptibility-list__list-item__title {
   margin-left: var(--spacing-half);
   margin-right: auto;
   font-size: var(--font-size-default);
 }
 
-.list-item__settings {
+.susceptibility-list__list-item__settings {
   --card-width: 270px;
   width: var(--card-width);
   position: absolute;
@@ -129,7 +129,7 @@ export default {
   box-shadow: 0 2px 5px 0 var(--neutral-color);
 }
 
-.list-item__settings .md-subheader {
+.susceptibility-list__list-item__settings .md-subheader {
   padding: 0;
 }
 </style>
