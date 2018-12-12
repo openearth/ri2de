@@ -45,7 +45,10 @@ export const mutations = {
     newFactors[hazardIndex][susceptibilityIndex].weightFactor = Number(weightFactor)
 
     state.susceptibilityFactors = newFactors
-  }
+  },
+  reset(state) {
+    state.selectedHazardIndex = undefined
+  },
 }
 
 export const actions = {

@@ -104,8 +104,10 @@ export default {
           this.errorCalculatingSusceptibilityLayers = true
           console.log('Error: ', e)
         }
+        if(index === this.currentSusceptibilityFactors.length - 1) {
+          this.calculatingSusceptibilityLayers = false
+        }
       })
-      this.calculatingSusceptibilityLayers = false
     },
     initMapState() {
       this.$store.dispatch('mapbox/selections/setMode', 'static')

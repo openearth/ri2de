@@ -1,57 +1,60 @@
 <template>
-  <md-list class="susceptibility-list">
-    <md-subheader class="susceptibility-list__header">
-      Susceptibility factors
-      <md-button class="md-dense">Reset</md-button>
-    </md-subheader>
-    <md-divider />
-    <div
-      v-for="(factor, index) in factors"
-      :key="factor.id"
-    >
-      <md-list-item>
-        <md-button
-          class="md-icon-button"
-          @click="toggleFactorActivity(index)"
-        >
-          <md-icon :disabled="!factor.visible">
-            {{ factor.visible ? 'visibility' : 'visibility_off' }}
-          </md-icon>
-        </md-button>
-        <span class="susceptibility-list__item-title">{{ factor.title }}</span>
-        <md-button
-          :class="{ 'md-raised md-primary' : selectedFactorIndex === index }"
-          class="md-icon-button"
-          @click="() => toggleSettings(index)"
-        >
-          <md-icon>keyboard_arrow_right</md-icon>
-        </md-button>
-      </md-list-item>
-      <transition name="fade">
+  <md-card>
+    <md-list class="susceptibility-list">
+      <md-subheader class="susceptibility-list__header">
+        Susceptibility factors
+      </md-subheader>
+      <md-divider />
+      <div class="susceptibility-list__list">
         <div
-          v-if="selectedFactorIndex === index"
-          class="list-item__settings"
+          v-for="(factor, index) in factors"
+          :key="factor.id"
         >
-          <weight-factor
-            :min="factor.min"
-            :max="factor.max"
-            :step="factor.step"
-            :weight-factor="factor.weightFactor"
-            @onChange="(value) => $emit('setWeightFactor', { value, index })"
-          />
-          <input-range
-            v-if="factor.classes && (factor.classes.length === 4)"
-            :label="'Classes'"
-            :value="[factor.classes[1], factor.classes[2]]"
-            :min="factor.classes[0]"
-            :max="factor.classes[3]"
-            @updateClasses="classes => $emit('updateClasses', { classes, index })"
-          />
-          <layer-legend :legend-url="factor.legendUrl" />
+          <md-list-item>
+            <md-button
+              class="md-icon-button"
+              @click="toggleFactorActivity(index)"
+            >
+              <md-icon :disabled="!factor.visible">
+                {{ factor.visible ? 'visibility' : 'visibility_off' }}
+              </md-icon>
+            </md-button>
+            <span class="susceptibility-list__list-item__title">{{ factor.title }}</span>
+            <md-button
+              :class="{ 'md-raised' : selectedFactorIndex === index }"
+              class="md-icon-button md-accent"
+              @click="() => toggleSettings(index)"
+            >
+              <md-icon>keyboard_arrow_right</md-icon>
+            </md-button>
+          </md-list-item>
+          <transition name="fade">
+            <div
+              v-if="selectedFactorIndex === index"
+              class="susceptibility-list__list-item__settings"
+            >
+              <weight-factor
+                :min="factor.min"
+                :max="factor.max"
+                :step="factor.step"
+                :weight-factor="factor.weightFactor"
+                @onChange="(value) => $emit('setWeightFactor', { value, index })"
+              />
+              <input-range
+                v-if="factor.classes && (factor.classes.length === 4)"
+                :value="[factor.classes[1], factor.classes[2]]"
+                :min="factor.classes[0]"
+                :max="factor.classes[3]"
+                label="Classes"
+                @updateClasses="classes => $emit('updateClasses', { classes, index })"
+              />
+              <layer-legend />
+            </div>
+          </transition>
         </div>
-      </transition>
-    </div>
-  </md-list>
+      </div>
+    </md-list>
+  </md-card>
 </template>
 
 <script>
@@ -94,8 +97,7 @@ export default {
 
 <style>
 .susceptibility-list {
-  position: relative;
-  z-index: 10000;
+  z-index: 1;
 }
 
 .susceptibility-list__header {
@@ -104,36 +106,30 @@ export default {
   width: 100%;
 }
 
-.susceptibility-list__item-title {
-  margin-left: var(--spacing-default);
+.susceptibility-list__list {
+  position: relative;
+  padding: var(--spacing-default) 0;
+}
+
+.susceptibility-list__list-item__title {
+  margin-left: var(--spacing-half);
   margin-right: auto;
+  font-size: var(--font-size-default);
 }
 
-.md-icon.icon-small {
-  font-size: 20px !important;
-  margin-right: 8px !important;
-}
-
-.list-item__settings {
+.susceptibility-list__list-item__settings {
+  --card-width: 270px;
+  width: var(--card-width);
   position: absolute;
-  width: 250px;
-  background-color: #fff;
   top: 0;
-  right: -275px;
-  z-index: 1000000;
+  right: calc(calc(var(--card-width) * -1) - 25px);
   padding: var(--spacing-default);
-  box-shadow: 1px 1px 10px #ccc;
+  background-color: #fff;
+  z-index: 2;
+  box-shadow: 0 2px 5px 0 var(--neutral-color);
 }
 
-.list-item__settings .md-subheader {
+.susceptibility-list__list-item__settings .md-subheader {
   padding: 0;
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
 }
 </style>
