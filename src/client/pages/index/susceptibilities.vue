@@ -2,6 +2,7 @@
   <div>
     <portal to="side-panel-bottom">
       <md-button
+        :disabled="calculatingSusceptibilityLayers || errorCalculatingSusceptibilityLayers"
         class="md-raised md-primary calculate-button"
         @click="calculateTotals"
       >

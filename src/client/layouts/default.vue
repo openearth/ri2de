@@ -72,10 +72,6 @@ export default {
   flex-wrap: wrap;
 }
 
-.side-panel {
-  height: calc(100% - 64px);
-}
-
 .side-panel__bottom {
   display: flex;
   height: 50px;
