@@ -47,11 +47,17 @@ export const actions = {
 
     const bounds = bbox(
       featureCollection(
-        selections.map(selection => selection.polygon[0])
+        selections.map(selection => selection.polygon)
       )
     )
 
     map.fitBounds(bounds, { padding: 50 })
+  },
+  hideAll({ state, rootGetters }) {
+    const map = rootGetters['mapbox/map']
+
+    state.selections
+      .forEach(selection => map.__draw.delete(selection.id))
   },
   reset({ commit, state, rootGetters }) {
     const map = rootGetters['mapbox/map']
@@ -65,4 +71,18 @@ export const actions = {
     const map = rootGetters['mapbox/map']
     map.__draw.changeMode(mode)
   },
+  showAll({ state, rootGetters }) {
+    const map = rootGetters['mapbox/map']
+
+    state.selections
+      .forEach(selection => map.__draw.add(selection))
+  }
+}
+
+export const getters = {
+  selectionsToRoadIds(state) {
+    return state.selections.reduce((selectionMap, selection) => {
+      return { ...selectionMap, [selection.id]: selection.identifier }
+    }, {})
+  }
 }

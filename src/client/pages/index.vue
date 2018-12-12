@@ -69,6 +69,13 @@
           @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
           @toggleFactorActivity="toggleSusceptibilityLayer"
         />
+        <nuxt-link
+          v-if="activePage === 'results'"
+          :to="'/susceptibilities'"
+          class="update-susceptibilities"
+        >
+          Update susceptibility settings
+        </nuxt-link>
         <nuxt-child/>
       </div>
     </div>
@@ -78,14 +85,14 @@
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 
-import { globalRoads, wmsSelectionFromFactor } from '../lib/project-layers'
+import { globalRoads, wmsSelectionFromFactor, selectionToCustomFactorLayer, generateWmsLayer } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
 
 import { InfrastructureList, ContentCard, HazardsList, SusceptibilityList } from '../components'
 
-const INFRASTRUCTURE_DEFAULT_COLOR = '#A34751'
+const INFRASTRUCTURE_DEFAULT_COLOR = '#502D56'
 const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 
 export default {
@@ -152,12 +159,6 @@ export default {
             },
           }))
         })
-
-      this.selections
-        .map(selection => selection.polygon[0])
-        .forEach(selection => {
-          this.$store.dispatch('mapbox/selections/draw', selection)
-        })
     },
     onSetWeightFactor({ value, index }) {
       this.updateWeightFactor({
@@ -203,15 +204,21 @@ export default {
       }
     },
     async updateSusceptibilityLayers({ susceptibilityIndex }) {
-      const selectionPolygons = this.selections.map(selection => ({ polygon: selection.polygon[0], identifier: selection.identifier }))
+      const selectionPolygons = this.selections
       const susceptibility = this.currentSusceptibilityFactors[susceptibilityIndex]
-      const layerPromises = selectionPolygons.map(polygon => {
-        this.$store.dispatch('mapbox/wms/remove', `${polygon.polygon.id}-${susceptibility.title}`)
-        return wmsSelectionFromFactor({ polygon: polygon.polygon, factor: susceptibility, identifier: polygon.identifier })
-      })
-      const layers = await Promise.all(layerPromises)
+      const customFactorLayers = await Promise.all(this.selections.map( async selection => {
+        this.$store.dispatch('mapbox/wms/remove', `${selection.polygon.id}-${susceptibility.title}`)
 
-      layers.forEach(layer => this.$store.dispatch('mapbox/wms/add', layer))
+        const customLayer = await selectionToCustomFactorLayer({ ...selection, factor: susceptibility })
+        this.$store.dispatch('mapbox/wms/add', generateWmsLayer({
+          ...customLayer,
+          paint: { 'raster-opacity': susceptibility.visible ? 1 : 0 }
+        }))
+        this.$store.commit('susceptibility-layers/addLayerToSelection', {
+          selectionId: selection.id,
+          layer: { ...customLayer, susceptibility: susceptibility.title },
+        })
+      }))
     },
     updateInfrastructureStyle(index, style) {
       const infrastructure = this.selections[index]
@@ -252,5 +259,11 @@ export default {
 
 .calculate-steps {
   padding: 0 var(--spacing-default);
+}
+
+.update-susceptibilities {
+  display: block;
+  text-align: center;
+  font-weight: bold;
 }
 </style>
