@@ -1,7 +1,6 @@
 export { default as AppHeader } from './app-header'
 export { default as BaselayerControl } from './baselayer-control'
 export { default as ContentCard } from './content-card'
-export { default as ErrorBar } from './error-bar'
 export { default as FitboundsControl } from './fitbounds-control'
 export { default as HazardsList } from './hazards-list'
 export { default as InfrastructureList } from './infrastructure-list'

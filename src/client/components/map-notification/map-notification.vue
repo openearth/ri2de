@@ -1,9 +1,11 @@
 <template>
-  <div class="map-notification">
-    <div
-      :class="type ? `map-notification__message--${type}` : ''"
-      class="map-notification__message">{{ message }}</div>
-  </div>
+  <transition name="fade">
+    <div class="map-notification">
+      <div
+        :class="type ? `map-notification__message--${type}` : ''"
+        class="map-notification__message">{{ message }}</div>
+    </div>
+  </transition>
 </template>
 
 <script>

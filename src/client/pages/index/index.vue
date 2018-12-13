@@ -1,14 +1,14 @@
 <template>
-  <portal
-    to="map-notification"
-    slim
-  >
-    <transition name="fade">
-      <error-bar
-        v-if="errorMessage"
-        :error-message="errorMessage"
-      />
-    </transition>
+  <portal to="map-notification">
+    <map-notification
+      v-if="fetchingRoads"
+      :message="fetchingRoadsMessage"
+    />
+    <map-notification
+      v-else-if="errorMessage"
+      :message="errorMessage"
+      type="error"
+    />
   </portal>
 </template>
 
@@ -19,16 +19,18 @@ import getFeature from '../../lib/get-feature'
 import initMapState from '../../lib/mixins/init-map-state'
 import layers from '../../lib/_mapbox/layers'
 
-import { ErrorBar } from '../../components'
+import { MapNotification } from '../../components'
 
 const INFRASTRUCTURE_DEFAULT_COLOR = '#502D56'
 
 export default {
-  components: { ErrorBar },
+  components: { MapNotification },
   mixins: [ initMapState ],
   data() {
     return {
       errorMessage: undefined,
+      fetchingRoads: false,
+      fetchingRoadsMessage: 'Fetching infrastructure in the selected area...'
     }
   },
   computed: {
@@ -66,11 +68,13 @@ export default {
       })
     },
     createSelection(event) {
+      this.fetchingRoads = true
       const selectionId = event.features[0].id
 
       getFeature(event.features[0])
         .then(({ featureCollection, roadsIdentifier, error }) => {
           if(error) {
+            this.fetchingRoads = false
             this.errorMessage = error
             this.$store.dispatch('mapbox/selections/delete', selectionId)
             setTimeout(() => { this.errorMessage = undefined }, 4000)
@@ -94,6 +98,8 @@ export default {
             polygon: event.features[0],
             identifier: roadsIdentifier,
           })
+
+          this.fetchingRoads = false
         })
     },
     deleteSelection(event) {
