@@ -26,7 +26,7 @@
           <button
             slot="actions"
             :disabled="selections.length === 0"
-            class="button button--primary"
+            class="button button--primary button--full-width"
             @click="completeInfrastructure"
           >
             Next
@@ -54,7 +54,7 @@
           <button
             slot="actions"
             :disabled="typeof selectedHazardIndex !== 'number'"
-            class="button button--primary"
+            class="button button--primary button--full-width"
             @click="completeHazards"
           >
             Next
@@ -68,6 +68,7 @@
           @setWeightFactor="onSetWeightFactor"
           @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
           @toggleFactorActivity="toggleSusceptibilityLayer"
+          @addLayer="addLayer"
         />
         <nuxt-link
           v-if="activePage === 'results' && totalsLayers && totalsLayers.length"
@@ -117,6 +118,7 @@ export default {
   },
   methods: {
     ...mapMutations({
+      addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard',
       onUpdateSelectionTitle: 'mapbox/selections/updateTitle',
       selectHazard: 'hazards/selectHazard',
       updateWeightFactor: 'hazards/updateWeightFactor',
@@ -125,6 +127,15 @@ export default {
     ...mapActions({
       bootstrapHazardsList: 'hazards/bootstrapHazards'
     }),
+    addLayer(newLayer) {
+      this.isLayerFormVisible = false
+      this.addSusceptibilityFactorForCurrentHazard({
+        ...newLayer,
+        weightFactor: 1,
+        visible: true,
+        wpsFunctionId: 'ri2de_calc_custom',
+      })
+    },
     completeInfrastructure() {
       if(this.selections.length) {
         this.$router.push({ path: '/hazards' })

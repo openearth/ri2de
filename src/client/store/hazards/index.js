@@ -13,6 +13,16 @@ export const mutations = {
   addSusceptibilityFactor(state, susceptibilityFactor) {
     state.susceptibilityFactors = [ ...state.susceptibilityFactors, susceptibilityFactor ]
   },
+  addSusceptibilityFactorForCurrentHazard(state, susceptibilityFactor) {
+    const newFactors = [ ...state.susceptibilityFactors ]
+
+    newFactors[state.selectedHazardIndex] = [
+      ...newFactors[state.selectedHazardIndex],
+      susceptibilityFactor
+    ]
+
+    state.susceptibilityFactors = newFactors
+  },
   selectHazard(state, index) {
     state.selectedHazardIndex = index
   },
