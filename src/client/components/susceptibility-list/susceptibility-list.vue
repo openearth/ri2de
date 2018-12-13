@@ -1,16 +1,15 @@
 <template>
-  <md-card>
+  <div>
     <md-list class="susceptibility-list">
       <md-subheader class="susceptibility-list__header">
         Susceptibility factors
       </md-subheader>
-      <md-divider />
       <div class="susceptibility-list__list">
         <div
           v-for="(factor, index) in factors"
           :key="factor.id"
         >
-          <md-list-item>
+          <md-list-item class="susceptibility-list__list-item">
             <md-button
               class="md-icon-button"
               @click="toggleFactorActivity(index)"
@@ -22,7 +21,7 @@
             <span class="susceptibility-list__list-item__title">{{ factor.title }}</span>
             <md-button
               :class="{ 'md-raised' : selectedFactorIndex === index }"
-              class="md-icon-button md-accent"
+              class="md-icon-button md-accent susceptibility-list__list-item__button"
               @click="() => toggleSettings(index)"
             >
               <md-icon>keyboard_arrow_right</md-icon>
@@ -106,23 +105,39 @@ export default {
 <style>
 .susceptibility-list {
   z-index: 1;
+  padding: var(--spacing-default) 0 !important;
 }
 
 .susceptibility-list__header {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  padding-bottom: .7rem !important;
+  border-bottom: 1px solid #eee;
+  background-color: transparent;
+  font-size: 1rem !important;
+  font-weight: bold;
 }
 
 .susceptibility-list__list {
   position: relative;
-  padding: var(--spacing-default) 0;
+}
+
+.susceptibility-list__list-item {
+  border-bottom: 1px solid #eee;
+}
+
+.susceptibility-list__list .md-list-item-content {
+  padding: .8rem 0;
 }
 
 .susceptibility-list__list-item__title {
-  margin-left: var(--spacing-half);
   margin-right: auto;
   font-size: var(--font-size-default);
+}
+
+.susceptibility-list__list-item__button {
+  margin: 0 20px !important;
 }
 
 .susceptibility-list__list-item__settings {

@@ -15,3 +15,7 @@
   font-size: 20px !important;
   margin-right: 8px !important;
 }
+
+.md-dialog-actions {
+  padding: 0 20px 20px 20px !important;
+}

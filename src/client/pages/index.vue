@@ -26,7 +26,7 @@
           <button
             slot="actions"
             :disabled="selections.length === 0"
-            class="button button--primary"
+            class="button button--primary button--full-width"
             @click="completeInfrastructure"
           >
             Next
@@ -54,7 +54,7 @@
           <button
             slot="actions"
             :disabled="typeof selectedHazardIndex !== 'number'"
-            class="button button--primary"
+            class="button button--primary button--full-width"
             @click="completeHazards"
           >
             Next
@@ -243,7 +243,7 @@ export default {
   position: relative;
   --triangle-height: 30px;
   --triangle-width: 25px;
-  margin-bottom: var(--triangle-height);
+  margin-bottom: calc(var(--triangle-height) / 2);
 }
 
 .selection-steps:after {
@@ -256,10 +256,6 @@ export default {
   border-top: calc(var(--triangle-height)/2) solid var(--neutral-color--light);
   border-left: calc(var(--triangle-width)/2) solid transparent;
   border-right: calc(var(--triangle-width)/2) solid transparent;
-}
-
-.calculate-steps {
-  padding: 0 var(--spacing-default);
 }
 
 .update-susceptibilities {

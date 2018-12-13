@@ -14,7 +14,7 @@ export default {
   props: {
     text: {
       type: String,
-      default: 'begin opnieuw'
+      default: 'Restart'
     }
   }
 }
