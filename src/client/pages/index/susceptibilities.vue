@@ -1,13 +1,13 @@
 <template>
   <div>
     <portal to="side-panel-bottom">
-      <md-button
+      <button
         :disabled="calculatingSusceptibilityLayers || errorCalculatingSusceptibilityLayers"
-        class="md-raised md-primary calculate-button"
+        class="button button--primary"
         @click="calculateTotals"
       >
         Calculate totals
-      </md-button>
+      </button>
     </portal>
     <portal to="map-notification">
       <map-notification
@@ -116,9 +116,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .calculate-button {
-    flex-grow: 1;
-  }
-</style>

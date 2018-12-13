@@ -79,6 +79,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
+  padding: 0 var(--spacing-default);
 }
 
 .map-container {
