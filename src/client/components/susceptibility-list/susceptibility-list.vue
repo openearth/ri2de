@@ -1,16 +1,15 @@
 <template>
-  <md-card>
+  <div>
     <md-list class="susceptibility-list">
       <md-subheader class="susceptibility-list__header">
         Susceptibility factors
       </md-subheader>
-      <md-divider />
       <div class="susceptibility-list__list">
         <div
           v-for="(factor, index) in factors"
           :key="factor.id"
         >
-          <md-list-item>
+          <md-list-item class="susceptibility-list__list-item">
             <md-button
               class="md-icon-button"
               @click="toggleFactorActivity(index)"
@@ -19,10 +18,10 @@
                 {{ factor.visible ? 'visibility' : 'visibility_off' }}
               </md-icon>
             </md-button>
-            <span class="susceptibility-list__list-item__title">{{ factor.title }}</span>
+            <span class="susceptibility-list__list-item-title">{{ factor.title }}</span>
             <md-button
               :class="{ 'md-raised' : selectedFactorIndex === index }"
-              class="md-icon-button md-accent"
+              class="md-icon-button md-accent susceptibility-list__list-item-button"
               @click="() => toggleSettings(index)"
             >
               <md-icon>keyboard_arrow_right</md-icon>
@@ -31,11 +30,11 @@
           <transition name="fade">
             <div
               v-if="selectedFactorIndex === index"
-              class="susceptibility-list__list-item__settings"
+              class="susceptibility-list__list-item-settings"
             >
-              <div class="susceptibility-list__list-item__settings-wrapper">
+              <div class="susceptibility-list__list-item-settings-wrapper">
                 <md-button
-                  class="md-icon-button md-dense susceptibility-list__list-item__settings__button"
+                  class="md-icon-button md-dense susceptibility-list__list-item-settings-button"
                   @click="selectedFactorIndex = null"
                 >
                   <md-icon>clear</md-icon>
@@ -106,26 +105,42 @@ export default {
 <style>
 .susceptibility-list {
   z-index: 1;
+  padding: var(--spacing-default) 0 !important;
 }
 
 .susceptibility-list__header {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  padding-bottom: .7rem !important;
+  border-bottom: 1px solid #eee;
+  background-color: transparent;
+  font-size: 1rem !important;
+  font-weight: bold;
 }
 
 .susceptibility-list__list {
   position: relative;
-  padding: var(--spacing-default) 0;
 }
 
-.susceptibility-list__list-item__title {
-  margin-left: var(--spacing-half);
+.susceptibility-list__list-item {
+  border-bottom: 1px solid #eee;
+}
+
+.susceptibility-list__list .md-list-item-content {
+  padding: .8rem 0;
+}
+
+.susceptibility-list__list-item-title {
   margin-right: auto;
   font-size: var(--font-size-default);
 }
 
-.susceptibility-list__list-item__settings {
+.susceptibility-list__list-item-button {
+  margin: 0 20px !important;
+}
+
+.susceptibility-list__list-item-settings {
   --card-width: 270px;
   width: var(--card-width);
   position: absolute;
@@ -137,15 +152,15 @@ export default {
   box-shadow: 0 2px 5px 0 var(--neutral-color);
 }
 
-.susceptibility-list__list-item__settings .md-subheader {
+.susceptibility-list__list-item-settings .md-subheader {
   padding: 0;
 }
 
-.susceptibility-list__list-item__settings-wrapper {
+.susceptibility-list__list-item-settings-wrapper {
   position: relative;
 }
 
-.susceptibility-list__list-item__settings__button {
+.susceptibility-list__list-item-settings-button {
   position: absolute !important;
   top: calc(calc(var(--spacing-default) - 10px) * -1);
   right: calc(calc(var(--spacing-default) - 10px) * -1);
