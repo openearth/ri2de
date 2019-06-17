@@ -33,7 +33,8 @@ export const actions = {
 
     dispatch('mapbox/selections/fitToFeatures')
 
-    commit('hazards/setHazards', loadedProject.hazards)
+    commit('hazards/setHazards', loadedProject.hazards.hazards)
+    commit('hazards/selectHazard', loadedProject.hazards.selectedHazardIndex )
   },
   saveProject ({ state }) {
     const project = {
