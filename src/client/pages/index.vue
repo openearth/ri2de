@@ -85,7 +85,7 @@
 <script>
 import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 
-import { globalRoads, wmsSelectionFromFactor, selectionToCustomFactorLayer, generateWmsLayer } from '../lib/project-layers'
+import { wmsSelectionFromFactor, selectionToCustomFactorLayer, generateWmsLayer } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
@@ -146,8 +146,6 @@ export default {
       })
     },
     initMapState() {
-      this.$store.dispatch('mapbox/wms/add', globalRoads)
-
       this.features
         .forEach(feature => {
           this.$store.dispatch('mapbox/features/add', layers.geojson.line({

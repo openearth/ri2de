@@ -6,15 +6,19 @@ export const MAP_CENTER = [
   WORLD_CENTER_LATITUDE,
 ]
 
-export const MAP_ZOOM = 2
-
 export const MAP_BASELAYERS = [
-  'light',
-  'satellite',
-].map(layer => ({
-  style: `mapbox://styles/mapbox/${layer}-v9`,
-  title: layer,
-  thumbnail: `/thumbnails/${layer}.png`
-}))
+  {
+    style: 'mapbox://styles/pulautekong/cjwud8m561cby1cp6z82kbkco',
+    title: 'light',
+    thumbnail: `/thumbnails/light.png`
+  },
+  {
+    style: 'mapbox://styles/mapbox/satellite-v9',
+    title: 'sattelite',
+    thumbnail: `/thumbnails/sattelite.png`
+  },
+]
 
 export const MAP_BASELAYER_DEFAULT = MAP_BASELAYERS[0]
+
+export const MAP_ZOOM = 2
