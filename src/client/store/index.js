@@ -39,6 +39,13 @@ export const actions = {
       commit('hazards/selectHazard', selectedHazardIndex )
     }
 
+    if (!selections.length) {
+      return ''
+    } else if (selectedHazardIndex) {
+      return 'susceptibilities'
+    } else {
+      return 'hazards'
+    }
   },
   saveProject ({ state }) {
     const project = {

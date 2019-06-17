@@ -27,6 +27,7 @@ export default {
     }),
     onFileInput(event) {
       this.$store.dispatch('importProject', event)
+        .then(page => this.$router.push(`/${page}`))
         .catch(error => this.showError({ message: 'Could not load file' }))
     }
   }
