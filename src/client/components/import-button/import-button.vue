@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <md-button class="md-raised md-primary">
+  <div class="export-button">
+    <md-button class="md-icon-button">
       <md-icon aria-hidden="true">save_alt</md-icon>
     </md-button>
     <input
@@ -23,3 +23,21 @@ export default {
   }
 }
 </script>
+
+<style>
+.export-button {
+  position: relative;
+  cursor: pointer;
+}
+
+.page-index__input-file {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  opacity: 0;
+  cursor: pointer;
+}
+</style>
