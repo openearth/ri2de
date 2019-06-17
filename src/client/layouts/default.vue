@@ -51,6 +51,7 @@ export default {
       this.$store.dispatch('mapbox/selections/reset')
       this.$store.dispatch('mapbox/moveMapToCenter')
       this.$store.dispatch('susceptibility-layers/reset')
+      this.$store.commit('hazards/reset')
       this.$router.replace({ path: '/' })
     }
   }
