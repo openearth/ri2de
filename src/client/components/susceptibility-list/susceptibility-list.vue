@@ -61,7 +61,7 @@
         </div>
       </div>
     </md-list>
-  </md-card>
+  </div>
 </template>
 
 <script>
