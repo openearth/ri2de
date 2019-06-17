@@ -8,6 +8,7 @@ export default ({ store }) => {
   createPersistedState({
       key: 'app-state',
       paths: [
+        'hazards',
         'mapbox.features',
         'mapbox.selections',
       ],

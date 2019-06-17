@@ -20,6 +20,7 @@ export const actions = {
   async importProject({ commit, dispatch }) {
     const loadedProject = await getLoadedFileContents(event)
     const { selections } = loadedProject.mapbox.selections
+    const { selectedHazardIndex, hazards } = loadedProject.hazards
 
     selections.forEach(selection => {
       commit('mapbox/selections/add', selection)
@@ -33,8 +34,12 @@ export const actions = {
 
     dispatch('mapbox/selections/fitToFeatures')
 
-    commit('hazards/setHazards', loadedProject.hazards.hazards)
-    commit('hazards/selectHazard', loadedProject.hazards.selectedHazardIndex )
+    commit('hazards/setHazards', hazards)
+
+    if (selectedHazardIndex) {
+      commit('hazards/selectHazard', selectedHazardIndex )
+    }
+
   },
   saveProject ({ state }) {
     const project = {
