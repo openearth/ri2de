@@ -13,12 +13,21 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
+  data() {
+    return {
+      showSnackBar: true
+    }
+  },
   methods: {
+    ...mapActions({
+      showError: 'notifications/showError',
+    }),
     onFileInput(event) {
       this.$store.dispatch('importProject', event)
-        .then(() => console.log('done'))
-        .catch(error => console.log(error))
+        .catch(error => this.showError({ message: 'Could not load file' }))
     }
   }
 }
