@@ -1,5 +1,6 @@
 // import { stringify } from 'flatted'
 import FileSaver from 'file-saver'
+import getLoadedFileContents from '../lib/get-loaded-file-contents'
 
 export const state = () => ({
   activePage: 'index',
@@ -12,10 +13,28 @@ export const state = () => ({
 export const mutations = {
   setActivePage(state, page) {
     state.activePage = page
-  }
+  },
 }
 
 export const actions = {
+  async importProject({ commit, dispatch }) {
+    const loadedProject = await getLoadedFileContents(event)
+    const { selections } = loadedProject.mapbox.selections
+
+    selections.forEach(selection => {
+      commit('mapbox/selections/add', selection)
+    })
+
+    selections
+      .map(selection => selection.polygon)
+      .forEach(selection => {
+        dispatch('mapbox/selections/draw', selection)
+      })
+
+    dispatch('mapbox/selections/fitToFeatures')
+
+    commit('hazards/setHazards', loadedProject.hazards)
+  },
   saveProject ({ state }) {
     const project = {
       hazards: state.hazards,

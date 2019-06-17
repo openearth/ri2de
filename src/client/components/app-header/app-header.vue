@@ -10,6 +10,7 @@
       <div class="md-toolbar-section-end">
         <restart-button @click="$emit('restart')" />
         <save-button />
+        <import-button />
       </div>
     </md-toolbar>
   </header>
@@ -18,11 +19,13 @@
 <script>
 import RestartButton from '../restart-button'
 import SaveButton from '../save-button'
+import ImportButton from '../import-button'
 
 export default {
   components: {
     RestartButton,
-    SaveButton
+    SaveButton,
+    ImportButton,
   },
 }
 </script>

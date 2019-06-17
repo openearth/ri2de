@@ -5,7 +5,7 @@
     @click="save"
     v-on="$listeners"
   >
-    <md-icon aria-hidden="true">save_alt</md-icon>
+    <md-icon aria-hidden="true">save</md-icon>
     <md-tooltip md-direction="bottom">{{ text }}</md-tooltip>
   </md-button>
 </template>
