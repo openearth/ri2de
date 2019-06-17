@@ -15,7 +15,7 @@ export const MAP_BASELAYERS = [
   {
     style: 'mapbox://styles/mapbox/satellite-v9',
     title: 'sattelite',
-    thumbnail: `/thumbnails/light.png`
+    thumbnail: `/thumbnails/sattelite.png`
   },
 ]
 
