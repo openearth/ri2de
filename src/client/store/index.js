@@ -1,4 +1,3 @@
-// import { stringify } from 'flatted'
 import FileSaver from 'file-saver'
 import getLoadedFileContents from '../lib/get-loaded-file-contents'
 
