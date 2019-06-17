@@ -47,7 +47,6 @@ export default {
     },
     restartApp() {
       this.$store.dispatch('mapbox/wms/resetLayers')
-      // this.$store.dispatch('mapbox/wms/add', globalRoads)
       this.$store.dispatch('mapbox/features/resetFeatures')
       this.$store.dispatch('mapbox/selections/reset')
       this.$store.dispatch('mapbox/moveMapToCenter')
