@@ -43,6 +43,8 @@ export default {
           event: 'fitbounds',
           handler: (event) => this.$store.dispatch('mapbox/selections/fitToFeatures')
         })
+
+        this.$store.dispatch('mapbox/selections/fitToFeatures')
       })
     },
     restartApp() {
