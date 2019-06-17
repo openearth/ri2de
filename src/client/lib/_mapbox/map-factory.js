@@ -1,5 +1,5 @@
 import mapboxgl from './_mapbox'
-import { MAP_CENTER, MAP_ZOOM, MAP_BASELAYER_DEFAULT } from './map-config'
+import { MAP_CENTER, MAP_ZOOM } from './map-config'
 
 import addDefaultControlsToMap from './default-controls'
 
@@ -10,7 +10,7 @@ export default function(container) {
     container,
     center: MAP_CENTER,
     zoom: MAP_ZOOM,
-    style: MAP_BASELAYER_DEFAULT.style
+    style: 'mapbox://styles/pulautekong/cjwud8m561cby1cp6z82kbkco'
   })
 
   // We overwrite the addLayer method of the map.

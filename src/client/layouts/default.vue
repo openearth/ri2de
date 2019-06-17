@@ -27,8 +27,6 @@
 <script>
 import { mapState } from 'vuex'
 
-import { globalRoads } from '../lib/project-layers'
-
 import { AppHeader, MapboxMap, SidePanel } from '../components'
 
 export default {
@@ -49,7 +47,7 @@ export default {
     },
     restartApp() {
       this.$store.dispatch('mapbox/wms/resetLayers')
-      this.$store.dispatch('mapbox/wms/add', globalRoads)
+      // this.$store.dispatch('mapbox/wms/add', globalRoads)
       this.$store.dispatch('mapbox/features/resetFeatures')
       this.$store.dispatch('mapbox/selections/reset')
       this.$store.dispatch('mapbox/moveMapToCenter')
