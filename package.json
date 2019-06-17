@@ -38,7 +38,7 @@
     "@turf/combine": "^6.0.1",
     "@turf/helpers": "^6.1.4",
     "cross-env": "^5.2.0",
-    "file-saver": "^2.0.0",
+    "file-saver": "^2.0.2",
     "lodash.debounce": "^4.0.8",
     "mapbox-gl": "^0.51.0",
     "nuxt": "^2.8.1",
