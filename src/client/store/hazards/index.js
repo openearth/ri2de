@@ -66,8 +66,9 @@ export const actions = {
     const susceptibilityFactors = hazardsList.map(({ layers }, HazardIndex) =>
       layers
         .map((layer, LayerIndex) => {
-          const layerInState = state.susceptibilityFactors[HazardIndex][LayerIndex]
-          const match = layerInState.layerName === layer.layerName
+          const hazard = state.susceptibilityFactors[HazardIndex]
+          const layerInState = hazard && hazard[LayerIndex]
+          const match = layerInState && layerInState.layerName === layer.layerName
 
           // get values from saved state if they are available
           const weightFactor = match ? layerInState.weightFactor : layer.weightFactor

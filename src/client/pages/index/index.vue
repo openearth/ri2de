@@ -1,6 +1,11 @@
 <template>
   <div class="page-index">
-    <md-dialog :md-active.sync="showDialog">
+    <md-dialog
+      :md-active="true"
+      :md-click-outside-to-close="false"
+      :md-close-on-esc="false"
+      :md-fullscreen="false"
+    >
       <md-dialog-title>Welcome</md-dialog-title>
 
       <md-dialog-content>RI2DE helps users to visualize the effect of certain hazards on infrastructure.</md-dialog-content>
@@ -27,11 +32,6 @@ import { mapState } from 'vuex';
 export default {
   components: {
     ImportButton
-  },
-  data() {
-    return {
-      showDialog: true
-    }
   },
   computed: {
     ...mapState('mapbox/selections', [ 'selections' ]),

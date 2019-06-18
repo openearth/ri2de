@@ -106,7 +106,7 @@ export default {
           this.errorCalculatingSusceptibilityLayers = true
           console.log('Error: ', e)
         }
-        if(index === this.currentSusceptibilityFactors.length - 1) {
+        if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
           this.calculatingSusceptibilityLayers = false
         }
       })
