@@ -64,7 +64,7 @@
       <div class="calculate-steps">
         <susceptibility-list
           v-if="activePage === 'susceptibilities'"
-          :factors="currentSusceptibilityFactors"
+          :factors="currentSusceptibilityFactors || []"
           @setWeightFactor="onSetWeightFactor"
           @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
           @toggleFactorActivity="toggleSusceptibilityLayer"
@@ -113,8 +113,10 @@ export default {
     }
   },
   beforeMount() {
-    if (this.selections.length) {
-      this.$router.replace('/project')
+    if ( this.selectedHazardIndex) {
+      this.$router.replace('/susceptibilities')
+    } else if (this.selections.length) {
+      this.$router.replace('/hazards')
     }
   },
   mounted() {
