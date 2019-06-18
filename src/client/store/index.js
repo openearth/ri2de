@@ -19,26 +19,41 @@ export const actions = {
   async importProject({ commit, dispatch }) {
     const loadedProject = await getLoadedFileContents(event)
     const { selections } = loadedProject.mapbox.selections
+    const { features } = loadedProject.mapbox
     const { selectedHazardIndex, hazards } = loadedProject.hazards
 
-    selections.forEach(selection => {
-      commit('mapbox/selections/add', selection)
-    })
+    if (!selections && !features) {
+      throw new Error()
+    }
 
+    dispatch('restartApp')
+
+    // add selections to state
+    selections
+      .forEach(selection => commit('mapbox/selections/add', selection))
+
+    // draw the selections
     selections
       .map(selection => selection.polygon)
-      .forEach(selection => {
-        dispatch('mapbox/selections/draw', selection)
-      })
+      .forEach(selection => dispatch('mapbox/selections/draw', selection))
 
+    // zoom in to the added features
     dispatch('mapbox/selections/fitToFeatures')
 
-    commit('hazards/setHazards', hazards)
+    if (features) {
+      features
+        .forEach(feature => dispatch('mapbox/features/add', feature))
+    }
+
+    if (hazards) {
+      commit('hazards/setHazards', hazards)
+    }
 
     if (selectedHazardIndex) {
       commit('hazards/selectHazard', selectedHazardIndex )
     }
 
+    // redirect to the right page after the import is done
     if (!selections.length) {
       return ''
     } else if (selectedHazardIndex) {
@@ -51,7 +66,8 @@ export const actions = {
     const project = {
       hazards: state.hazards,
       mapbox: {
-        selections: state.mapbox.selections
+        selections: state.mapbox.selections,
+        features: state.mapbox.features.features
       }
     }
     const title = 'ri2de_project'
