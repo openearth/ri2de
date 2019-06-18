@@ -16,6 +16,15 @@ export const xmlRequestTemplate = ({ functionId, requestData, polygon, roadsIden
 
 function wpsInput(identifier, data) {
   return `
+    ${identifier === 'geojson_area' ? (`
+      <wps:Input>
+        <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">buffer_dist</ows:Identifier>
+        <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">buffer_dist</ows:Title>
+        <wps:Data>
+          <wps:LiteralData>300</wps:LiteralData>
+        </wps:Data>
+      </wps:Input>
+    `) : ''}
     <wps:Input>
       <ows:Identifier xmlns:ows="http://www.opengis.net/ows/1.1">${identifier}</ows:Identifier>
       <ows:Title xmlns:ows="http://www.opengis.net/ows/1.1">${identifier}</ows:Title>
