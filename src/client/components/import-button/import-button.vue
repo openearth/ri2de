@@ -1,7 +1,7 @@
 <template>
   <div class="export-button">
-    <md-button class="md-icon-button">
-      <md-icon aria-hidden="true">save_alt</md-icon>
+    <md-button class="md-raised md-primary">
+      Open
     </md-button>
     <input
       class="page-index__input-file"
@@ -38,6 +38,12 @@ export default {
 .export-button {
   position: relative;
   cursor: pointer;
+  display: flex;
+}
+
+.export-button .md-button {
+  flex: 1;
+  z-index: 0;
 }
 
 .page-index__input-file {
