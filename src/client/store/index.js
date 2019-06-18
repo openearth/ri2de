@@ -20,7 +20,7 @@ export const actions = {
     const loadedProject = await getLoadedFileContents(event)
     const { selections } = loadedProject.mapbox.selections
     const { features } = loadedProject.mapbox
-    const { selectedHazardIndex, hazards } = loadedProject.hazards
+    const { selectedHazardIndex, hazards, susceptibilityFactors } = loadedProject.hazards
 
     if (!selections && !features) {
       throw new Error()
@@ -42,10 +42,12 @@ export const actions = {
 
     if (hazards) {
       commit('hazards/setHazards', hazards)
+      commit('hazards/setSusceptibilityFactors', susceptibilityFactors)
+      dispatch('hazards/bootstrapHazards', susceptibilityFactors)
     }
 
-    if (selectedHazardIndex) {
-      commit('hazards/selectHazard', selectedHazardIndex )
+    if (selectedHazardIndex !== undefined) {
+      commit('hazards/selectHazard', selectedHazardIndex)
     }
   },
   saveProject ({ state }) {
