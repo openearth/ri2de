@@ -34,6 +34,7 @@ import { MapNotification } from '../../components'
 
 export default {
   components: { MapNotification },
+  mixins: [ initMapState ],
   data() {
     return {
       errorMessage: undefined,
