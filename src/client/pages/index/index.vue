@@ -66,6 +66,7 @@ export default {
         event: 'draw.update',
         handler: (event) => this.updateSelection(event)
       })
+      this.$store.dispatch('mapbox/selections/fitToFeatures')
     },
     createSelection(event) {
       this.fetchingRoads = true

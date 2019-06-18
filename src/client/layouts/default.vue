@@ -21,21 +21,33 @@
       <mapbox-map @mapCreated="initializeMap" />
     </div>
     <nuxt/>
+    <notification-area
+      :notifications="notifications"
+      @remove-notification="removeNotification"
+    />
   </main>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
-import { AppHeader, MapboxMap, SidePanel } from '../components'
+import { mapState, mapMutations } from 'vuex'
+import { AppHeader, MapboxMap, SidePanel, NotificationArea } from '../components'
 
 export default {
   components: {
     AppHeader,
     MapboxMap,
-    SidePanel
+    SidePanel,
+    NotificationArea
+  },
+  computed: {
+    ...mapState({
+      notifications: state => state.notifications.messages
+    })
   },
   methods: {
+    ...mapMutations({
+      removeNotification: 'notifications/remove',
+    }),
     initializeMap(map) {
       this.$store.dispatch('mapbox/initMap', map)
       map.on('load', () => {
@@ -43,14 +55,12 @@ export default {
           event: 'fitbounds',
           handler: (event) => this.$store.dispatch('mapbox/selections/fitToFeatures')
         })
+
+        this.$store.dispatch('mapbox/selections/fitToFeatures')
       })
     },
     restartApp() {
-      this.$store.dispatch('mapbox/wms/resetLayers')
-      this.$store.dispatch('mapbox/features/resetFeatures')
-      this.$store.dispatch('mapbox/selections/reset')
-      this.$store.dispatch('mapbox/moveMapToCenter')
-      this.$store.dispatch('susceptibility-layers/reset')
+      this.$store.dispatch('restartApp')
       this.$router.replace({ path: '/' })
     }
   }
