@@ -57,5 +57,13 @@ export const actions = {
     const title = 'ri2de_project'
     const blob = new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' })
     FileSaver.saveAs(blob, `${title || 'ri2de_project'}.json`)
+  },
+  restartApp({ commit, dispatch}) {
+    dispatch('mapbox/wms/resetLayers')
+    dispatch('mapbox/features/resetFeatures')
+    dispatch('mapbox/selections/reset')
+    dispatch('mapbox/moveMapToCenter')
+    dispatch('susceptibility-layers/reset')
+    commit('hazards/reset')
   }
 }

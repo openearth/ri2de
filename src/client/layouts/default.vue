@@ -60,12 +60,7 @@ export default {
       })
     },
     restartApp() {
-      this.$store.dispatch('mapbox/wms/resetLayers')
-      this.$store.dispatch('mapbox/features/resetFeatures')
-      this.$store.dispatch('mapbox/selections/reset')
-      this.$store.dispatch('mapbox/moveMapToCenter')
-      this.$store.dispatch('susceptibility-layers/reset')
-      this.$store.commit('hazards/reset')
+      this.$store.dispatch('restartApp')
       this.$router.replace({ path: '/' })
     }
   }
