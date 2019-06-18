@@ -17,7 +17,7 @@ export default {
     if(this.selections.length) {
       this.$store.commit('setActivePage', 'hazards')
     } else {
-      this.$router.replace({ path: '/' })
+      this.$router.replace({ path: '/project' })
     }
   },
   methods: {
