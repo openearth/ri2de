@@ -56,7 +56,7 @@ export default {
     } else if (this.selections.length) {
       this.$router.replace({ path: '/hazards' })
     } else {
-      this.$router.replace({ path: '/' })
+      this.$router.replace({ path: '/project' })
     }
   },
   beforeDestroy() {
