@@ -22,7 +22,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('mapbox/selections', [ 'selectedHazardIndex' ]),
+    ...mapState('mapbox/selections', [ 'selections' ]),
+    ...mapState('hazards', [ 'selectedHazardIndex' ]),
   },
   methods: {
     ...mapActions({
@@ -33,9 +34,9 @@ export default {
         .then(() => {
           // redirect to the right page after the import is done
           if (this.selectedHazardIndex) {
-            this.$router.push('/susceptibilities');
-          } else {
-            this.$router.push('/hazards');
+            this.$router.replace('/susceptibilities')
+          } else if (this.selections.length) {
+            this.$router.replace('/hazards')
           }
         })
         .catch(error => this.showError({ message: 'Could not load file' }))
