@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   data() {
@@ -21,13 +21,23 @@ export default {
       showSnackBar: true
     }
   },
+  computed: {
+    ...mapState('mapbox/selections', [ 'selectedHazardIndex' ]),
+  },
   methods: {
     ...mapActions({
       showError: 'notifications/showError',
     }),
     onFileInput(event) {
       this.$store.dispatch('importProject', event)
-        .then(page => this.$router.push(`/${page}`))
+        .then(() => {
+          // redirect to the right page after the import is done
+          if (this.selectedHazardIndex) {
+            this.$router.push('/susceptibilities');
+          } else {
+            this.$router.push('/hazards');
+          }
+        })
         .catch(error => this.showError({ message: 'Could not load file' }))
     }
   }

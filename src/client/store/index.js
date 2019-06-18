@@ -32,11 +32,6 @@ export const actions = {
     selections
       .forEach(selection => commit('mapbox/selections/add', selection))
 
-    // draw the selections
-    selections
-      .map(selection => selection.polygon)
-      .forEach(selection => dispatch('mapbox/selections/draw', selection))
-
     // zoom in to the added features
     dispatch('mapbox/selections/fitToFeatures')
 
@@ -51,13 +46,6 @@ export const actions = {
 
     if (selectedHazardIndex) {
       commit('hazards/selectHazard', selectedHazardIndex )
-    }
-
-    // redirect to the right page after the import is done
-    if (selectedHazardIndex) {
-      return 'susceptibilities'
-    } else {
-      return 'hazards'
     }
   },
   saveProject ({ state }) {
