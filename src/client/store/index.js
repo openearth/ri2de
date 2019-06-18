@@ -54,9 +54,7 @@ export const actions = {
     }
 
     // redirect to the right page after the import is done
-    if (!selections.length) {
-      return ''
-    } else if (selectedHazardIndex) {
+    if (selectedHazardIndex) {
       return 'susceptibilities'
     } else {
       return 'hazards'
