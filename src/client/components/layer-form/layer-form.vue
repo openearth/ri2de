@@ -1,24 +1,32 @@
 <template>
   <div class="layer-form">
-    <form
-      class="layer-form__form"
-      @submit.prevent="onSubmit"
-    >
-      <md-dialog-title>Add a new layer</md-dialog-title>
-      <slot name="title" />
-      <md-field>
-        <label>Layer url</label>
-        <md-input v-model="url" />
-      </md-field>
-      <md-field>
-        <label>Layer name</label>
-        <md-input v-model="name" />
-      </md-field>
-      <md-field>
-        <label>Layer title</label>
-        <md-input v-model="title" />
-      </md-field>
-      <md-dialog-actions>
+    <md-dialog-title>Add a new layer</md-dialog-title>
+    <form @submit.prevent="onSubmit">
+      <div class="layer-form__form">
+        <slot name="title" />
+        <md-field>
+          <label>Layer url</label>
+          <md-input
+            v-model="url"
+            required
+          />
+        </md-field>
+        <md-field>
+          <label>Layer name</label>
+          <md-input
+            v-model="name"
+            required
+          />
+        </md-field>
+        <md-field>
+          <label>Layer title</label>
+          <md-input
+            v-model="title"
+            required
+          />
+        </md-field>
+      </div>
+      <md-dialog-actions class="layer-form__actions">
         <button
           :disabled="loading"
           class="button button--primary"
