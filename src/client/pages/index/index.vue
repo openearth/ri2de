@@ -8,7 +8,20 @@
     >
       <md-dialog-title>Welcome</md-dialog-title>
 
-      <md-dialog-content>RI2DE helps users to visualize the effect of certain hazards on infrastructure.</md-dialog-content>
+      <div class="page-index__logos">
+        <img
+          src="/images/OE_logo.png"
+          alt="OE logo"
+        >
+        <img
+          src="/images/logo-m-2x.png"
+          alt="Deltares logo"
+        >
+      </div>
+
+      <md-dialog-content>
+        RI2DE tool enables the user to select infrastructure and calculate the susceptibility of the hazard erosium due to culvert. The user can navigate to the area of interest by typing a location and by zooming and panning the base map.
+      </md-dialog-content>
 
       <div class="page-index__actions">
         <md-button
@@ -52,5 +65,15 @@ export default {
   height: 50px;
   background-color: lightgrey;
   flex: 1;
+}
+
+.page-index__logos {
+  display: flex;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.page-index__logos img {
+  width: 10rem;
+  margin: 0 0.5rem;
 }
 </style>
