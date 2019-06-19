@@ -89,7 +89,6 @@ import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 import { wmsSelectionFromFactor, selectionToCustomFactorLayer, generateWmsLayer } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
-import customWps from '../lib/custom-wps'
 import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
 
 import { InfrastructureList, ContentCard, HazardsList, SusceptibilityList } from '../components'
@@ -126,7 +125,8 @@ export default {
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     ...mapActions({
-      bootstrapHazardsList: 'hazards/bootstrapHazards'
+      bootstrapHazardsList: 'hazards/bootstrapHazards',
+      addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
     }),
     completeInfrastructure() {
       if(this.selections.length) {
@@ -234,18 +234,27 @@ export default {
       })
     },
     async addLayer(newLayer) {
-      const { owsUrl, layerName } = newLayer
-
-      const layer = await customWps({
-        owsUrl,
-        layerName
-      })
-
-      console.log(layer)
-
       this.isLayerFormVisible = false
+
+      const customFactorLayers = await Promise.all(this.selections.map( async selection => {
+        const customLayer = await selectionToCustomFactorLayer({
+          ...selection, factor: { wpsFunctionId: 'ri2de_calc_custom', classes: [], ...newLayer }
+        })
+
+        this.$store.dispatch('mapbox/wms/add', generateWmsLayer({
+          ...customLayer, paint: { 'raster-opacity': 1 }
+        }))
+
+        this.$store.commit('susceptibility-layers/addLayerToSelection', {
+          selectionId: selection.id, layer: { ...customLayer, susceptibility: newLayer.title },
+        })
+
+        return customLayer
+      }))
+
       this.addSusceptibilityFactorForCurrentHazard({
         ...newLayer,
+        factorLayers: customFactorLayers.map(layer => layer.id),
         weightFactor: 1,
         visible: true,
         wpsFunctionId: 'ri2de_calc_custom',

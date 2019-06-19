@@ -70,8 +70,13 @@ export const actions = {
     commit('setHazards', hazards)
     commit('setSusceptibilityFactors', susceptibilityFactors)
   },
-  async addSusceptibility({ commit }, { owsUrl, layerName }) {
-
+  async addSusceptibilityFactor({ commit }, newLayer) {
+    commit('addSusceptibilityFactorForCurrentHazard', {
+      ...newLayer,
+      weightFactor: 1,
+      visible: true,
+      wpsFunctionId: 'ri2de_calc_custom',
+    })
   }
 }
 

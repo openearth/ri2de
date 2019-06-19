@@ -34,9 +34,9 @@
 export default {
   data() {
     return {
-      url: '',
-      name: '',
-      title: '',
+      url: 'https://ri2de.openearth.eu/geoserver/ows?',
+      name: 'albania:culverts_wgs84',
+      title: 'Test',
     }
   },
   methods: {
