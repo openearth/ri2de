@@ -5,6 +5,7 @@
       :md-click-outside-to-close="false"
       :md-close-on-esc="false"
       :md-fullscreen="false"
+      class="page-index__dialog"
     >
       <md-dialog-title>Welcome</md-dialog-title>
 
@@ -75,5 +76,9 @@ export default {
 .page-index__logos img {
   width: 10rem;
   margin: 0 0.5rem;
+}
+
+.page-index__dialog {
+  max-width: 40rem;
 }
 </style>
