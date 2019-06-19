@@ -62,13 +62,13 @@
       </div>
     </md-list>
     <div>
-      <button
-        class="susceptibility-list__add-layer"
+      <md-button
+        class="md-primary susceptibility-list__add-layer"
         @click="isLayerFormVisible = !isLayerFormVisible"
       >
         <md-icon class="md-primary susceptiblity-list__add-layer__icon">add_circle_outline</md-icon>
         <span class="md-body-2">Add a new layer</span>
-      </button>
+      </md-button>
     </div>
     <md-dialog
       :md-active.sync="isLayerFormVisible"
@@ -228,5 +228,13 @@ export default {
   top: calc(calc(var(--spacing-default) - 10px) * -1);
   right: calc(calc(var(--spacing-default) - 10px) * -1);
   margin: 0 !important;
+}
+
+.susceptibility-list__add-layer .md-button-content {
+  display: flex;
+}
+
+.susceptiblity-list__add-layer__icon.md-icon {
+  margin-right: 0.25rem;
 }
 </style>
