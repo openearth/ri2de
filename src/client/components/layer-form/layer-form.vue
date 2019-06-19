@@ -1,10 +1,10 @@
 <template>
   <div class="layer-form">
-    <md-dialog-title>Add a new layer</md-dialog-title>
     <form
       class="layer-form__form"
-      @submit.prevent="() => $emit('addLayer', { url, name })"
+      @submit.prevent="onSubmit"
     >
+      <md-dialog-title>Add a new layer</md-dialog-title>
       <slot name="title" />
       <md-field>
         <label>Layer url</label>
@@ -18,25 +18,40 @@
         <label>Layer title</label>
         <md-input v-model="title" />
       </md-field>
+      <md-dialog-actions>
+        <button
+          :disabled="loading"
+          class="button button--primary"
+        >
+          <md-progress-spinner
+            v-if="loading"
+            :md-diameter="20"
+            :md-stroke="3"
+            md-mode="indeterminate"
+            class="md-white"
+          />
+          <span v-else>
+            Add layer
+          </span>
+        </button>
+      </md-dialog-actions>
     </form>
-    <md-dialog-actions>
-      <button
-        class="button button--primary"
-        @click="onSubmit"
-      >
-        Add layer
-      </button>
-    </md-dialog-actions>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
-      url: 'https://ri2de.openearth.eu/geoserver/ows?',
-      name: 'albania:culverts_wgs84',
-      title: 'Test',
+      url: '',
+      name: '',
+      title: '',
     }
   },
   methods: {
@@ -46,9 +61,6 @@ export default {
         layerName: this.name,
         title: this.title
       })
-      this.url = ''
-      this.name = ''
-      this.title = ''
     }
   },
 }
@@ -62,5 +74,9 @@ export default {
 .layer-form__form {
   padding: 0 24px 1rem 24px;
   min-width: 400px;
+}
+
+.layer-form .md-progress-spinner.md-theme-default .md-progress-spinner-circle {
+  stroke: #FFF;
 }
 </style>

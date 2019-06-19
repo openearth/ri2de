@@ -70,12 +70,12 @@
         <span class="md-body-2">Add a new layer</span>
       </button>
     </div>
-    <md-dialog :md-active="isLayerFormVisible">
+    <md-dialog
+      :md-active.sync="isLayerFormVisible"
+    >
       <layer-form
-        @addLayer="(newLayer) => {
-          isLayerFormVisible = false
-          $emit('addLayer', newLayer)
-        }"
+        :loading="isLoadingLayer"
+        @addLayer="addLayer"
       />
     </md-dialog>
   </div>
@@ -86,6 +86,8 @@ import { LayerLegend } from '../'
 import WeightFactor from '../weight-factor'
 import InputRange from '../input-range'
 import LayerForm from '../layer-form'
+import { selectionToCustomFactorLayer, generateWmsLayer } from '../../lib/project-layers'
+import { mapActions, mapState, mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -104,9 +106,19 @@ export default {
     return {
       selectedFactorIndex: null,
       isLayerFormVisible: false,
+      isLoadingLayer: false
     }
   },
+  computed: {
+    ...mapState('mapbox/selections', [ 'selections' ]),
+  },
   methods: {
+    ...mapActions({
+      addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
+    }),
+    ...mapMutations({
+      addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
+    }),
     toggleFactorActivity(index) {
       this.$emit('toggleFactorActivity', { index, active: !this.factors[index].visible })
     },
@@ -117,6 +129,37 @@ export default {
       }
 
       this.selectedFactorIndex = index
+    },
+    async addLayer(newLayer) {
+      this.isLoadingLayer = true
+
+      const customFactorLayers = await Promise.all(this.selections.map( async selection => {
+        const customLayer = await selectionToCustomFactorLayer({
+          ...selection, factor: { wpsFunctionId: 'ri2de_calc_custom', classes: [], ...newLayer }
+        })
+
+        this.$store.dispatch('mapbox/wms/add', generateWmsLayer({
+          ...customLayer, paint: { 'raster-opacity': 1 }
+        }))
+
+        this.$store.commit('susceptibility-layers/addLayerToSelection', {
+          selectionId: selection.id, layer: { ...customLayer, susceptibility: newLayer.title },
+        })
+
+        return customLayer
+      }))
+
+      this.isLayerFormVisible = false
+
+      this.addSusceptibilityFactorForCurrentHazard({
+        ...newLayer,
+        factorLayers: customFactorLayers.map(layer => layer.id),
+        weightFactor: 1,
+        visible: true,
+        wpsFunctionId: 'ri2de_calc_custom',
+      })
+
+      this.isLoadingLayer = false
     },
   },
 }

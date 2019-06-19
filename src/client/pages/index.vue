@@ -68,7 +68,6 @@
           @setWeightFactor="onSetWeightFactor"
           @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
           @toggleFactorActivity="toggleSusceptibilityLayer"
-          @addLayer="addLayer"
         />
         <nuxt-link
           v-if="activePage === 'results' && totalsLayers && totalsLayers.length"
@@ -239,33 +238,6 @@ export default {
         id: infrastructure.features[0],
         styleOption: 'line-color',
         value: style,
-      })
-    },
-    async addLayer(newLayer) {
-      this.isLayerFormVisible = false
-
-      const customFactorLayers = await Promise.all(this.selections.map( async selection => {
-        const customLayer = await selectionToCustomFactorLayer({
-          ...selection, factor: { wpsFunctionId: 'ri2de_calc_custom', classes: [], ...newLayer }
-        })
-
-        this.$store.dispatch('mapbox/wms/add', generateWmsLayer({
-          ...customLayer, paint: { 'raster-opacity': 1 }
-        }))
-
-        this.$store.commit('susceptibility-layers/addLayerToSelection', {
-          selectionId: selection.id, layer: { ...customLayer, susceptibility: newLayer.title },
-        })
-
-        return customLayer
-      }))
-
-      this.addSusceptibilityFactorForCurrentHazard({
-        ...newLayer,
-        factorLayers: customFactorLayers.map(layer => layer.id),
-        weightFactor: 1,
-        visible: true,
-        wpsFunctionId: 'ri2de_calc_custom',
       })
     },
   },
