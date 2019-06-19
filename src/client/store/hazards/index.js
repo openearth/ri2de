@@ -19,6 +19,16 @@ export const mutations = {
   setHazards(state, hazards) {
     state.hazards = hazards
   },
+  addSusceptibilityFactorForCurrentHazard(state, susceptibilityFactor) {
+    const newFactors = [ ...state.susceptibilityFactors ]
+
+     newFactors[state.selectedHazardIndex] = [
+      ...newFactors[state.selectedHazardIndex],
+      susceptibilityFactor
+    ]
+
+     state.susceptibilityFactors = newFactors
+  },
   setSusceptibilityFactors(state, susceptibilityFactors) {
     state.susceptibilityFactors = susceptibilityFactors
   },
@@ -60,6 +70,9 @@ export const actions = {
     commit('setHazards', hazards)
     commit('setSusceptibilityFactors', susceptibilityFactors)
   },
+  async addSusceptibility({ commit }, { owsUrl, layerName }) {
+
+  }
 }
 
 export const getters = {

@@ -68,6 +68,7 @@
           @setWeightFactor="onSetWeightFactor"
           @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
           @toggleFactorActivity="toggleSusceptibilityLayer"
+          @addLayer="addLayer"
         />
         <nuxt-link
           v-if="activePage === 'results' && totalsLayers && totalsLayers.length"
@@ -88,6 +89,7 @@ import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
 import { wmsSelectionFromFactor, selectionToCustomFactorLayer, generateWmsLayer } from '../lib/project-layers'
 import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
+import customWps from '../lib/custom-wps'
 import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
 
 import { InfrastructureList, ContentCard, HazardsList, SusceptibilityList } from '../components'
@@ -121,6 +123,7 @@ export default {
       selectHazard: 'hazards/selectHazard',
       updateWeightFactor: 'hazards/updateWeightFactor',
       updateClasses: 'hazards/updateClasses',
+      addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     ...mapActions({
       bootstrapHazardsList: 'hazards/bootstrapHazards'
@@ -228,6 +231,24 @@ export default {
         id: infrastructure.features[0],
         styleOption: 'line-color',
         value: style,
+      })
+    },
+    async addLayer(newLayer) {
+      const { owsUrl, layerName } = newLayer
+
+      const layer = await customWps({
+        owsUrl,
+        layerName
+      })
+
+      console.log(layer)
+
+      this.isLayerFormVisible = false
+      this.addSusceptibilityFactorForCurrentHazard({
+        ...newLayer,
+        weightFactor: 1,
+        visible: true,
+        wpsFunctionId: 'ri2de_calc_custom',
       })
     },
   },

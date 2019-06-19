@@ -61,6 +61,23 @@
         </div>
       </div>
     </md-list>
+    <div>
+      <button
+        class="susceptibility-list__add-layer"
+        @click="isLayerFormVisible = !isLayerFormVisible"
+      >
+        <md-icon class="md-primary susceptiblity-list__add-layer__icon">add_circle_outline</md-icon>
+        <span class="md-body-2">Add a new layer</span>
+      </button>
+    </div>
+    <md-dialog :md-active="isLayerFormVisible">
+      <layer-form
+        @addLayer="(newLayer) => {
+          isLayerFormVisible = false
+          $emit('addLayer', newLayer)
+        }"
+      />
+    </md-dialog>
   </div>
 </template>
 
@@ -68,10 +85,12 @@
 import { LayerLegend } from '../'
 import WeightFactor from '../weight-factor'
 import InputRange from '../input-range'
+import LayerForm from '../layer-form'
 
 export default {
   components: {
     LayerLegend,
+    LayerForm,
     WeightFactor,
     InputRange,
   },
@@ -84,6 +103,7 @@ export default {
   data() {
     return {
       selectedFactorIndex: null,
+      isLayerFormVisible: false,
     }
   },
   methods: {
