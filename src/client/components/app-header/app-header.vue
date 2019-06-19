@@ -8,8 +8,8 @@
         <h1 class="md-title">RI2DE</h1>
       </nuxt-link>
       <div class="md-toolbar-section-end">
-        <restart-button @click="$emit('restart')" />
         <save-button />
+        <restart-button @click="$emit('restart')" />
       </div>
     </md-toolbar>
   </header>
