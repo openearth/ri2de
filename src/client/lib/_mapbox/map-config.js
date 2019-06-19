@@ -13,7 +13,7 @@ export const MAP_BASELAYERS = [
     thumbnail: `/thumbnails/light.png`
   },
   {
-    style: 'mapbox://styles/mapbox/satellite-v9',
+    style: 'mapbox://styles/mapbox/satellite-streets-v9',
     title: 'sattelite',
     thumbnail: `/thumbnails/sattelite.png`
   },
