@@ -34,6 +34,7 @@ import { MapNotification } from '../../components'
 
 export default {
   components: { MapNotification },
+  mixins: [ initMapState ],
   data() {
     return {
       errorMessage: undefined,
@@ -56,7 +57,7 @@ export default {
     } else if (this.selections.length) {
       this.$router.replace({ path: '/hazards' })
     } else {
-      this.$router.replace({ path: '/' })
+      this.$router.replace({ path: '/project' })
     }
   },
   beforeDestroy() {
@@ -105,7 +106,7 @@ export default {
           this.errorCalculatingSusceptibilityLayers = true
           console.log('Error: ', e)
         }
-        if(index === this.currentSusceptibilityFactors.length - 1) {
+        if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
           this.calculatingSusceptibilityLayers = false
         }
       })

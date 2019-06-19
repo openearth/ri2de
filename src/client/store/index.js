@@ -20,7 +20,7 @@ export const actions = {
     const loadedProject = await getLoadedFileContents(event)
     const { selections } = loadedProject.mapbox.selections
     const { features } = loadedProject.mapbox
-    const { selectedHazardIndex, hazards } = loadedProject.hazards
+    const { selectedHazardIndex, hazards, susceptibilityFactors } = loadedProject.hazards
 
     if (!selections && !features) {
       throw new Error()
@@ -32,11 +32,6 @@ export const actions = {
     selections
       .forEach(selection => commit('mapbox/selections/add', selection))
 
-    // draw the selections
-    selections
-      .map(selection => selection.polygon)
-      .forEach(selection => dispatch('mapbox/selections/draw', selection))
-
     // zoom in to the added features
     dispatch('mapbox/selections/fitToFeatures')
 
@@ -47,19 +42,12 @@ export const actions = {
 
     if (hazards) {
       commit('hazards/setHazards', hazards)
+      commit('hazards/setSusceptibilityFactors', susceptibilityFactors)
+      dispatch('hazards/bootstrapHazards', susceptibilityFactors)
     }
 
-    if (selectedHazardIndex) {
-      commit('hazards/selectHazard', selectedHazardIndex )
-    }
-
-    // redirect to the right page after the import is done
-    if (!selections.length) {
-      return ''
-    } else if (selectedHazardIndex) {
-      return 'susceptibilities'
-    } else {
-      return 'hazards'
+    if (selectedHazardIndex !== undefined) {
+      commit('hazards/selectHazard', selectedHazardIndex)
     }
   },
   saveProject ({ state }) {

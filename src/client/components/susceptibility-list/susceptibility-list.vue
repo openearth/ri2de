@@ -48,7 +48,7 @@
                 />
                 <input-range
                   v-if="factor.classes && (factor.classes.length === 4)"
-                  :value="[factor.classes[1], factor.classes[2]]"
+                  :value="[factor.classesValue[1], factor.classesValue[2]]"
                   :min="factor.classes[0]"
                   :max="factor.classes[3]"
                   label="Classes"
