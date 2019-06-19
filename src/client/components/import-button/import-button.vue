@@ -1,7 +1,7 @@
 <template>
   <div class="export-button">
-    <md-button class="md-icon-button">
-      <md-icon aria-hidden="true">save_alt</md-icon>
+    <md-button class="md-raised md-primary">
+      Open
     </md-button>
     <input
       class="page-index__input-file"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   data() {
@@ -21,13 +21,24 @@ export default {
       showSnackBar: true
     }
   },
+  computed: {
+    ...mapState('mapbox/selections', [ 'selections' ]),
+    ...mapState('hazards', [ 'selectedHazardIndex' ]),
+  },
   methods: {
     ...mapActions({
       showError: 'notifications/showError',
     }),
     onFileInput(event) {
       this.$store.dispatch('importProject', event)
-        .then(page => this.$router.push(`/${page}`))
+        .then(() => {
+          // redirect to the right page after the import is done
+          if (this.selectedHazardIndex !== undefined) {
+            this.$router.replace('/susceptibilities')
+          } else if (this.selections.length) {
+            this.$router.replace('/hazards')
+          }
+        })
         .catch(error => this.showError({ message: 'Could not load file' }))
     }
   }
@@ -38,6 +49,12 @@ export default {
 .export-button {
   position: relative;
   cursor: pointer;
+  display: flex;
+}
+
+.export-button .md-button {
+  flex: 1;
+  z-index: 0;
 }
 
 .page-index__input-file {

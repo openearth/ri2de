@@ -112,6 +112,13 @@ export default {
       }
     }
   },
+  beforeMount() {
+    if (this.selectedHazardIndex !== undefined) {
+      this.$router.replace('/susceptibilities')
+    } else if (this.selections.length) {
+      this.$router.replace('/hazards')
+    }
+  },
   mounted() {
     this.bootstrapHazardsList()
   },
@@ -165,6 +172,7 @@ export default {
         susceptibilityIndex: index,
         weightFactor: value,
       })
+      this.updateSusceptibilityLayers({ susceptibilityIndex: index })
     },
     onUpdateClasses(classes, index) {
       this.updateClasses({
@@ -177,7 +185,7 @@ export default {
     selectCard(title) {
       switch (title) {
         case 'Infrastructure':
-          this.$router.push({ path: '/' })
+          this.$router.push({ path: '/project' })
           break
 
         case 'Hazards':

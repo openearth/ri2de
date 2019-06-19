@@ -1,11 +1,11 @@
 <template>
   <md-button
     :aria-label="text"
-    class="md-icon-button"
+    class="md-raised"
     @click="save"
     v-on="$listeners"
   >
-    <md-icon aria-hidden="true">save</md-icon>
+    Save
     <md-tooltip md-direction="bottom">{{ text }}</md-tooltip>
   </md-button>
 </template>

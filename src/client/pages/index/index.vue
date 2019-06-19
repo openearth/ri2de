@@ -1,123 +1,84 @@
 <template>
-  <portal to="map-notification">
-    <map-notification
-      v-if="fetchingRoads"
-      :message="fetchingRoadsMessage"
-    />
-    <map-notification
-      v-else-if="errorMessage"
-      :message="errorMessage"
-      type="error"
-    />
-  </portal>
+  <div class="page-index">
+    <md-dialog
+      :md-active="true"
+      :md-click-outside-to-close="false"
+      :md-close-on-esc="false"
+      :md-fullscreen="false"
+      class="page-index__dialog"
+    >
+      <md-dialog-title>Welcome</md-dialog-title>
+
+      <div class="page-index__logos">
+        <img
+          src="/images/OE_logo.png"
+          alt="OE logo"
+        >
+        <img
+          src="/images/logo-m-2x.png"
+          alt="Deltares logo"
+        >
+      </div>
+
+      <md-dialog-content>
+        RI2DE tool enables the user to select infrastructure and calculate the susceptibility of the hazard erosium due to culvert. The user can navigate to the area of interest by typing a location and by zooming and panning the base map.
+      </md-dialog-content>
+
+      <div class="page-index__actions">
+        <md-button
+          to="/project"
+          class="md-raised md-primary"
+        >
+          New
+        </md-button>
+        <div class="page-index__divider" />
+        <import-button />
+      </div>
+
+    </md-dialog>
+  </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
-import getFeature from '../../lib/get-feature'
-import initMapState from '../../lib/mixins/init-map-state'
-import layers from '../../lib/_mapbox/layers'
-
-import { MapNotification } from '../../components'
-
-const INFRASTRUCTURE_DEFAULT_COLOR = '#502D56'
+import ImportButton from '../../components/import-button'
+import { mapState } from 'vuex';
 
 export default {
-  components: { MapNotification },
-  mixins: [ initMapState ],
-  data() {
-    return {
-      errorMessage: undefined,
-      fetchingRoads: false,
-      fetchingRoadsMessage: 'Fetching infrastructure in the selected area...'
-    }
+  components: {
+    ImportButton
   },
   computed: {
     ...mapState('mapbox/selections', [ 'selections' ]),
   },
-  mounted() {
-    this.$store.commit('setActivePage', 'index')
-  },
-  beforeDestroy() {
-    this.$store.dispatch('mapbox/removeEventHandler', { event: 'draw.create' })
-    this.$store.dispatch('mapbox/removeEventHandler', { event: 'draw.delete' })
-    this.$store.dispatch('mapbox/removeEventHandler', { event: 'draw.update' })
-    this.$store.dispatch('mapbox/selections/setMode', 'static')
-    this.$store.dispatch('mapbox/selections/hideAll')
-  },
-  methods: {
-    initMapState() {
-      this.selections
-        .map(selection => selection.polygon)
-        .forEach(selection => {
-          this.$store.dispatch('mapbox/selections/draw', selection)
-        })
-      this.$store.dispatch('mapbox/selections/setMode', 'simple_select')
-      this.$store.dispatch('mapbox/addEventHandler', {
-        event: 'draw.create',
-        handler: (event) => this.createSelection(event)
-      })
-      this.$store.dispatch('mapbox/addEventHandler', {
-        event: 'draw.delete',
-        handler: (event) => this.deleteSelection(event)
-      })
-      this.$store.dispatch('mapbox/addEventHandler', {
-        event: 'draw.update',
-        handler: (event) => this.updateSelection(event)
-      })
-      this.$store.dispatch('mapbox/selections/fitToFeatures')
-    },
-    createSelection(event) {
-      this.fetchingRoads = true
-      const selectionId = event.features[0].id
-
-      getFeature(event.features[0])
-        .then(({ featureCollection, roadsIdentifier, error }) => {
-          if(error) {
-            this.fetchingRoads = false
-            this.errorMessage = error
-            this.$store.dispatch('mapbox/selections/delete', selectionId)
-            setTimeout(() => { this.errorMessage = undefined }, 4000)
-            return
-          }
-
-          this.$store.dispatch('mapbox/features/add', layers.geojson.line({
-            id: selectionId,
-            data: featureCollection,
-            paint: {
-              'line-width': 5,
-              'line-color': INFRASTRUCTURE_DEFAULT_COLOR,
-              'line-opacity': 0.8,
-            },
-          }))
-
-          this.$store.commit('mapbox/selections/add', {
-            title: 'Unnamed Selection',
-            id: selectionId,
-            features: [ selectionId ],
-            polygon: event.features[0],
-            identifier: roadsIdentifier,
-          })
-
-          this.fetchingRoads = false
-        })
-    },
-    deleteSelection(event) {
-      const selectionId = event.features[0].id
-      const selection = this.selections.find(selection => selection.id === selectionId)
-
-      if(selection) {
-        this.$store.commit('mapbox/selections/remove', selectionId)
-        selection.features.forEach(featureId => {
-          this.$store.dispatch('mapbox/features/remove', featureId)
-        })
-      }
-    },
-    updateSelection(event) {
-      this.deleteSelection(event)
-      this.createSelection(event)
-    },
-  }
 }
 </script>
+
+<style>
+.page-index__actions {
+  display: grid;
+  grid-column-gap: var(--spacing-default);
+  grid-template-columns: 1fr 1px 1fr;
+  padding: 0 1rem 1rem;
+}
+
+.page-index__divider {
+  width: 1px;
+  height: 50px;
+  background-color: lightgrey;
+  flex: 1;
+}
+
+.page-index__logos {
+  display: flex;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.page-index__logos img {
+  width: 10rem;
+  margin: 0 0.5rem;
+}
+
+.page-index__dialog {
+  max-width: 40rem;
+}
+</style>

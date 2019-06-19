@@ -4,7 +4,7 @@
     class="md-icon-button"
     v-on="$listeners"
   >
-    <md-icon aria-hidden="true">restore_page</md-icon>
+    <md-icon aria-hidden="true">settings_backup_restore</md-icon>
     <md-tooltip md-direction="bottom">{{ text }}</md-tooltip>
   </md-button>
 </template>
