@@ -22,7 +22,7 @@
             <md-button
               :class="{ 'md-raised' : selectedFactorIndex === index }"
               class="md-icon-button md-accent susceptibility-list__list-item-button"
-              @click="() => toggleSettings(index)"
+              @click="toggleSettings(index)"
             >
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>

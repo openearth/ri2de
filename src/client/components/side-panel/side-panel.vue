@@ -7,7 +7,6 @@
 <style>
   .side-panel {
     position: relative;
-    overflow: auto;
     box-sizing: border-box;
     z-index: 1;
     height: calc(100% - 64px);

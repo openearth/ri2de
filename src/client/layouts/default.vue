@@ -82,7 +82,6 @@ export default {
 
 .side-panel__body {
   flex: 1;
-  overflow: auto
 }
 
 .side-panel__bottom {
