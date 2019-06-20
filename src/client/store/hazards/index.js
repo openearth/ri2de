@@ -59,11 +59,13 @@ export const mutations = {
   reset(state) {
     state.selectedHazardIndex = undefined
     state.susceptibilityFactors = state.susceptibilityFactors.map(susceptibilityFactor =>
-      susceptibilityFactor.map(layer => ({
-        ...layer,
-        classesValue: layer.classes,
-        weightFactor: 1
-      }))
+      susceptibilityFactor
+        .filter(layer => !layer.isCustom)
+        .map(layer => ({
+          ...layer,
+          classesValue: layer.classes,
+          weightFactor: 1
+        }))
     )
   },
 }
@@ -76,7 +78,7 @@ export const actions = {
     const susceptibilityFactors = hazardsList.map(({ layers }, hazardIndex) => {
       const hazard = state.susceptibilityFactors[hazardIndex]
       // get current custom layers from state
-      const customLayers = hazard.filter(layer => layer.isCustom)
+      const customLayers = hazard ? hazard.filter(layer => layer.isCustom) : []
 
       // merge custom layers with layers from wps()
       return [...layers, ...customLayers]
