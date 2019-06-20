@@ -5,6 +5,7 @@
       <portal-target
         name="side-panel"
         slim
+        class="side-panel__body"
       />
       <div class="side-panel__bottom">
         <portal-target
@@ -79,14 +80,15 @@ export default {
   flex-wrap: wrap;
 }
 
+.side-panel__body {
+  flex: 1;
+  overflow: auto
+}
+
 .side-panel__bottom {
   display: flex;
-  height: 50px;
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 0 var(--spacing-default);
+  padding: var(--spacing-half) var(--spacing-default);
 }
 
 .map-container {

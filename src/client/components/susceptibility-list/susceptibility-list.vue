@@ -61,15 +61,13 @@
         </div>
       </div>
     </md-list>
-    <div>
-      <md-button
-        class="md-primary susceptibility-list__add-layer"
-        @click="isLayerFormVisible = !isLayerFormVisible"
-      >
-        <md-icon class="md-primary susceptiblity-list__add-layer__icon">add_circle_outline</md-icon>
-        <span class="md-body-2">Add a new layer</span>
-      </md-button>
-    </div>
+    <md-button
+      class="md-primary susceptibility-list__add-layer"
+      @click="isLayerFormVisible = !isLayerFormVisible"
+    >
+      <md-icon class="md-primary susceptiblity-list__add-layer__icon">add_circle_outline</md-icon>
+      <span class="md-body-2">Add a new layer</span>
+    </md-button>
     <md-dialog
       :md-active.sync="isLayerFormVisible"
     >
@@ -234,6 +232,10 @@ export default {
   top: calc(calc(var(--spacing-default) - 10px) * -1);
   right: calc(calc(var(--spacing-default) - 10px) * -1);
   margin: 0 !important;
+}
+
+.susceptibility-list__add-layer {
+  margin-bottom: var(--spacing-default);
 }
 
 .susceptibility-list__add-layer .md-button-content {

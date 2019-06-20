@@ -271,4 +271,9 @@ export default {
   text-align: center;
   font-weight: bold;
 }
+
+.calculate-steps {
+  flex: 1;
+  padding-bottom: var(--spacing-default);
+}
 </style>
