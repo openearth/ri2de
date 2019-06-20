@@ -27,9 +27,13 @@
         </md-field>
       </div>
       <md-dialog-actions class="layer-form__actions">
-        <button
+        <md-button>
+          Cancel
+        </md-button>
+        <md-button
           :disabled="loading"
-          class="button button--primary"
+          class="md-raised md-accent"
+          @click="onSubmit"
         >
           <md-progress-spinner
             v-if="loading"
@@ -41,7 +45,7 @@
           <span v-else>
             Add layer
           </span>
-        </button>
+        </md-button>
       </md-dialog-actions>
     </form>
   </div>
@@ -86,5 +90,10 @@ export default {
 
 .layer-form .md-progress-spinner.md-theme-default .md-progress-spinner-circle {
   stroke: #FFF;
+}
+
+.layer-form__actions {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>
