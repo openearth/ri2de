@@ -73,11 +73,15 @@ export const actions = {
     const hazardsList = await wps({ functionId: 'ri2de_calc_init' })
     const hazards = hazardsList.map(({ name }) => ({ name, title: name, id: name }))
 
-    const susceptibilityFactors = hazardsList.map(({ layers }, HazardIndex) =>
-      layers
-        .map((layer, LayerIndex) => {
-          const hazard = state.susceptibilityFactors[HazardIndex]
-          const layerInState = hazard && hazard[LayerIndex]
+    const susceptibilityFactors = hazardsList.map(({ layers }, hazardIndex) => {
+      const hazard = state.susceptibilityFactors[hazardIndex]
+      // get current custom layers from state
+      const customLayers = hazard.filter(layer => layer.isCustom)
+
+      // merge custom layers with layers from wps()
+      return [...layers, ...customLayers]
+        .map((layer, layerIndex) => {
+          const layerInState = hazard && hazard[layerIndex]
           const match = layerInState && layerInState.layerName === layer.layerName
 
           // get values from saved state if they are available
@@ -91,8 +95,8 @@ export const actions = {
             weightFactor,
             visible
           }
-      })
-    )
+        })
+    })
 
     commit('setHazards', hazards)
     commit('setSusceptibilityFactors', susceptibilityFactors)

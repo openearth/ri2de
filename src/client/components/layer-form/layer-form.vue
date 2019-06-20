@@ -27,7 +27,7 @@
         </md-field>
       </div>
       <md-dialog-actions class="layer-form__actions">
-        <md-button>
+        <md-button @click="$emit('close')">
           Cancel
         </md-button>
         <md-button

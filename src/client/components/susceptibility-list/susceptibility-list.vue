@@ -76,6 +76,7 @@
       <layer-form
         :loading="isLoadingLayer"
         @addLayer="addLayer"
+        @close="isLayerFormVisible = false"
       />
     </md-dialog>
   </div>
@@ -157,6 +158,7 @@ export default {
           weightFactor: 1,
           visible: true,
           wpsFunctionId: 'ri2de_calc_custom',
+          isCustom: true
         })
       } catch (err) {
         this.showError(err)
