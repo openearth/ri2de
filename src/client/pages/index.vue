@@ -254,6 +254,11 @@ export default {
   margin-bottom: calc(var(--triangle-height) / 2);
 }
 
+.calculate-steps {
+  flex: 1;
+  overflow: auto;
+}
+
 .selection-steps:after {
   position: absolute;
   bottom: calc(var(--triangle-height) * -1);

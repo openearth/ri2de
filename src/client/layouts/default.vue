@@ -2,16 +2,18 @@
   <main class="page-main">
     <app-header @restart="restartApp" />
     <side-panel>
-      <portal-target
-        class="side-panel__body"
-        name="side-panel"
-        slim
-      />
-      <div class="side-panel__bottom">
+      <div class="side-panel__container">
         <portal-target
-          name="side-panel-bottom"
+          class="side-panel__body"
+          name="side-panel"
           slim
         />
+        <div class="side-panel__bottom">
+          <portal-target
+            name="side-panel-bottom"
+            slim
+          />
+        </div>
       </div>
     </side-panel>
     <div class="map-container">
@@ -85,9 +87,16 @@ export default {
   padding: var(--spacing-half) var(--spacing-default);
 }
 
+.side-panel__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .side-panel__body {
   flex: 1;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .map-container {
