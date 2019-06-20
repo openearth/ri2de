@@ -38,12 +38,17 @@ export async function selectionToCustomFactorLayer({ factor, polygon, identifier
     roadsIdentifier: identifier,
   })
 
-  const { baseUrl, layerName, style } = wpsResponse
-  return {
-    style,
-    id: `${polygon.id}-${factor.title}`,
-    layer: layerName,
-    url: baseUrl,
+  if (wpsResponse.errMsg) {
+    throw new Error(wpsResponse.errMsg)
+  } else {
+    const { baseUrl, layerName, style } = wpsResponse
+
+    return {
+      style,
+      id: `${polygon.id}-${factor.title}`,
+      layer: layerName,
+      url: baseUrl,
+    }
   }
 }
 

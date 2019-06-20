@@ -114,6 +114,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      showError: 'notifications/showError',
       addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
     }),
     ...mapMutations({
@@ -133,32 +134,35 @@ export default {
     async addLayer(newLayer) {
       this.isLoadingLayer = true
 
-      const customFactorLayers = await Promise.all(this.selections.map( async selection => {
-        const customLayer = await selectionToCustomFactorLayer({
-          ...selection, factor: { wpsFunctionId: 'ri2de_calc_custom', classes: [], ...newLayer }
-        })
+      try {
+        const customFactorLayers = await Promise.all(this.selections.map( async selection => {
+            const customLayer = await selectionToCustomFactorLayer({
+              ...selection, factor: { wpsFunctionId: 'ri2de_calc_custom', classes: [], ...newLayer }
+            })
 
-        this.$store.dispatch('mapbox/wms/add', generateWmsLayer({
-          ...customLayer, paint: { 'raster-opacity': 1 }
+            this.$store.dispatch('mapbox/wms/add', generateWmsLayer({
+              ...customLayer, paint: { 'raster-opacity': 1 }
+            }))
+
+            this.$store.commit('susceptibility-layers/addLayerToSelection', {
+              selectionId: selection.id, layer: { ...customLayer, susceptibility: newLayer.title },
+            })
+
+            return customLayer
         }))
 
-        this.$store.commit('susceptibility-layers/addLayerToSelection', {
-          selectionId: selection.id, layer: { ...customLayer, susceptibility: newLayer.title },
+        this.addSusceptibilityFactorForCurrentHazard({
+          ...newLayer,
+          factorLayers: customFactorLayers.map(layer => layer.id),
+          weightFactor: 1,
+          visible: true,
+          wpsFunctionId: 'ri2de_calc_custom',
         })
-
-        return customLayer
-      }))
+      } catch (err) {
+        this.showError(err)
+      }
 
       this.isLayerFormVisible = false
-
-      this.addSusceptibilityFactorForCurrentHazard({
-        ...newLayer,
-        factorLayers: customFactorLayers.map(layer => layer.id),
-        weightFactor: 1,
-        visible: true,
-        wpsFunctionId: 'ri2de_calc_custom',
-      })
-
       this.isLoadingLayer = false
     },
   },
