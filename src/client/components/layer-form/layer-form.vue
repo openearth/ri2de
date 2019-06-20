@@ -33,7 +33,7 @@
         <md-button
           :disabled="loading"
           class="md-raised md-accent"
-          @click="onSubmit"
+          type="submit"
         >
           <md-progress-spinner
             v-if="loading"
