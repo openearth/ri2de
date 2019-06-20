@@ -3,9 +3,9 @@
     <app-header @restart="restartApp" />
     <side-panel>
       <portal-target
+        class="side-panel__body"
         name="side-panel"
         slim
-        class="side-panel__body"
       />
       <div class="side-panel__bottom">
         <portal-target
@@ -80,14 +80,14 @@ export default {
   flex-wrap: wrap;
 }
 
-.side-panel__body {
-  flex: 1;
-}
-
 .side-panel__bottom {
   display: flex;
-  width: 100%;
   padding: var(--spacing-half) var(--spacing-default);
+}
+
+.side-panel__body {
+  flex: 1;
+  overflow: auto;
 }
 
 .map-container {

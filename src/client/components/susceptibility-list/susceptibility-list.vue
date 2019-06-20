@@ -234,10 +234,6 @@ export default {
   margin: 0 !important;
 }
 
-.susceptibility-list__add-layer {
-  margin-bottom: var(--spacing-default);
-}
-
 .susceptibility-list__add-layer .md-button-content {
   display: flex;
 }
