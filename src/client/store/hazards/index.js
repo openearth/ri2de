@@ -34,7 +34,7 @@ export const mutations = {
   },
   updateClasses(state, { hazardIndex, susceptibilityIndex, classes }) {
     const newFactors = [ ...state.susceptibilityFactors ]
-    newFactors[hazardIndex][susceptibilityIndex].classesValue = [ ...classes ]
+    newFactors[hazardIndex][susceptibilityIndex].classes = [ ...classes ]
 
     state.susceptibilityFactors = newFactors
   },
@@ -63,7 +63,6 @@ export const mutations = {
         .filter(layer => !layer.isCustom)
         .map(layer => ({
           ...layer,
-          classesValue: layer.classes,
           weightFactor: 1
         }))
     )
@@ -74,31 +73,7 @@ export const actions = {
   async bootstrapHazards({ commit, state }) {
     const hazardsList = await wps({ functionId: 'ri2de_calc_init' })
     const hazards = hazardsList.map(({ name }) => ({ name, title: name, id: name }))
-
-    const susceptibilityFactors = hazardsList.map(({ layers }, hazardIndex) => {
-      const hazard = state.susceptibilityFactors[hazardIndex]
-      // get current custom layers from state
-      const customLayers = hazard ? hazard.filter(layer => layer.isCustom) : []
-
-      // merge custom layers with layers from wps()
-      return [...layers, ...customLayers]
-        .map((layer, layerIndex) => {
-          const layerInState = hazard && hazard[layerIndex]
-          const match = layerInState && layerInState.layerName === layer.layerName
-
-          // get values from saved state if they are available
-          const weightFactor = match ? layerInState.weightFactor : layer.weightFactor
-          const classesValue = match && layerInState.classesValue ? layerInState.classesValue : layer.classes
-          const visible = match ? layerInState.visible : layer.visible
-
-          return {
-            ...layer,
-            classesValue,
-            weightFactor,
-            visible
-          }
-        })
-    })
+    const susceptibilityFactors = hazardsList.map(({ layers }) => layers.map(layer => ({ ...layer, weightFactor: 1, visible: false })) )
 
     commit('setHazards', hazards)
     commit('setSusceptibilityFactors', susceptibilityFactors)

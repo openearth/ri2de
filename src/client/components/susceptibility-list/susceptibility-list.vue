@@ -27,37 +27,6 @@
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
           </md-list-item>
-          <portal to="susceptibility-settings">
-            <div
-              v-if="selectedFactorIndex === index"
-              class="susceptibility-list__list-item-settings"
-            >
-              <div class="susceptibility-list__list-item-settings-wrapper">
-                <md-button
-                  class="md-icon-button md-dense susceptibility-list__list-item-settings-button"
-                  @click="selectedFactorIndex = null"
-                >
-                  <md-icon>clear</md-icon>
-                </md-button>
-                <weight-factor
-                  :min="factor.min"
-                  :max="factor.max"
-                  :step="factor.step"
-                  :weight-factor="factor.weightFactor"
-                  @onChange="(value) => $emit('setWeightFactor', { value, index })"
-                />
-                <input-range
-                  v-if="factor.classes && (factor.classes.length === 4)"
-                  :value="[factor.classesValue[1], factor.classesValue[2]]"
-                  :min="factor.classes[0]"
-                  :max="factor.classes[3]"
-                  label="Classes"
-                  @updateClasses="classes => $emit('updateClasses', { classes, index })"
-                />
-                <layer-legend />
-              </div>
-            </div>
-          </portal>
         </div>
       </div>
     </md-list>
@@ -205,33 +174,6 @@ export default {
 
 .susceptibility-list__list-item-button {
   margin: 0 20px !important;
-}
-
-.susceptibility-list__list-item-settings {
-  --card-width: 270px;
-  width: var(--card-width);
-  position: absolute;
-  top: 15rem;
-  left: 1.5rem;
-  padding: var(--spacing-default);
-  background-color: #fff;
-  z-index: 2;
-  box-shadow: 0 2px 5px 0 var(--neutral-color);
-}
-
-.susceptibility-list__list-item-settings .md-subheader {
-  padding: 0;
-}
-
-.susceptibility-list__list-item-settings-wrapper {
-  position: relative;
-}
-
-.susceptibility-list__list-item-settings-button {
-  position: absolute !important;
-  top: calc(calc(var(--spacing-default) - 10px) * -1);
-  right: calc(calc(var(--spacing-default) - 10px) * -1);
-  margin: 0 !important;
 }
 
 .susceptibility-list__add-layer .md-button-content {

@@ -98,7 +98,7 @@ export default {
 }
 
 .content-card__content {
-  padding: 0 var(--spacing-medium);
+  padding: 0 var(--spacing-half);
 }
 
 .content-card__header__icon {

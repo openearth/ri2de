@@ -32,10 +32,7 @@ export default {
     onFileInput(event) {
       this.$store.dispatch('importProject', event)
         .then(() => {
-          // redirect to the right page after the import is done
-          if (this.selectedHazardIndex !== undefined) {
-            this.$router.replace('/susceptibilities')
-          } else if (this.selections.length) {
+          if (this.selections.length) {
             this.$router.replace('/hazards')
           }
         })

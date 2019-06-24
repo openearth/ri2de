@@ -50,6 +50,9 @@
             :hazards="hazards"
             :initial-selection="selectedHazardIndex"
             @select="selectHazard"
+            @setWeightFactor="onSetWeightFactor"
+            @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
+            @toggleFactorActivity="toggleSusceptibilityLayer"
           />
           <button
             slot="actions"
