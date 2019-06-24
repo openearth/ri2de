@@ -27,7 +27,7 @@
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
           </md-list-item>
-          <transition name="fade">
+          <portal to="susceptibility-settings">
             <div
               v-if="selectedFactorIndex === index"
               class="susceptibility-list__list-item-settings"
@@ -57,7 +57,7 @@
                 <layer-legend />
               </div>
             </div>
-          </transition>
+          </portal>
         </div>
       </div>
     </md-list>
@@ -211,8 +211,8 @@ export default {
   --card-width: 270px;
   width: var(--card-width);
   position: absolute;
-  top: 0;
-  right: calc(calc(var(--card-width) * -1) - 25px);
+  top: 15rem;
+  left: 1.5rem;
   padding: var(--spacing-default);
   background-color: #fff;
   z-index: 2;

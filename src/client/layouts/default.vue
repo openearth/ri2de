@@ -17,6 +17,7 @@
       </div>
     </side-panel>
     <div class="map-container">
+      <portal-target name="susceptibility-settings"/>
       <portal-target
         name="map-notification"
         slim
