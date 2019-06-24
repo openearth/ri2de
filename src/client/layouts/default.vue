@@ -44,6 +44,9 @@ export default {
       notifications: state => state.notifications.messages
     })
   },
+  beforeMount() {
+    this.$router.replace('/')
+  },
   methods: {
     ...mapMutations({
       removeNotification: 'notifications/remove',
