@@ -29,7 +29,7 @@
           to="/project"
           class="md-raised md-primary"
         >
-          New
+          New project
         </md-button>
         <div class="page-index__divider" />
         <import-button />
