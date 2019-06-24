@@ -19,6 +19,16 @@ export const mutations = {
   setHazards(state, hazards) {
     state.hazards = hazards
   },
+  addSusceptibilityFactorForCurrentHazard(state, susceptibilityFactor) {
+    const newFactors = [ ...state.susceptibilityFactors ]
+
+     newFactors[state.selectedHazardIndex] = [
+      ...newFactors[state.selectedHazardIndex],
+      susceptibilityFactor
+    ]
+
+     state.susceptibilityFactors = newFactors
+  },
   setSusceptibilityFactors(state, susceptibilityFactors) {
     state.susceptibilityFactors = susceptibilityFactors
   },
@@ -49,11 +59,13 @@ export const mutations = {
   reset(state) {
     state.selectedHazardIndex = undefined
     state.susceptibilityFactors = state.susceptibilityFactors.map(susceptibilityFactor =>
-      susceptibilityFactor.map(layer => ({
-        ...layer,
-        classesValue: layer.classes,
-        weightFactor: 1
-      }))
+      susceptibilityFactor
+        .filter(layer => !layer.isCustom)
+        .map(layer => ({
+          ...layer,
+          classesValue: layer.classes,
+          weightFactor: 1
+        }))
     )
   },
 }
@@ -63,11 +75,15 @@ export const actions = {
     const hazardsList = await wps({ functionId: 'ri2de_calc_init' })
     const hazards = hazardsList.map(({ name }) => ({ name, title: name, id: name }))
 
-    const susceptibilityFactors = hazardsList.map(({ layers }, HazardIndex) =>
-      layers
-        .map((layer, LayerIndex) => {
-          const hazard = state.susceptibilityFactors[HazardIndex]
-          const layerInState = hazard && hazard[LayerIndex]
+    const susceptibilityFactors = hazardsList.map(({ layers }, hazardIndex) => {
+      const hazard = state.susceptibilityFactors[hazardIndex]
+      // get current custom layers from state
+      const customLayers = hazard ? hazard.filter(layer => layer.isCustom) : []
+
+      // merge custom layers with layers from wps()
+      return [...layers, ...customLayers]
+        .map((layer, layerIndex) => {
+          const layerInState = hazard && hazard[layerIndex]
           const match = layerInState && layerInState.layerName === layer.layerName
 
           // get values from saved state if they are available
@@ -81,12 +97,20 @@ export const actions = {
             weightFactor,
             visible
           }
-      })
-    )
+        })
+    })
 
     commit('setHazards', hazards)
     commit('setSusceptibilityFactors', susceptibilityFactors)
   },
+  async addSusceptibilityFactor({ commit }, newLayer) {
+    commit('addSusceptibilityFactorForCurrentHazard', {
+      ...newLayer,
+      weightFactor: 1,
+      visible: true,
+      wpsFunctionId: 'ri2de_calc_custom',
+    })
+  }
 }
 
 export const getters = {

@@ -22,12 +22,12 @@
             <md-button
               :class="{ 'md-raised' : selectedFactorIndex === index }"
               class="md-icon-button md-accent susceptibility-list__list-item-button"
-              @click="() => toggleSettings(index)"
+              @click="toggleSettings(index)"
             >
               <md-icon>keyboard_arrow_right</md-icon>
             </md-button>
           </md-list-item>
-          <transition name="fade">
+          <portal to="susceptibility-settings">
             <div
               v-if="selectedFactorIndex === index"
               class="susceptibility-list__list-item-settings"
@@ -57,10 +57,26 @@
                 <layer-legend />
               </div>
             </div>
-          </transition>
+          </portal>
         </div>
       </div>
     </md-list>
+    <md-button
+      class="md-primary susceptibility-list__add-layer"
+      @click="isLayerFormVisible = !isLayerFormVisible"
+    >
+      <md-icon class="md-primary susceptiblity-list__add-layer__icon">add_circle_outline</md-icon>
+      <span class="md-body-2">Add a new layer</span>
+    </md-button>
+    <md-dialog
+      :md-active.sync="isLayerFormVisible"
+    >
+      <layer-form
+        :loading="isLoadingLayer"
+        @addLayer="addLayer"
+        @close="isLayerFormVisible = false"
+      />
+    </md-dialog>
   </div>
 </template>
 
@@ -68,10 +84,14 @@
 import { LayerLegend } from '../'
 import WeightFactor from '../weight-factor'
 import InputRange from '../input-range'
+import LayerForm from '../layer-form'
+import { selectionToCustomFactorLayer, generateWmsLayer } from '../../lib/project-layers'
+import { mapActions, mapState, mapMutations } from 'vuex';
 
 export default {
   components: {
     LayerLegend,
+    LayerForm,
     WeightFactor,
     InputRange,
   },
@@ -84,9 +104,21 @@ export default {
   data() {
     return {
       selectedFactorIndex: null,
+      isLayerFormVisible: false,
+      isLoadingLayer: false
     }
   },
+  computed: {
+    ...mapState('mapbox/selections', [ 'selections' ]),
+  },
   methods: {
+    ...mapActions({
+      showError: 'notifications/showError',
+      addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
+    }),
+    ...mapMutations({
+      addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
+    }),
     toggleFactorActivity(index) {
       this.$emit('toggleFactorActivity', { index, active: !this.factors[index].visible })
     },
@@ -97,6 +129,41 @@ export default {
       }
 
       this.selectedFactorIndex = index
+    },
+    async addLayer(newLayer) {
+      this.isLoadingLayer = true
+
+      try {
+        const customFactorLayers = await Promise.all(this.selections.map( async selection => {
+            const customLayer = await selectionToCustomFactorLayer({
+              ...selection, factor: { wpsFunctionId: 'ri2de_calc_custom', classes: [], ...newLayer }
+            })
+
+            this.$store.dispatch('mapbox/wms/add', generateWmsLayer({
+              ...customLayer, paint: { 'raster-opacity': 1 }
+            }))
+
+            this.$store.commit('susceptibility-layers/addLayerToSelection', {
+              selectionId: selection.id, layer: { ...customLayer, susceptibility: newLayer.title },
+            })
+
+            return customLayer
+        }))
+
+        this.addSusceptibilityFactorForCurrentHazard({
+          ...newLayer,
+          factorLayers: customFactorLayers.map(layer => layer.id),
+          weightFactor: 1,
+          visible: true,
+          wpsFunctionId: 'ri2de_calc_custom',
+          isCustom: true
+        })
+      } catch (err) {
+        this.showError(err)
+      }
+
+      this.isLayerFormVisible = false
+      this.isLoadingLayer = false
     },
   },
 }
@@ -144,8 +211,8 @@ export default {
   --card-width: 270px;
   width: var(--card-width);
   position: absolute;
-  top: 0;
-  right: calc(calc(var(--card-width) * -1) - 25px);
+  top: 15rem;
+  left: 1.5rem;
   padding: var(--spacing-default);
   background-color: #fff;
   z-index: 2;
@@ -165,5 +232,13 @@ export default {
   top: calc(calc(var(--spacing-default) - 10px) * -1);
   right: calc(calc(var(--spacing-default) - 10px) * -1);
   margin: 0 !important;
+}
+
+.susceptibility-list__add-layer .md-button-content {
+  display: flex;
+}
+
+.susceptiblity-list__add-layer__icon.md-icon {
+  margin-right: 0.25rem;
 }
 </style>

@@ -9,4 +9,8 @@
   accent: #FF7200 // The secondary color of your brand
 ));
 
+:root {
+  --md-theme-default-text-primary-on-accent: #fff;
+}
+
 @import "~vue-material/dist/theme/all"; // Apply the theme

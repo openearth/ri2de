@@ -128,9 +128,11 @@ export default {
       selectHazard: 'hazards/selectHazard',
       updateWeightFactor: 'hazards/updateWeightFactor',
       updateClasses: 'hazards/updateClasses',
+      addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     ...mapActions({
-      bootstrapHazardsList: 'hazards/bootstrapHazards'
+      bootstrapHazardsList: 'hazards/bootstrapHazards',
+      addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
     }),
     completeInfrastructure() {
       if(this.selections.length) {
@@ -250,6 +252,11 @@ export default {
   --triangle-height: 30px;
   --triangle-width: 25px;
   margin-bottom: calc(var(--triangle-height) / 2);
+}
+
+.calculate-steps {
+  flex: 1;
+  overflow: auto;
 }
 
 .selection-steps:after {
