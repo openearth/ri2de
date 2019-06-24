@@ -51,14 +51,8 @@ export default {
     ...mapGetters('mapbox/selections', [ 'selectionsToRoadIds' ]),
   },
   mounted() {
-    if(this.selections.length && typeof this.selectedHazardIndex !== 'undefined') {
-      this.$store.commit('setActivePage', 'susceptibilities')
-      this.getSelectionLayers()
-    } else if (this.selections.length) {
-      this.$router.replace({ path: '/hazards' })
-    } else {
-      this.$router.replace({ path: '/project' })
-    }
+    this.$store.commit('setActivePage', 'susceptibilities')
+    this.getSelectionLayers()
   },
   beforeDestroy() {
     if(this.currentSusceptibilityFactors) {

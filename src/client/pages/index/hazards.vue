@@ -14,11 +14,7 @@ export default {
     ...mapState('mapbox/selections', [ 'selections' ]),
   },
   mounted() {
-    if(this.selections.length) {
-      this.$store.commit('setActivePage', 'hazards')
-    } else {
-      this.$router.replace({ path: '/project' })
-    }
+    this.$store.commit('setActivePage', 'hazards')
   },
   methods: {
     initMapState() {

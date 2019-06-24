@@ -1,7 +1,7 @@
 <template>
   <div class="export-button">
     <md-button class="md-raised md-primary">
-      Open
+      Open from disk
     </md-button>
     <input
       class="page-index__input-file"

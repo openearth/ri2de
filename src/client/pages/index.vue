@@ -112,13 +112,6 @@ export default {
       }
     }
   },
-  beforeMount() {
-    if (this.selectedHazardIndex !== undefined) {
-      this.$router.replace('/susceptibilities')
-    } else if (this.selections.length) {
-      this.$router.replace('/hazards')
-    }
-  },
   mounted() {
     this.bootstrapHazardsList()
   },
