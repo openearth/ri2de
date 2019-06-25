@@ -2,7 +2,7 @@ import wps from '../../lib/wps'
 
 export const state = () => ({
   hazards: [],
-  selectedHazardIndex: undefined,
+  selectedHazardIndex: 0,
   susceptibilityFactors: [],
 })
 
@@ -21,7 +21,6 @@ export const mutations = {
   },
   addSusceptibilityFactorForCurrentHazard(state, susceptibilityFactor) {
     const newFactors = [ ...state.susceptibilityFactors ]
-
      newFactors[state.selectedHazardIndex] = [
       ...newFactors[state.selectedHazardIndex],
       susceptibilityFactor

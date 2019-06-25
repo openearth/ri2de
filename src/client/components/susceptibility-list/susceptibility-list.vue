@@ -81,10 +81,6 @@ export default {
     ...mapState('mapbox/selections', [ 'selections' ]),
   },
   methods: {
-    ...mapActions({
-      showError: 'notifications/showError',
-      addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
-    }),
     ...mapMutations({
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
@@ -98,41 +94,6 @@ export default {
       }
 
       this.selectedFactorIndex = index
-    },
-    async addLayer(newLayer) {
-      this.isLoadingLayer = true
-
-      try {
-        const customFactorLayers = await Promise.all(this.selections.map( async selection => {
-            const customLayer = await selectionToCustomFactorLayer({
-              ...selection, factor: { wpsFunctionId: 'ri2de_calc_custom', classes: [], ...newLayer }
-            })
-
-            this.$store.dispatch('mapbox/wms/add', generateWmsLayer({
-              ...customLayer, paint: { 'raster-opacity': 1 }
-            }))
-
-            this.$store.commit('susceptibility-layers/addLayerToSelection', {
-              selectionId: selection.id, layer: { ...customLayer, susceptibility: newLayer.title },
-            })
-
-            return customLayer
-        }))
-
-        this.addSusceptibilityFactorForCurrentHazard({
-          ...newLayer,
-          factorLayers: customFactorLayers.map(layer => layer.id),
-          weightFactor: 1,
-          visible: true,
-          wpsFunctionId: 'ri2de_calc_custom',
-          isCustom: true
-        })
-      } catch (err) {
-        this.showError(err)
-      }
-
-      this.isLayerFormVisible = false
-      this.isLoadingLayer = false
     },
   },
 }

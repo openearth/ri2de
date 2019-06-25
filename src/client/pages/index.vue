@@ -38,13 +38,6 @@
           title="Hazards"
           @selectCard="selectCard"
         >
-          <div
-            v-if="typeof selectedHazardIndex === 'number'"
-            slot="info"
-            class="content-card__header__info"
-          >
-            {{ hazards[selectedHazardIndex].title }}
-          </div>
           <hazards-list
             slot="content"
             :hazards="hazards"
