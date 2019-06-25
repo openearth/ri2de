@@ -41,7 +41,7 @@ export const actions = {
       commit('remove', id)
     }
   },
-  resetLayers({ commit, rootGetters, state }, id) {
+  resetLayers({ commit, rootGetters, state }) {
     const map = rootGetters['mapbox/map']
 
     state.layers.forEach(({ id }) => {

@@ -50,6 +50,9 @@ export default {
   computed: {
     ...mapState('mapbox/selections', [ 'selections' ]),
   },
+  mounted() {
+    this.$store.commit('setActivePage', 'index')
+  }
 }
 </script>
 

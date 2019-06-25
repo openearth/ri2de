@@ -70,10 +70,10 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
 import SusceptibilitySettings from '../susceptibility-settings'
 import LayerForm from '../layer-form'
-import { selectionToCustomFactorLayer, generateWmsLayer } from '../../lib/project-layers'
+import { selectionToCustomFactorLayer, generateWmsLayer, resetLayers } from '../../lib/project-layers'
 
 export default {
   components: {
@@ -92,22 +92,25 @@ export default {
     }
   },
   data() {
-    const { hazards, initialSelection } = this
-    const selectedHazard = hazards[initialSelection]
-      ? hazards[initialSelection].title
-      : undefined
-
     return {
-      selectedHazard,
       selectedFactorIndex: 0,
       expandSingle: true,
       isLayerFormVisible: false,
-      isLoadingLayer: false
+      isLoadingLayer: false,
+      errorMessage: undefined,
+      errorCalculatingSusceptibilityLayers: false,
+      calculatingMessage: 'Calculating susceptibility layers...',
+      calculatingSusceptibilityLayers: false,
     }
   },
   computed: {
     ...mapState('mapbox/selections', [ 'selections' ]),
-    ...mapState('hazards', [ 'susceptibilityFactors', 'selectedHazardIndex' ]),
+    ...mapState('hazards', [ 'susceptibilityFactors', 'selectedHazardIndex', 'currentSusceptibilityFactors' ]),
+    ...mapState('susceptibility-layers', [ 'layersPerSelection' ]),
+    ...mapGetters('mapbox/selections', [ 'selectionsToRoadIds' ]),
+  },
+  mounted() {
+    this.getSelectionLayers()
   },
   methods: {
     ...mapActions({
@@ -118,11 +121,15 @@ export default {
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     onHazardClick(index) {
-      this.selectedFactorIndex = 0
-      this.$emit('select', this.selectedHazardIndex === index ? null : index)
+      if (index !== this.selectedHazardIndex) {
+        this.selectedFactorIndex = 0
+        this.getSelectionLayers()
+      }
+      this.$emit('select', index)
     },
     onFactorClick(index) {
-      this.selectedFactorIndex = this.selectedFactorIndex === index ? null : index
+      this.selectedFactorIndex = index
+      this.getSelectionLayers()
     },
     async addLayer(newLayer) {
       this.isLoadingLayer = true
@@ -159,6 +166,53 @@ export default {
 
       this.isLayerFormVisible = false
       this.isLoadingLayer = false
+    },
+    async getSelectionLayers() {
+      this.calculatingSusceptibilityLayers = true
+      const hazardIndex = this.selectedHazardIndex
+      const factorIndex = this.selectedFactorIndex
+      const selectedSusceptibility = this.susceptibilityFactors[hazardIndex][factorIndex]
+
+      this.$store.dispatch('mapbox/wms/resetLayers')
+
+      const factorLayers = await this.selections.map(async selection => {
+        const customFactorLayer = await selectionToCustomFactorLayer({
+          polygon: selection.polygon,
+          factor: selectedSusceptibility,
+          identifier: selection.identifier
+        })
+
+        const wmsLayer = generateWmsLayer(customFactorLayer)
+
+        this.$store.dispatch('mapbox/wms/add', {
+          ...wmsLayer,
+          paint: { 'raster-opacity': 1 },
+        })
+
+        this.$store.commit('susceptibility-layers/addLayerToSelection', {
+          selectionId: selection.id,
+          layer: { ...customFactorLayer, susceptibility: selectedSusceptibility.title },
+        })
+
+        return wmsLayer.id
+      })
+
+      try {
+        this.$store.commit('hazards/updateFactorVisibility', {
+          index: factorIndex, hazardIndex, visible: true
+        })
+
+        this.$store.commit('hazards/updateFactorLayers', {
+          index: factorIndex, hazardIndex, factorLayers: await Promise.all(factorLayers)
+        })
+      } catch(e) {
+        this.errorMessage = 'Error fetching the layers, reload and try again'
+        this.errorCalculatingSusceptibilityLayers = true
+        console.log('Error: ', e)
+      }
+      if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
+        this.calculatingSusceptibilityLayers = false
+      }
     },
   }
 }
