@@ -1,14 +1,5 @@
 <template>
   <div>
-    <portal to="side-panel-bottom">
-      <button
-        :disabled="calculatingSusceptibilityLayers || errorCalculatingSusceptibilityLayers"
-        class="button button--primary button--full-width"
-        @click="calculateTotals"
-      >
-        Calculate totals
-      </button>
-    </portal>
     <portal to="map-notification">
       <map-notification
         v-if="calculatingSusceptibilityLayers"
