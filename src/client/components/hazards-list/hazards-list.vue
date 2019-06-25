@@ -19,10 +19,12 @@
       >
         <li
           v-for="(factor, factorIndex) in susceptibilityFactors[hazardIndex]"
-          :key="factorIndex"
+          :key="`${factorIndex}-${hazardIndex}`"
         >
           <div
-            :class="{'hazards-list__susceptiblity--active': selectedFactorIndex === factorIndex}"
+            :class="{
+              'hazards-list__susceptiblity--active': selectedFactorIndex === factorIndex && selectedHazardIndex === hazardIndex
+            }"
             class="hazards-list__susceptiblity"
           >
             <button
@@ -34,7 +36,8 @@
             to="susceptibility-settings"
           >
             <susceptibility-settings
-              v-if="selectedFactorIndex === factorIndex"
+              v-if="selectedFactorIndex === factorIndex && selectedHazardIndex === hazardIndex"
+              :key="`${factorIndex}-${hazardIndex}`"
               :factor="factor"
               :factor-index="factorIndex"
               @weightFactorChange="data => $emit('setWeightFactor', data)"
@@ -115,6 +118,7 @@ export default {
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     onHazardClick(index) {
+      this.selectedFactorIndex = 0
       this.$emit('select', this.selectedHazardIndex === index ? null : index)
     },
     onFactorClick(index) {

@@ -23,14 +23,14 @@
             @mouseout="(index) => updateInfrastructureStyle(index, infrastructureStyles.default)"
             @updateSelectionTitle="onUpdateSelectionTitle"
           />
-          <button
+          <md-button
             slot="actions"
             :disabled="selections.length === 0"
-            class="button button--primary button--full-width"
+            class="md-raised md-accent button--full-width"
             @click="completeInfrastructure"
           >
             Next
-          </button>
+          </md-button>
         </content-card>
         <content-card
           :is-expanded="activePage === 'hazards'"
@@ -47,14 +47,13 @@
             @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
             @toggleFactorActivity="toggleSusceptibilityLayer"
           />
-          <button
+          <md-button
             slot="actions"
-            :disabled="!selections.length"
-            class="button button--primary button--full-width"
-            @click="completeHazards"
+            class="md-raised md-accent button--full-width"
+            to="/results"
           >
-            Next
-          </button>
+            Calculate totals
+          </md-button>
         </content-card>
       </div>
       <nuxt-child/>

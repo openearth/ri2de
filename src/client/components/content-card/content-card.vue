@@ -95,7 +95,8 @@ export default {
 }
 
 .content-card__actions {
-  padding: 0 var(--spacing-default) var(--spacing-medium);
+  display: flex;
+  padding: 0 var(--spacing-half) var(--spacing-default);
 }
 
 .content-card__content {
