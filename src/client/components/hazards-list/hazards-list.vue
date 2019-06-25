@@ -42,7 +42,6 @@
               :factor-index="factorIndex"
               @weightFactorChange="data => $emit('setWeightFactor', data)"
               @updateClasses="data => $emit('updateClasses', data)"
-              @close="selectedFactorIndex = null"
             />
           </portal>
         </li>

@@ -3,12 +3,6 @@
     class="susceptibility-settings"
   >
     <div class="susceptibility-settings__wrapper">
-      <md-button
-        class="md-icon-button md-dense susceptibility-settings__button"
-        @click="$emit('close')"
-      >
-        <md-icon>clear</md-icon>
-      </md-button>
       <weight-factor
         :min="factor.min"
         :max="factor.max"
