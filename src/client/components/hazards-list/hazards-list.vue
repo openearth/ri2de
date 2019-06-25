@@ -187,6 +187,7 @@ export default {
 .hazard-list__hazard-button {
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .hazard-list__hazard-button .md-icon {
