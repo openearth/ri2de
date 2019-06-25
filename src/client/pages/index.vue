@@ -4,7 +4,7 @@
       <div class="selection-steps">
         <content-card
           :is-expanded="activePage === 'index'"
-          :is-completed="!!selections.length"
+          :is-completed="Boolean(selections.length)"
           title="Infrastructure"
           @selectCard="selectCard"
         >
@@ -34,7 +34,7 @@
         </content-card>
         <content-card
           :is-expanded="activePage === 'hazards'"
-          :is-completed="typeof selectedHazardIndex === 'number'"
+          :is-completed="Boolean(selections.length)"
           title="Hazards"
           @selectCard="selectCard"
         >
@@ -49,7 +49,7 @@
           />
           <button
             slot="actions"
-            :disabled="typeof selectedHazardIndex !== 'number'"
+            :disabled="!selections.length"
             class="button button--primary button--full-width"
             @click="completeHazards"
           >
@@ -57,23 +57,7 @@
           </button>
         </content-card>
       </div>
-      <div class="calculate-steps">
-        <susceptibility-list
-          v-if="activePage === 'susceptibilities'"
-          :factors="currentSusceptibilityFactors || []"
-          @setWeightFactor="onSetWeightFactor"
-          @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
-          @toggleFactorActivity="toggleSusceptibilityLayer"
-        />
-        <nuxt-link
-          v-if="activePage === 'results' && totalsLayers && totalsLayers.length"
-          :to="'/susceptibilities'"
-          class="update-susceptibilities md-accent"
-        >
-          Update susceptibility settings
-        </nuxt-link>
-        <nuxt-child/>
-      </div>
+      <nuxt-child/>
     </div>
   </portal>
 </template>
@@ -238,26 +222,13 @@ export default {
   background-color: var(--neutral-color--light);
   padding: var(--spacing-default);
   position: relative;
-  --triangle-height: 30px;
-  --triangle-width: 25px;
   margin-bottom: calc(var(--triangle-height) / 2);
+  height: 100%;
 }
 
 .calculate-steps {
   flex: 1;
   overflow: auto;
-}
-
-.selection-steps:after {
-  position: absolute;
-  bottom: calc(var(--triangle-height) * -1);
-  left: calc(50% - calc(var(--triangle-width)/2));
-  content: '';
-  width: var(--triangle-width);
-  height: var(--triangle-height);
-  border-top: calc(var(--triangle-height)/2) solid var(--neutral-color--light);
-  border-left: calc(var(--triangle-width)/2) solid transparent;
-  border-right: calc(var(--triangle-width)/2) solid transparent;
 }
 
 .update-susceptibilities {
