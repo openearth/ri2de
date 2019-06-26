@@ -69,14 +69,15 @@ export const mutations = {
 }
 
 export const actions = {
-  async bootstrapHazards({ commit, state }, susceptibilityFactors) {
+  async bootstrapHazards({ commit, state }) {
     const hazardsList = await wps({ functionId: 'ri2de_calc_init' })
     const hazards = hazardsList.map(({ name }) => ({ name, title: name, id: name }))
 
     commit('setHazards', hazards)
+
     commit('setSusceptibilityFactors',
-      susceptibilityFactors
-        ? susceptibilityFactors
+    state.susceptibilityFactors
+        ? state.susceptibilityFactors
         : hazardsList.map(({ layers }) => layers.map(layer => ({ ...layer, weightFactor: 1, visible: false })) )
     )
   },

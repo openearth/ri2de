@@ -3,7 +3,7 @@
     class="susceptibility-settings"
   >
     <div class="susceptibility-settings__wrapper">
-      <span class="md-title">{{ title }}</span>
+      <span class="md-title">{{ factor.title }}</span>
 
       <input-range
         v-if="factor.classes && (factor.classes.length === 4)"
@@ -37,10 +37,6 @@ export default {
       type: Number,
       required: true
     },
-    title: {
-      type: String,
-      required: true
-    }
   },
   methods: {
     onUpdateClasses(classes) {
