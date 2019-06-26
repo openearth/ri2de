@@ -97,9 +97,6 @@ export default {
       isLayerFormVisible: false,
       isLoadingLayer: false,
       errorMessage: undefined,
-      errorCalculatingSusceptibilityLayers: false,
-      calculatingMessage: 'Calculating susceptibility layers...',
-      calculatingSusceptibilityLayers: false,
     }
   },
   computed: {
@@ -171,7 +168,6 @@ export default {
       this.isLoadingLayer = false
     },
     async getSelectionLayer() {
-      this.calculatingSusceptibilityLayers = true
       const hazardIndex = this.selectedHazardIndex
       const factorIndex = this.selectedFactorIndex
       const selectedHazard = this.susceptibilityFactors[hazardIndex]
@@ -213,12 +209,7 @@ export default {
           })
         } catch(e) {
           this.errorMessage = 'Error fetching the layers, reload and try again'
-          this.errorCalculatingSusceptibilityLayers = true
           console.log('Error: ', e)
-        }
-
-        if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
-          this.calculatingSusceptibilityLayers = false
         }
       }
     },
@@ -248,12 +239,12 @@ export default {
   background-color: transparent;
   color: var(--neutral-color--light);
   border: none;
+  cursor: pointer;
 }
 
 .hazard-list__hazard-button {
   display: flex;
   justify-content: space-between;
-  cursor: pointer;
 }
 
 .hazard-list__hazard-button .md-icon {
