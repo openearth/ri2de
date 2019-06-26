@@ -3,13 +3,8 @@
     class="susceptibility-settings"
   >
     <div class="susceptibility-settings__wrapper">
-      <weight-factor
-        :min="factor.min"
-        :max="factor.max"
-        :step="factor.step"
-        :weight-factor="factor.weightFactor"
-        @onChange="(value) => $emit('weightFactorChange', { value, index: factorIndex })"
-      />
+      <span class="md-title">{{ title }}</span>
+
       <input-range
         v-if="factor.classes && (factor.classes.length === 4)"
         :key="factor.title"
@@ -25,13 +20,11 @@
 </template>
 
 <script>
-import WeightFactor from '../weight-factor'
 import InputRange from '../input-range'
 import LayerLegend from '../layer-legend'
 
 export default {
   components: {
-    WeightFactor,
     InputRange,
     LayerLegend
   },
@@ -42,6 +35,10 @@ export default {
     },
     factorIndex: {
       type: Number,
+      required: true
+    },
+    title: {
+      type: String,
       required: true
     }
   },

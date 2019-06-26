@@ -31,6 +31,14 @@
               class="hazards-list__susceptiblity-button"
               @click="onFactorClick(factorIndex)"
             >{{ factor.title }}</button>
+
+            <weight-factor
+              :min="factor.min"
+              :max="factor.max"
+              :step="factor.step"
+              :weight-factor="factor.weightFactor"
+              @onChange="(value) => $emit('setWeightFactor', { value, index: factorIndex })"
+            />
           </div>
           <portal
             to="susceptibility-settings"
@@ -40,7 +48,7 @@
               :key="`${factorIndex}-${hazardIndex}`"
               :factor="factor"
               :factor-index="factorIndex"
-              @weightFactorChange="data => $emit('setWeightFactor', data)"
+              :title="factor.title"
               @updateClasses="data => $emit('updateClasses', data)"
             />
           </portal>
@@ -72,12 +80,14 @@
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
 import SusceptibilitySettings from '../susceptibility-settings'
 import LayerForm from '../layer-form'
+import WeightFactor from '../weight-factor'
 import { selectionToCustomFactorLayer, generateWmsLayer, resetLayers } from '../../lib/project-layers'
 
 export default {
   components: {
     SusceptibilitySettings,
-    LayerForm
+    LayerForm,
+    WeightFactor
   },
   props: {
     hazards: {
@@ -277,6 +287,8 @@ export default {
 .hazards-list__susceptiblity {
   background-color: #585657;
   color: var(--text-color);
+  display: flex;
+  align-items: center;
 }
 
 .hazards-list__susceptiblity-button {
