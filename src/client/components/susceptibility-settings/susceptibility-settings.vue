@@ -19,7 +19,15 @@
         label="Classes"
         @updateClasses="classes => $emit('updateClasses', { classes, index: factorIndex })"
       />
+
       <layer-legend />
+      <add-source-button
+        v-if="factor.keywords.length"
+        :roadsid="infrastructure[factorIndex].identifier"
+        :keywords="factor.keywords"
+        :csw="factor.cswUrls"
+        @updateFactorLayer="(updatedlayer) => $emit('updateFactorLayer', { updatedlayer, index: factorIndex })"
+      />
     </div>
   </div>
 </template>
@@ -28,12 +36,15 @@
 import WeightFactor from '../weight-factor'
 import InputRange from '../input-range'
 import LayerLegend from '../layer-legend'
+import AddSourceButton from '../add-source-button'
+
 
 export default {
   components: {
     WeightFactor,
     InputRange,
-    LayerLegend
+    LayerLegend,
+    AddSourceButton
   },
   props: {
     factor: {
@@ -43,6 +54,10 @@ export default {
     factorIndex: {
       type: Number,
       required: true
+    },
+    infrastructure:{
+      type:Array,
+      required:true,
     }
   }
 }
