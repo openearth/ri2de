@@ -106,7 +106,7 @@ export default {
     ...mapGetters('mapbox/selections', [ 'selectionsToRoadIds' ]),
     ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
   },
-  mounted() {
+  async mounted() {
     this.getSelectionLayers()
   },
   beforeDestroy() {
@@ -115,7 +115,7 @@ export default {
   methods: {
     ...mapActions({
       showError: 'notifications/showError',
-      addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
+      addSusceptibilityFactor: 'hazards/addSusceptibilityFactor',
     }),
     ...mapMutations({
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'

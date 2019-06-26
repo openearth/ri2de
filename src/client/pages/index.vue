@@ -98,9 +98,6 @@ export default {
       return activeHazard ? activeHazard.title : ''
     }
   },
-  mounted() {
-    this.bootstrapHazardsList()
-  },
   methods: {
     ...mapMutations({
       onUpdateSelectionTitle: 'mapbox/selections/updateTitle',
@@ -110,7 +107,6 @@ export default {
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     ...mapActions({
-      bootstrapHazardsList: 'hazards/bootstrapHazards',
       addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
     }),
     completeInfrastructure() {
