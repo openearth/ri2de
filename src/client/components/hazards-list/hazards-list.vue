@@ -121,12 +121,12 @@ export default {
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     onHazardClick(index) {
-      if (index !== this.selectedHazardIndex) {
-        this.selectedFactorIndex = 0
-        this.getSelectionLayers()
-      }
+      if (index === this.selectedHazardIndex) { return }
 
       this.$emit('select', index)
+      this.selectedFactorIndex = 0
+      this.getSelectionLayers()
+      this.showCurrentLayer()
     },
     onFactorClick(index) {
       this.selectedFactorIndex = index
