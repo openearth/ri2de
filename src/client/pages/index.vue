@@ -46,6 +46,7 @@
             @setWeightFactor="onSetWeightFactor"
             @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
             @toggleFactorActivity="toggleSusceptibilityLayer"
+            @updateFactorLayer="onUpdateFactorLayer"
           />
           <md-button
             slot="actions"
@@ -100,6 +101,7 @@ export default {
       selectHazard: 'hazards/selectHazard',
       updateWeightFactor: 'hazards/updateWeightFactor',
       updateClasses: 'hazards/updateClasses',
+      updateFactorLayer:'hazards/updateFactorLayer',
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     ...mapActions({
@@ -155,6 +157,15 @@ export default {
         classes,
       })
       this.updateSusceptibilityLayers({ susceptibilityIndex: index })
+    },
+    onUpdateFactorLayer({updatedlayer, index}){
+      this.updateFactorLayer({
+        hazardIndex: this.selectedHazardIndex,
+        susceptibilityIndex: index,
+        layer:updatedlayer,
+      })
+      this.updateSusceptibilityLayers({ susceptibilityIndex: index })
+      
     },
     selectCard(title) {
       switch (title) {
