@@ -40,8 +40,10 @@
               :key="`${factorIndex}-${hazardIndex}`"
               :factor="factor"
               :factor-index="factorIndex"
+              :infrastructure="selections"
               @weightFactorChange="data => $emit('setWeightFactor', data)"
               @updateClasses="data => $emit('updateClasses', data)"
+              @updateFactorLayer="data => $emit('updateFactorLayer', data)"
             />
           </portal>
         </li>
