@@ -55,6 +55,13 @@ export const mutations = {
 
     state.susceptibilityFactors = newFactors
   },
+  updateFactorLayer(state,{hazardIndex, susceptibilityIndex, layer }){
+    const newFactors = [ ...state.susceptibilityFactors ]
+    newFactors[hazardIndex][susceptibilityIndex].owsUrl = layer.owsurl
+    newFactors[hazardIndex][susceptibilityIndex].layerName = layer.layername
+    state.susceptibilityFactors = newFactors
+
+  },
   reset(state) {
     state.selectedHazardIndex = 0
     state.susceptibilityFactors = state.susceptibilityFactors.map(susceptibilityFactor =>
