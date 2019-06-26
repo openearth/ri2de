@@ -104,9 +104,10 @@ export default {
     ...mapState('hazards', [ 'susceptibilityFactors', 'selectedHazardIndex', 'currentSusceptibilityFactors' ]),
     ...mapState('susceptibility-layers', [ 'layersPerSelection' ]),
     ...mapGetters('mapbox/selections', [ 'selectionsToRoadIds' ]),
+    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
   },
   mounted() {
-    this.getSelectionLayer()
+    this.getSelectionLayers()
   },
   beforeDestroy() {
     this.$store.dispatch('mapbox/wms/resetLayers')
@@ -122,18 +123,17 @@ export default {
     onHazardClick(index) {
       if (index !== this.selectedHazardIndex) {
         this.selectedFactorIndex = 0
-        this.getSelectionLayer()
+        this.getSelectionLayers()
       }
+
       this.$emit('select', index)
     },
     onFactorClick(index) {
       this.selectedFactorIndex = index
-      this.getSelectionLayer()
+      this.showCurrentLayer()
     },
     async addLayer(newLayer) {
       this.isLoadingLayer = true
-
-      this.$store.dispatch('mapbox/wms/resetLayers')
 
       try {
         const customFactorLayers = await Promise.all(this.selections.map( async selection => {
@@ -162,6 +162,7 @@ export default {
         })
 
         this.selectedFactorIndex = this.susceptibilityFactors[this.selectedHazardIndex].length - 1
+        this.showCurrentLayer()
       } catch (err) {
         console.error(err)
         this.showError(err)
@@ -170,50 +171,64 @@ export default {
       this.isLayerFormVisible = false
       this.isLoadingLayer = false
     },
-    async getSelectionLayer() {
-      const hazardIndex = this.selectedHazardIndex
+    async showCurrentLayer() {
       const factorIndex = this.selectedFactorIndex
-      const selectedHazard = this.susceptibilityFactors[hazardIndex]
 
-      if (selectedHazard) {
-        const selectedSusceptibility = selectedHazard[factorIndex]
+      this.currentSusceptibilityFactors.forEach((factor, index) => {
+        const active = factorIndex === index
 
-        this.$store.dispatch('mapbox/wms/resetLayers')
+        this.$store.commit('hazards/updateFactorVisibility', {
+          hazardIndex: this.selectedHazardIndex, index, visible: active
+        })
 
-        const factorLayers = await Promise.all(this.selections.map(async selection => {
-          const customFactorLayer = await selectionToCustomFactorLayer({
-            polygon: selection.polygon,
-            factor: selectedSusceptibility,
-            identifier: selection.identifier
+        if(factor.factorLayers) {
+          factor.factorLayers.forEach(layer => {
+            this.$store.dispatch('mapbox/wms/setOpacity', {
+              id: layer,
+              opacity: active ? 1 : 0
+            })
           })
-
-          const wmsLayer = generateWmsLayer(customFactorLayer)
-
-          this.$store.dispatch('mapbox/wms/add', {
-            ...wmsLayer,
-            paint: { 'raster-opacity': 1 },
-          })
-
-          this.$store.commit('susceptibility-layers/addLayerToSelection', {
-            selectionId: selection.id,
-            layer: { ...customFactorLayer, susceptibility: selectedSusceptibility.title },
-          })
-
-          return wmsLayer.id
-        }))
-
-        try {
-          this.$store.commit('hazards/updateFactorVisibility', {
-            index: factorIndex, hazardIndex, visible: true
-          })
-
-          this.$store.commit('hazards/updateFactorLayers', {
-            index: factorIndex, hazardIndex, factorLayers
-          })
-        } catch(e) {
-          this.errorMessage = 'Error fetching the layers, reload and try again'
-          console.log('Error: ', e)
         }
+      })
+    },
+    getSelectionLayers() {
+      const hazardIndex = this.selectedHazardIndex
+      this.calculatingSusceptibilityLayers = true
+
+      this.$store.dispatch('mapbox/wms/resetLayers')
+
+      if (this.currentSusceptibilityFactors) {
+        this.currentSusceptibilityFactors.forEach(async (factor, index) => {
+          const factorLayers = this.selections.map(async selection => {
+            const customFactorLayer = await selectionToCustomFactorLayer({ polygon: selection.polygon, factor, identifier: selection.identifier })
+            const wmsLayer = generateWmsLayer(customFactorLayer)
+
+            this.$store.dispatch('mapbox/wms/add', {
+              ...wmsLayer,
+              paint: { 'raster-opacity': index === 0 ? 1 : 0 },
+            })
+            this.$store.commit('susceptibility-layers/addLayerToSelection', {
+              selectionId: selection.id,
+              layer: { ...customFactorLayer, susceptibility: factor.title },
+            })
+
+            return wmsLayer.id
+          })
+
+          try {
+            this.$store.commit('hazards/updateFactorLayers', {
+              index, hazardIndex, factorLayers: await Promise.all(factorLayers)
+            })
+          } catch(e) {
+            this.errorMessage = 'Error fetching the layers, reload and try again'
+            this.errorCalculatingSusceptibilityLayers = true
+            console.log('Error: ', e)
+          }
+
+          if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
+            this.calculatingSusceptibilityLayers = false
+          }
+        })
       }
     },
   }

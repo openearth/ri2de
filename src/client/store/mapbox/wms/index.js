@@ -30,6 +30,7 @@ export const actions = {
 
     if(map.getLayer(id)) {
       map.setPaintProperty(id, 'raster-opacity', opacity)
+      map.setPaintProperty(id, 'raster-opacity-transition', { duration: 0 })
     }
   },
   remove({ commit, rootGetters }, id) {

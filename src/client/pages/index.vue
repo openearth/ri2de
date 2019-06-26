@@ -45,7 +45,6 @@
             @select="selectHazard"
             @setWeightFactor="onSetWeightFactor"
             @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
-            @toggleFactorActivity="toggleSusceptibilityLayer"
           />
           <md-button
             slot="actions"
@@ -146,7 +145,6 @@ export default {
         susceptibilityIndex: index,
         weightFactor: value,
       })
-      this.updateSusceptibilityLayers({ susceptibilityIndex: index })
     },
     onUpdateClasses(classes, index) {
       this.updateClasses({
@@ -168,20 +166,6 @@ export default {
 
         default:
           break
-      }
-    },
-    toggleSusceptibilityLayer({ index, active }) {
-      const factor = this.currentSusceptibilityFactors[index]
-      this.$store.commit('hazards/updateFactorVisibility', {
-        hazardIndex: this.selectedHazardIndex, index, visible: active ? true : false
-      })
-      if(factor.factorLayers) {
-        factor.factorLayers.forEach(layer => {
-          this.$store.dispatch('mapbox/wms/setOpacity', {
-            id: layer,
-            opacity: active ? 1 : 0
-          })
-        })
       }
     },
     async updateSusceptibilityLayers({ susceptibilityIndex }) {

@@ -17,7 +17,7 @@
         :min="factor.classes[0]"
         :max="factor.classes[3]"
         label="Classes"
-        @updateClasses="classes => $emit('updateClasses', { classes, index: factorIndex })"
+        @updateClasses="onUpdateClasses"
       />
       <layer-legend />
     </div>
@@ -43,6 +43,14 @@ export default {
     factorIndex: {
       type: Number,
       required: true
+    }
+  },
+  methods: {
+    onUpdateClasses(classes) {
+      // check if the value has change
+      if (!classes.every((value, index) => value === this.factor.classes[index])) {
+        this.$emit('updateClasses', { classes, index: this.factorIndex })
+      }
     }
   }
 }
