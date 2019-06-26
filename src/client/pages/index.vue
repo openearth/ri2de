@@ -46,13 +46,6 @@
             @setWeightFactor="onSetWeightFactor"
             @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
           />
-          <md-button
-            slot="actions"
-            class="md-raised md-accent button--full-width"
-            to="/results"
-          >
-            Calculate: {{ activeHazardTitle }}
-          </md-button>
         </content-card>
 
         <div v-if="activePage === 'results'">
