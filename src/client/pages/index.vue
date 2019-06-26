@@ -4,7 +4,7 @@
       <div class="selection-steps">
         <content-card
           :is-expanded="activePage === 'index'"
-          :is-completed="!!selections.length"
+          :is-completed="Boolean(selections.length)"
           title="Infrastructure"
           @selectCard="selectCard"
         >
@@ -23,61 +23,36 @@
             @mouseout="(index) => updateInfrastructureStyle(index, infrastructureStyles.default)"
             @updateSelectionTitle="onUpdateSelectionTitle"
           />
-          <button
+          <md-button
             slot="actions"
             :disabled="selections.length === 0"
-            class="button button--primary button--full-width"
+            class="md-raised md-accent button--full-width"
             @click="completeInfrastructure"
           >
             Next
-          </button>
+          </md-button>
         </content-card>
         <content-card
           :is-expanded="activePage === 'hazards'"
-          :is-completed="typeof selectedHazardIndex === 'number'"
+          :is-completed="Boolean(selections.length)"
           title="Hazards"
           @selectCard="selectCard"
         >
-          <div
-            v-if="typeof selectedHazardIndex === 'number'"
-            slot="info"
-            class="content-card__header__info"
-          >
-            {{ hazards[selectedHazardIndex].title }}
-          </div>
           <hazards-list
             slot="content"
             :hazards="hazards"
             :initial-selection="selectedHazardIndex"
             @select="selectHazard"
+            @setWeightFactor="onSetWeightFactor"
+            @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
           />
-          <button
-            slot="actions"
-            :disabled="typeof selectedHazardIndex !== 'number'"
-            class="button button--primary button--full-width"
-            @click="completeHazards"
-          >
-            Next
-          </button>
         </content-card>
+
+        <div v-if="activePage === 'results'">
+          <p class="md-subheading">Results for totals of {{ activeHazardTitle }}</p>
+        </div>
       </div>
-      <div class="calculate-steps">
-        <susceptibility-list
-          v-if="activePage === 'susceptibilities'"
-          :factors="currentSusceptibilityFactors || []"
-          @setWeightFactor="onSetWeightFactor"
-          @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
-          @toggleFactorActivity="toggleSusceptibilityLayer"
-        />
-        <nuxt-link
-          v-if="activePage === 'results' && totalsLayers && totalsLayers.length"
-          :to="'/susceptibilities'"
-          class="update-susceptibilities md-accent"
-        >
-          Update susceptibility settings
-        </nuxt-link>
-        <nuxt-child/>
-      </div>
+      <nuxt-child/>
     </div>
   </portal>
 </template>
@@ -110,10 +85,11 @@ export default {
         default: INFRASTRUCTURE_DEFAULT_COLOR,
         highlight: INFRASTRUCTURE_HIGHLIGHT_COLOR,
       }
+    },
+    activeHazardTitle() {
+      const activeHazard = this.hazards[this.selectedHazardIndex]
+      return activeHazard ? activeHazard.title : ''
     }
-  },
-  mounted() {
-    this.bootstrapHazardsList()
   },
   methods: {
     ...mapMutations({
@@ -124,7 +100,6 @@ export default {
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     ...mapActions({
-      bootstrapHazardsList: 'hazards/bootstrapHazards',
       addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
     }),
     completeInfrastructure() {
@@ -167,7 +142,6 @@ export default {
         susceptibilityIndex: index,
         weightFactor: value,
       })
-      this.updateSusceptibilityLayers({ susceptibilityIndex: index })
     },
     onUpdateClasses(classes, index) {
       this.updateClasses({
@@ -189,20 +163,6 @@ export default {
 
         default:
           break
-      }
-    },
-    toggleSusceptibilityLayer({ index, active }) {
-      const factor = this.currentSusceptibilityFactors[index]
-      this.$store.commit('hazards/updateFactorVisibility', {
-        hazardIndex: this.selectedHazardIndex, index, visible: active ? true : false
-      })
-      if(factor.factorLayers) {
-        factor.factorLayers.forEach(layer => {
-          this.$store.dispatch('mapbox/wms/setOpacity', {
-            id: layer,
-            opacity: active ? 1 : 0
-          })
-        })
       }
     },
     async updateSusceptibilityLayers({ susceptibilityIndex }) {
@@ -242,26 +202,13 @@ export default {
   background-color: var(--neutral-color--light);
   padding: var(--spacing-default);
   position: relative;
-  --triangle-height: 30px;
-  --triangle-width: 25px;
   margin-bottom: calc(var(--triangle-height) / 2);
+  height: 100%;
 }
 
 .calculate-steps {
   flex: 1;
   overflow: auto;
-}
-
-.selection-steps:after {
-  position: absolute;
-  bottom: calc(var(--triangle-height) * -1);
-  left: calc(50% - calc(var(--triangle-width)/2));
-  content: '';
-  width: var(--triangle-width);
-  height: var(--triangle-height);
-  border-top: calc(var(--triangle-height)/2) solid var(--neutral-color--light);
-  border-left: calc(var(--triangle-width)/2) solid transparent;
-  border-right: calc(var(--triangle-width)/2) solid transparent;
 }
 
 .update-susceptibilities {

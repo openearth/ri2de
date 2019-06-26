@@ -45,6 +45,8 @@ export default {
     this.$store.commit('susceptibility-layers/resetTotalsLayers')
   },
   mounted() {
+    this.$store.dispatch('mapbox/wms/resetLayers')
+
     if(Object.keys(this.layersPerSelection).length) {
       this.$store.commit('setActivePage', 'results')
       this.calculateTotals()

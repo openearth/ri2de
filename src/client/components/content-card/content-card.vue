@@ -70,6 +70,7 @@ export default {
   background-color: var(--neutral-color);
   color: #fff;
   border-radius: var(--border-radius--small);
+  cursor: pointer;
 }
 
 .content-card--completed .content-card__header,
@@ -94,11 +95,12 @@ export default {
 }
 
 .content-card__actions {
-  padding: var(--spacing-medium);
+  display: flex;
+  padding: 0 var(--spacing-half) var(--spacing-default);
 }
 
 .content-card__content {
-  padding: 0 var(--spacing-medium);
+  padding: 0 var(--spacing-default);
 }
 
 .content-card__header__icon {

@@ -9,6 +9,9 @@ import initMapState from '../../lib/mixins/init-map-state'
 
 export default {
   mixins: [ initMapState ],
+  fetch({ store }) {
+    return store.dispatch('hazards/bootstrapHazards')
+  },
   computed: {
     ...mapState([ 'activePage' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
