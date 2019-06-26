@@ -51,9 +51,13 @@
             class="md-raised md-accent button--full-width"
             to="/results"
           >
-            Calculate totals
+            Calculate: {{ activeHazardTitle }}
           </md-button>
         </content-card>
+
+        <div v-if="activePage === 'results'">
+          <p class="md-subheading">Results for totals of {{ activeHazardTitle }}</p>
+        </div>
       </div>
       <nuxt-child/>
     </div>
@@ -88,6 +92,10 @@ export default {
         default: INFRASTRUCTURE_DEFAULT_COLOR,
         highlight: INFRASTRUCTURE_HIGHLIGHT_COLOR,
       }
+    },
+    activeHazardTitle() {
+      const activeHazard = this.hazards[this.selectedHazardIndex]
+      return activeHazard ? activeHazard.title : ''
     }
   },
   mounted() {
