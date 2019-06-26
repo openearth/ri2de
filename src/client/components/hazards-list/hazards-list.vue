@@ -50,7 +50,7 @@
             class="md-primary hazard-list__add-layer"
             @click="isLayerFormVisible = !isLayerFormVisible"
           >
-            <md-icon class="md-primary susceptiblity-list__add-layer__icon">add_circle_outline</md-icon>
+            <md-icon class="md-primary hazard-list__add-layer__icon">add_circle_outline</md-icon>
             <span class="md-body-2">Add a new layer</span>
           </md-button>
           <md-dialog
@@ -272,6 +272,10 @@ export default {
 
 .hazard-list__hazard-button--active .md-icon {
   transform: rotate(-90deg);
+}
+
+.hazard-list__add-layer__icon.md-icon {
+  margin-right: 0.25rem;
 }
 
 .hazards-list__susceptiblity {
