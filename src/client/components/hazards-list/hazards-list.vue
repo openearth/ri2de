@@ -109,7 +109,7 @@ export default {
     ...mapGetters('mapbox/selections', [ 'selectionsToRoadIds' ]),
   },
   mounted() {
-    this.getSelectionLayers()
+    this.getSelectionLayer()
   },
   methods: {
     ...mapActions({
@@ -122,13 +122,13 @@ export default {
     onHazardClick(index) {
       if (index !== this.selectedHazardIndex) {
         this.selectedFactorIndex = 0
-        this.getSelectionLayers()
+        this.getSelectionLayer()
       }
       this.$emit('select', index)
     },
     onFactorClick(index) {
       this.selectedFactorIndex = index
-      this.getSelectionLayers()
+      this.getSelectionLayer()
     },
     async addLayer(newLayer) {
       this.isLoadingLayer = true
@@ -166,51 +166,56 @@ export default {
       this.isLayerFormVisible = false
       this.isLoadingLayer = false
     },
-    async getSelectionLayers() {
+    async getSelectionLayer() {
       this.calculatingSusceptibilityLayers = true
       const hazardIndex = this.selectedHazardIndex
       const factorIndex = this.selectedFactorIndex
-      const selectedSusceptibility = this.susceptibilityFactors[hazardIndex][factorIndex]
+      const selectedHazard = this.susceptibilityFactors[hazardIndex]
 
-      this.$store.dispatch('mapbox/wms/resetLayers')
+      if (selectedHazard) {
+        const selectedSusceptibility = selectedHazard[factorIndex]
 
-      const factorLayers = await this.selections.map(async selection => {
-        const customFactorLayer = await selectionToCustomFactorLayer({
-          polygon: selection.polygon,
-          factor: selectedSusceptibility,
-          identifier: selection.identifier
-        })
+        this.$store.dispatch('mapbox/wms/resetLayers')
 
-        const wmsLayer = generateWmsLayer(customFactorLayer)
+        const factorLayers = await Promise.all(this.selections.map(async selection => {
+          const customFactorLayer = await selectionToCustomFactorLayer({
+            polygon: selection.polygon,
+            factor: selectedSusceptibility,
+            identifier: selection.identifier
+          })
 
-        this.$store.dispatch('mapbox/wms/add', {
-          ...wmsLayer,
-          paint: { 'raster-opacity': 1 },
-        })
+          const wmsLayer = generateWmsLayer(customFactorLayer)
 
-        this.$store.commit('susceptibility-layers/addLayerToSelection', {
-          selectionId: selection.id,
-          layer: { ...customFactorLayer, susceptibility: selectedSusceptibility.title },
-        })
+          this.$store.dispatch('mapbox/wms/add', {
+            ...wmsLayer,
+            paint: { 'raster-opacity': 1 },
+          })
 
-        return wmsLayer.id
-      })
+          this.$store.commit('susceptibility-layers/addLayerToSelection', {
+            selectionId: selection.id,
+            layer: { ...customFactorLayer, susceptibility: selectedSusceptibility.title },
+          })
 
-      try {
-        this.$store.commit('hazards/updateFactorVisibility', {
-          index: factorIndex, hazardIndex, visible: true
-        })
+          return wmsLayer.id
+        }))
 
-        this.$store.commit('hazards/updateFactorLayers', {
-          index: factorIndex, hazardIndex, factorLayers: await Promise.all(factorLayers)
-        })
-      } catch(e) {
-        this.errorMessage = 'Error fetching the layers, reload and try again'
-        this.errorCalculatingSusceptibilityLayers = true
-        console.log('Error: ', e)
-      }
-      if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
-        this.calculatingSusceptibilityLayers = false
+        try {
+          this.$store.commit('hazards/updateFactorVisibility', {
+            index: factorIndex, hazardIndex, visible: true
+          })
+
+          this.$store.commit('hazards/updateFactorLayers', {
+            index: factorIndex, hazardIndex, factorLayers
+          })
+        } catch(e) {
+          this.errorMessage = 'Error fetching the layers, reload and try again'
+          this.errorCalculatingSusceptibilityLayers = true
+          console.log('Error: ', e)
+        }
+
+        if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
+          this.calculatingSusceptibilityLayers = false
+        }
       }
     },
   }
