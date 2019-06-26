@@ -108,6 +108,9 @@ export default {
   mounted() {
     this.getSelectionLayer()
   },
+  beforeDestroy() {
+    this.$store.dispatch('mapbox/wms/resetLayers')
+  },
   methods: {
     ...mapActions({
       showError: 'notifications/showError',
