@@ -133,6 +133,8 @@ export default {
     async addLayer(newLayer) {
       this.isLoadingLayer = true
 
+      this.$store.dispatch('mapbox/wms/resetLayers')
+
       try {
         const customFactorLayers = await Promise.all(this.selections.map( async selection => {
             const customLayer = await selectionToCustomFactorLayer({
@@ -158,6 +160,8 @@ export default {
           wpsFunctionId: 'ri2de_calc_custom',
           isCustom: true
         })
+
+        this.selectedFactorIndex = this.susceptibilityFactors[this.selectedHazardIndex].length - 1
       } catch (err) {
         console.error(err)
         this.showError(err)
