@@ -54,7 +54,7 @@ export default {
           "borderColor": "#008FC5",
         },
         processStyle: {
-          "backgroundColor": "#ccc",
+          "backgroundColor": "red",
         },
         bgStyle: {
           "backgroundColor": "#ccc",

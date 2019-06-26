@@ -270,10 +270,6 @@ export default {
   background-color: var(--primary-color);
 }
 
-.hazard-list__add-layer {
-  padding-left: 2rem;
-}
-
 .hazard-list__add-layer .md-button-content {
   display: flex;
 }
