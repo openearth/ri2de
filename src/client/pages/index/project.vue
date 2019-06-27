@@ -91,8 +91,15 @@ export default {
             },
           }))
 
+          // Find the last used number for an unnamed selection number by matching for 'Selection [number]'
+          const latestUnnamedSelectionNumber = this.selections
+            .filter(selection => selection.title.match(/^Selection 0*[1-9][0-9]*$/))
+            .map(selection => selection.title.replace( /^\D+/g, ''))
+            .map(string => Number(string))
+            .sort((a, b) => b - a)[0]
+
           this.$store.commit('mapbox/selections/add', {
-            title: 'Unnamed Selection',
+            title: `Selection ${latestUnnamedSelectionNumber ? latestUnnamedSelectionNumber + 1 : 1}`,
             id: selectionId,
             features: [ selectionId ],
             polygon: event.features[0],
