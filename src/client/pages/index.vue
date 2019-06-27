@@ -153,9 +153,7 @@ export default {
       })
       this.updateSusceptibilityLayers({ susceptibilityIndex: index })
     },
-    onUpdateFactorLayer({updatedlayer, index}){
-      console.log(index)
-
+    onUpdateFactorLayer({updatedlayer, index}
       this.updateFactorLayer({
         hazardIndex: this.selectedHazardIndex,
         susceptibilityIndex: index,
@@ -181,8 +179,6 @@ export default {
 
       const selectionPolygons = this.selections
       const susceptibility = this.currentSusceptibilityFactors[susceptibilityIndex]
-
-      console.log(susceptibility)
 
       const customFactorLayers = await Promise.all(this.selections.map( async selection => {
         this.$store.dispatch('mapbox/wms/remove', `${selection.polygon.id}-${susceptibility.title}`)
