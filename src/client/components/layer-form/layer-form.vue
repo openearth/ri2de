@@ -8,6 +8,7 @@
           <label>Layer url</label>
           <md-input
             v-model="url"
+            type="url"
             required
           />
         </md-field>
