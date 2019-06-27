@@ -45,6 +45,7 @@
             @select="selectHazard"
             @setWeightFactor="onSetWeightFactor"
             @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
+            @updateFactorLayer="onUpdateFactorLayer"
           />
         </content-card>
 
@@ -97,6 +98,7 @@ export default {
       selectHazard: 'hazards/selectHazard',
       updateWeightFactor: 'hazards/updateWeightFactor',
       updateClasses: 'hazards/updateClasses',
+      updateFactorLayer:'hazards/updateFactorLayer',
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     ...mapActions({
@@ -151,6 +153,14 @@ export default {
       })
       this.updateSusceptibilityLayers({ susceptibilityIndex: index })
     },
+    onUpdateFactorLayer({updatedlayer, index}) {
+      this.updateFactorLayer({
+        hazardIndex: this.selectedHazardIndex,
+        susceptibilityIndex: index,
+        layer:updatedlayer,
+      })
+      this.updateSusceptibilityLayers({ susceptibilityIndex: index })
+    },
     selectCard(title) {
       switch (title) {
         case 'Infrastructure':
@@ -168,6 +178,7 @@ export default {
     async updateSusceptibilityLayers({ susceptibilityIndex }) {
       const selectionPolygons = this.selections
       const susceptibility = this.currentSusceptibilityFactors[susceptibilityIndex]
+
       const customFactorLayers = await Promise.all(this.selections.map( async selection => {
         this.$store.dispatch('mapbox/wms/remove', `${selection.polygon.id}-${susceptibility.title}`)
 
