@@ -11,5 +11,5 @@ export default function(map) {
   map.addControl(map.__draw, 'top-left')
   map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
   map.addControl(new BaselayerControl(MAP_BASELAYERS), 'bottom-right')
-  map.addControl(new FitboundsControl(), 'bottom-right')
+  map.addControl(new FitboundsControl(), 'top-left')
 }
