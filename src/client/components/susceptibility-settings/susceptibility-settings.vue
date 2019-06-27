@@ -20,7 +20,7 @@
       />
       <add-source-button
         v-if="factor.keywords && factor.keywords.length"
-        :roadsid="infrastructure[factorIndex].identifier"
+        :roadsid="infrastructure[factorIndex] && infrastructure[factorIndex].identifier"
         :keywords="factor.keywords"
         :csw="factor.cswUrls"
         @updateFactorLayer="(updatedlayer) => $emit('updateFactorLayer', { updatedlayer, index: factorIndex })"
