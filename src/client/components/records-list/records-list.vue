@@ -37,15 +37,10 @@ export default {
       type:Array,
       required:true
     },
-    openstate:{
-      type:Boolean,
-      required:true
-    },
   },
   methods: {
     changeLayer(updatedlayer) {
       this.$emit('updateFactorLayer', updatedlayer)
-      this.openstate=false
     }
   }
 }

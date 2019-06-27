@@ -22,7 +22,7 @@
 
       <layer-legend />
       <add-source-button
-        v-if="factor.keywords.length"
+        v-if="factor.keywords && factor.keywords.length"
         :roadsid="infrastructure[factorIndex].identifier"
         :keywords="factor.keywords"
         :csw="factor.cswUrls"

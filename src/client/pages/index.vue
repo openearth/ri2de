@@ -45,7 +45,6 @@
             @select="selectHazard"
             @setWeightFactor="onSetWeightFactor"
             @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
-            @toggleFactorActivity="toggleSusceptibilityLayer"
             @updateFactorLayer="onUpdateFactorLayer"
           />
         </content-card>
@@ -155,6 +154,8 @@ export default {
       this.updateSusceptibilityLayers({ susceptibilityIndex: index })
     },
     onUpdateFactorLayer({updatedlayer, index}){
+      console.log(index)
+
       this.updateFactorLayer({
         hazardIndex: this.selectedHazardIndex,
         susceptibilityIndex: index,
