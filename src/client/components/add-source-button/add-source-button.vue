@@ -1,13 +1,13 @@
 <template>
-  <div class="add-source">    
+  <div class="add-source">
     <div>
       <md-button
         class="md-primary"
         @click="showDialog"
       >
-        change source ...
+        change source
       </md-button>
-      
+
       <md-dialog :md-active.sync="open">
         <div class="add-source__title">
           <md-dialog-title>Select data source for slope susceptibility</md-dialog-title>
@@ -25,8 +25,8 @@
 
         <md-dialog-actions>
           <div class="add-source__actions">
-            <md-button 
-              class="md-primary" 
+            <md-button
+              class="md-primary"
               @click="open = false"
             >Close</md-button>
           </div>
@@ -34,7 +34,7 @@
       </md-dialog>
     </div>
   </div>
-          
+
 </template>
 
 
@@ -63,7 +63,7 @@ export default{
   data() {
     return {
       open: false,
-      records: [],  
+      records: [],
     }
   },
   methods: {
