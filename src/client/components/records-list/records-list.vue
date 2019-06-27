@@ -18,7 +18,7 @@
             </md-button>
           </div>
 
-          <p class="md-body-1">
+          <p class="md-body-1 record-list__item-body">
             {{ record.abstract }}
           </p>
     
@@ -57,5 +57,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.record-list__item-body {
+  word-wrap: break-word;
 }
 </style>

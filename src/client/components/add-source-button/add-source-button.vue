@@ -14,17 +14,22 @@
         </div>
 
         <md-dialog-content>
-          <records-list
-            :recordslist="records"
-            :openstate="open"
-            @updateFactorLayer="onUpdateFactorLayer"
-          />
+          <div>
+            <records-list
+              :recordslist="records"
+              :openstate="open"
+              @updateFactorLayer="onUpdateFactorLayer"
+            />
+          </div>
         </md-dialog-content>
 
         <md-dialog-actions>
-          <md-button 
-            class="md-primary" 
-            @click="open = false">Close</md-button>
+          <div class="add-source__actions">
+            <md-button 
+              class="md-primary" 
+              @click="open = false"
+            >Close</md-button>
+          </div>
         </md-dialog-actions>
       </md-dialog>
     </div>
@@ -98,6 +103,10 @@ export default{
   color:white;
   text-align: center;
   padding: 1rem;
+}
+
+.add-source__actions {
+  padding-top: 1rem;
 }
 </style>
 

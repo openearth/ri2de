@@ -20,7 +20,9 @@
         @updateClasses="onUpdateClasses"
       />
 
-      <layer-legend />
+      <layer-legend
+        class="susceptibility-settings__layer-legend"
+      />
       <add-source-button
         v-if="factor.keywords && factor.keywords.length"
         :roadsid="infrastructure[factorIndex].identifier"
@@ -97,5 +99,9 @@ export default {
   top: calc(calc(var(--spacing-default) - 10px) * -1);
   right: calc(calc(var(--spacing-default) - 10px) * -1);
   margin: 0 !important;
+}
+
+.susceptibility-settings__layer-legend { 
+  margin-bottom: 1rem;
 }
 </style>
