@@ -9,6 +9,7 @@
         <button
           :class="{'hazard-list__hazard-button--active': selectedHazardIndex === hazardIndex}"
           class="hazard-list__hazard-button"
+          type="button"
           @click="onHazardClick(hazardIndex)"
         >
           {{ hazard.title }}
@@ -30,6 +31,7 @@
             >
               <button
                 class="hazards-list__susceptiblity-button"
+                type="button"
                 @click="onFactorClick(factorIndex)"
               >{{ factor.title }}</button>
 
@@ -57,6 +59,7 @@
           <li>
             <md-button
               class="md-primary hazard-list__add-layer"
+              type="button"
               @click="isLayerFormVisible = !isLayerFormVisible"
             >
               <md-icon class="md-primary hazard-list__add-layer__icon">add_circle_outline</md-icon>
