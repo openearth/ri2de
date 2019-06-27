@@ -215,6 +215,7 @@ export default {
   position: relative;
   margin-bottom: calc(var(--triangle-height) / 2);
   height: 100%;
+  overflow-y: auto;
 }
 
 .calculate-steps {

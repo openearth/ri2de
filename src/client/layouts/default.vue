@@ -8,12 +8,6 @@
           name="side-panel"
           slim
         />
-        <div class="side-panel__bottom">
-          <portal-target
-            name="side-panel-bottom"
-            slim
-          />
-        </div>
       </div>
     </side-panel>
     <div class="map-container">
