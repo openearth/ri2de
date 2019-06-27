@@ -69,7 +69,9 @@ export const actions = {
   },
   setMode({ rootGetters }, mode) {
     const map = rootGetters['mapbox/map']
-    map.__draw.changeMode(mode)
+    if (map) {
+      map.__draw.changeMode(mode)
+    }
   },
   showAll({ state, rootGetters }) {
     const map = rootGetters['mapbox/map']
