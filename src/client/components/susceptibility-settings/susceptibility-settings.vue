@@ -19,7 +19,17 @@
         label="Classes"
         @updateClasses="onUpdateClasses"
       />
-      <layer-legend />
+
+      <layer-legend
+        class="susceptibility-settings__layer-legend"
+      />
+      <add-source-button
+        v-if="factor.keywords && factor.keywords.length"
+        :roadsid="infrastructure[factorIndex].identifier"
+        :keywords="factor.keywords"
+        :csw="factor.cswUrls"
+        @updateFactorLayer="(updatedlayer) => $emit('updateFactorLayer', { updatedlayer, index: factorIndex })"
+      />
     </div>
   </div>
 </template>
@@ -28,12 +38,15 @@
 import WeightFactor from '../weight-factor'
 import InputRange from '../input-range'
 import LayerLegend from '../layer-legend'
+import AddSourceButton from '../add-source-button'
+
 
 export default {
   components: {
     WeightFactor,
     InputRange,
-    LayerLegend
+    LayerLegend,
+    AddSourceButton
   },
   props: {
     factor: {
@@ -43,6 +56,10 @@ export default {
     factorIndex: {
       type: Number,
       required: true
+    },
+    infrastructure:{
+      type:Array,
+      required:true,
     }
   },
   methods: {
@@ -82,5 +99,9 @@ export default {
   top: calc(calc(var(--spacing-default) - 10px) * -1);
   right: calc(calc(var(--spacing-default) - 10px) * -1);
   margin: 0 !important;
+}
+
+.susceptibility-settings__layer-legend { 
+  margin-bottom: 1rem;
 }
 </style>
