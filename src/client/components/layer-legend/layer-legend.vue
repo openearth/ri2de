@@ -1,6 +1,6 @@
 <template>
   <div class="layer-legend">
-    <md-subheader>Legend</md-subheader>
+    <md-subheader>Susceptiblity</md-subheader>
     <div
       v-for="item in legend"
       :key="item.label"
@@ -20,9 +20,9 @@ export default {
   data() {
     return {
       legend: [
-        { color: '#2A7221', label: 'Class 0'},
-        { color: '#FFCE4B', label: 'Class 1'},
-        { color: '#DF2935', label: 'Class 2'}
+        { color: '#2A7221', label: 'Low'},
+        { color: '#FFCE4B', label: 'Medium'},
+        { color: '#DF2935', label: 'High'}
       ]
     }
   }

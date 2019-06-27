@@ -11,6 +11,7 @@
   border-radius: var(--border-radius--small);
   box-shadow: 1px 1px 3px #ccc;
   transition: all .1s ease-in-out;
+  text-transform: uppercase;
 }
 
 .button:not(:disabled):hover:after,

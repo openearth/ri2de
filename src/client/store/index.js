@@ -43,7 +43,6 @@ export const actions = {
     if (hazards) {
       commit('hazards/setHazards', hazards)
       commit('hazards/setSusceptibilityFactors', susceptibilityFactors)
-      dispatch('hazards/bootstrapHazards', susceptibilityFactors)
     }
 
     if (selectedHazardIndex !== undefined) {

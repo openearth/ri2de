@@ -1,85 +1,105 @@
 <template>
-  <ul class="hazards-list">
-    <li
-      v-for="(hazard, hazardIndex) in hazards"
-      :key="hazard.title"
-      class="hazard-list__hazard md-primary"
-    >
-      <button
-        :class="{'hazard-list__hazard-button--active': selectedHazardIndex === hazardIndex}"
-        class="hazard-list__hazard-button"
-        @click="onHazardClick(hazardIndex)"
+  <div>
+    <ul class="hazards-list">
+      <li
+        v-for="(hazard, hazardIndex) in hazards"
+        :key="hazard.title"
+        class="hazard-list__hazard md-primary"
       >
-        {{ hazard.title }}
-        <md-icon>chevron_left</md-icon>
-      </button>
-      <ul
-        v-if="selectedHazardIndex === hazardIndex"
-        class="hazards-list__susceptiblities"
-      >
-        <li
-          v-for="(factor, factorIndex) in susceptibilityFactors[hazardIndex]"
-          :key="`${factorIndex}-${hazardIndex}`"
+        <button
+          :class="{'hazard-list__hazard-button--active': selectedHazardIndex === hazardIndex}"
+          class="hazard-list__hazard-button"
+          @click="onHazardClick(hazardIndex)"
         >
-          <div
-            :class="{
-              'hazards-list__susceptiblity--active': selectedFactorIndex === factorIndex && selectedHazardIndex === hazardIndex
-            }"
-            class="hazards-list__susceptiblity"
+          {{ hazard.title }}
+          <md-icon>chevron_left</md-icon>
+        </button>
+        <ul
+          v-if="selectedHazardIndex === hazardIndex"
+          class="hazards-list__susceptiblities"
+        >
+          <li
+            v-for="(factor, factorIndex) in susceptibilityFactors[hazardIndex]"
+            :key="`${factorIndex}-${hazardIndex}`"
           >
-            <button
-              class="hazards-list__susceptiblity-button"
-              @click="onFactorClick(factorIndex)"
-            >{{ factor.title }}</button>
-          </div>
-          <portal
-            to="susceptibility-settings"
-          >
-            <susceptibility-settings
-              v-if="selectedFactorIndex === factorIndex && selectedHazardIndex === hazardIndex"
-              :key="`${factorIndex}-${hazardIndex}`"
-              :factor="factor"
-              :factor-index="factorIndex"
-              :infrastructure="selections"
-              @weightFactorChange="data => $emit('setWeightFactor', data)"
-              @updateClasses="data => $emit('updateClasses', data)"
-              @updateFactorLayer="data => $emit('updateFactorLayer', data)"
-            />
-          </portal>
-        </li>
-        <li>
-          <md-button
-            class="md-primary hazard-list__add-layer"
-            @click="isLayerFormVisible = !isLayerFormVisible"
-          >
-            <md-icon class="md-primary susceptiblity-list__add-layer__icon">add_circle_outline</md-icon>
-            <span class="md-body-2">Add a new layer</span>
-          </md-button>
-          <md-dialog
-            :md-active.sync="isLayerFormVisible"
-          >
-            <layer-form
-              :loading="isLoadingLayer"
-              @addLayer="addLayer"
-              @close="isLayerFormVisible = false"
-            />
-          </md-dialog>
-        </li>
-      </ul>
-    </li>
-  </ul>
+            <div
+              :class="{
+                'hazards-list__susceptiblity--active': selectedFactorIndex === factorIndex && selectedHazardIndex === hazardIndex
+              }"
+              class="hazards-list__susceptiblity"
+            >
+              <button
+                class="hazards-list__susceptiblity-button"
+                @click="onFactorClick(factorIndex)"
+              >{{ factor.title }}</button>
+            </div>
+            <portal
+              to="susceptibility-settings"
+            >
+              <susceptibility-settings
+                v-if="selectedFactorIndex === factorIndex && selectedHazardIndex === hazardIndex"
+                :key="`${factorIndex}-${hazardIndex}`"
+                :factor="factor"
+                :factor-index="factorIndex"
+                @weightFactorChange="data => $emit('setWeightFactor', data)"
+                @updateClasses="data => $emit('updateClasses', data)"
+              />
+            </portal>
+          </li>
+          <li>
+            <md-button
+              class="md-primary hazard-list__add-layer"
+              @click="isLayerFormVisible = !isLayerFormVisible"
+            >
+              <md-icon class="md-primary hazard-list__add-layer__icon">add_circle_outline</md-icon>
+              <span class="md-body-2">Add a new layer</span>
+            </md-button>
+            <md-dialog
+              :md-active.sync="isLayerFormVisible"
+            >
+              <layer-form
+                :loading="isLoadingLayer"
+                @addLayer="addLayer"
+                @close="isLayerFormVisible = false"
+              />
+            </md-dialog>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <button
+      :disabled="calculatingSusceptibilityLayers || errorCalculatingSusceptibilityLayers"
+      class="button button--primary button--full-width"
+      @click="calculateTotals"
+    >
+      Calculate: {{ activeHazardTitle }}
+    </button>
+    <portal to="map-notification">
+      <map-notification
+        v-if="calculatingSusceptibilityLayers"
+        :message="calculatingMessage"
+      />
+      <map-notification
+        v-else-if="errorCalculatingSusceptibilityLayers"
+        :message="errorMessage"
+        type="error"
+      />
+    </portal>
+  </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
 import SusceptibilitySettings from '../susceptibility-settings'
 import LayerForm from '../layer-form'
+import MapNotification from '../map-notification'
 import { selectionToCustomFactorLayer, generateWmsLayer, resetLayers } from '../../lib/project-layers'
 
 export default {
   components: {
     SusceptibilitySettings,
-    LayerForm
+    LayerForm,
+    MapNotification
   },
   props: {
     hazards: {
@@ -99,6 +119,9 @@ export default {
       isLayerFormVisible: false,
       isLoadingLayer: false,
       errorMessage: undefined,
+      errorCalculatingSusceptibilityLayers: false,
+      calculatingMessage: 'Calculating susceptibility layers...',
+      calculatingSusceptibilityLayers: false,
     }
   },
   computed: {
@@ -106,33 +129,43 @@ export default {
     ...mapState('hazards', [ 'susceptibilityFactors', 'selectedHazardIndex', 'currentSusceptibilityFactors' ]),
     ...mapState('susceptibility-layers', [ 'layersPerSelection' ]),
     ...mapGetters('mapbox/selections', [ 'selectionsToRoadIds' ]),
+    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
+    activeHazardTitle() {
+      const activeHazard = this.hazards[this.selectedHazardIndex]
+      return activeHazard ? activeHazard.title : ''
+    }
   },
-  mounted() {
-    this.getSelectionLayer()
+  async mounted() {
+    this.getSelectionLayers()
+  },
+  beforeDestroy() {
+    this.$store.dispatch('mapbox/wms/resetLayers')
   },
   methods: {
     ...mapActions({
       showError: 'notifications/showError',
-      addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
+      addSusceptibilityFactor: 'hazards/addSusceptibilityFactor',
     }),
     ...mapMutations({
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
+    calculateTotals() {
+      this.$router.push({ path: '/results' })
+    },
     onHazardClick(index) {
-      if (index !== this.selectedHazardIndex) {
-        this.selectedFactorIndex = 0
-        this.getSelectionLayer()
-      }
+      if (index === this.selectedHazardIndex) { return }
+
       this.$emit('select', index)
+      this.selectedFactorIndex = 0
+      this.getSelectionLayers()
+      this.showCurrentLayer()
     },
     onFactorClick(index) {
       this.selectedFactorIndex = index
-      this.getSelectionLayer()
+      this.showCurrentLayer()
     },
     async addLayer(newLayer) {
       this.isLoadingLayer = true
-
-      this.$store.dispatch('mapbox/wms/resetLayers')
 
       try {
         const customFactorLayers = await Promise.all(this.selections.map( async selection => {
@@ -161,6 +194,7 @@ export default {
         })
 
         this.selectedFactorIndex = this.susceptibilityFactors[this.selectedHazardIndex].length - 1
+        this.showCurrentLayer()
       } catch (err) {
         console.error(err)
         this.showError(err)
@@ -169,50 +203,64 @@ export default {
       this.isLayerFormVisible = false
       this.isLoadingLayer = false
     },
-    async getSelectionLayer() {
-      const hazardIndex = this.selectedHazardIndex
+    async showCurrentLayer() {
       const factorIndex = this.selectedFactorIndex
-      const selectedHazard = this.susceptibilityFactors[hazardIndex]
 
-      if (selectedHazard) {
-        const selectedSusceptibility = selectedHazard[factorIndex]
+      this.currentSusceptibilityFactors.forEach((factor, index) => {
+        const active = factorIndex === index
 
-        this.$store.dispatch('mapbox/wms/resetLayers')
+        this.$store.commit('hazards/updateFactorVisibility', {
+          hazardIndex: this.selectedHazardIndex, index, visible: active
+        })
 
-        const factorLayers = await Promise.all(this.selections.map(async selection => {
-          const customFactorLayer = await selectionToCustomFactorLayer({
-            polygon: selection.polygon,
-            factor: selectedSusceptibility,
-            identifier: selection.identifier
+        if(factor.factorLayers) {
+          factor.factorLayers.forEach(layer => {
+            this.$store.dispatch('mapbox/wms/setOpacity', {
+              id: layer,
+              opacity: active ? 1 : 0
+            })
           })
-
-          const wmsLayer = generateWmsLayer(customFactorLayer)
-
-          this.$store.dispatch('mapbox/wms/add', {
-            ...wmsLayer,
-            paint: { 'raster-opacity': 1 },
-          })
-
-          this.$store.commit('susceptibility-layers/addLayerToSelection', {
-            selectionId: selection.id,
-            layer: { ...customFactorLayer, susceptibility: selectedSusceptibility.title },
-          })
-
-          return wmsLayer.id
-        }))
-
-        try {
-          this.$store.commit('hazards/updateFactorVisibility', {
-            index: factorIndex, hazardIndex, visible: true
-          })
-
-          this.$store.commit('hazards/updateFactorLayers', {
-            index: factorIndex, hazardIndex, factorLayers
-          })
-        } catch(e) {
-          this.errorMessage = 'Error fetching the layers, reload and try again'
-          console.log('Error: ', e)
         }
+      })
+    },
+    getSelectionLayers() {
+      const hazardIndex = this.selectedHazardIndex
+      this.calculatingSusceptibilityLayers = true
+
+      this.$store.dispatch('mapbox/wms/resetLayers')
+
+      if (this.currentSusceptibilityFactors) {
+        this.currentSusceptibilityFactors.forEach(async (factor, index) => {
+          const factorLayers = this.selections.map(async selection => {
+            const customFactorLayer = await selectionToCustomFactorLayer({ polygon: selection.polygon, factor, identifier: selection.identifier })
+            const wmsLayer = generateWmsLayer(customFactorLayer)
+
+            this.$store.dispatch('mapbox/wms/add', {
+              ...wmsLayer,
+              paint: { 'raster-opacity': index === 0 ? 1 : 0 },
+            })
+            this.$store.commit('susceptibility-layers/addLayerToSelection', {
+              selectionId: selection.id,
+              layer: { ...customFactorLayer, susceptibility: factor.title },
+            })
+
+            return wmsLayer.id
+          })
+
+          try {
+            this.$store.commit('hazards/updateFactorLayers', {
+              index, hazardIndex, factorLayers: await Promise.all(factorLayers)
+            })
+          } catch(e) {
+            this.errorMessage = 'Error fetching the layers, reload and try again'
+            this.errorCalculatingSusceptibilityLayers = true
+            console.log('Error: ', e)
+          }
+
+          if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
+            this.calculatingSusceptibilityLayers = false
+          }
+        })
       }
     },
   }
@@ -256,6 +304,10 @@ export default {
 
 .hazard-list__hazard-button--active .md-icon {
   transform: rotate(-90deg);
+}
+
+.hazard-list__add-layer__icon.md-icon {
+  margin-right: 0.25rem;
 }
 
 .hazards-list__susceptiblity {

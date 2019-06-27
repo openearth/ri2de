@@ -48,14 +48,11 @@
             @toggleFactorActivity="toggleSusceptibilityLayer"
             @updateFactorLayer="onUpdateFactorLayer"
           />
-          <md-button
-            slot="actions"
-            class="md-raised md-accent button--full-width"
-            to="/results"
-          >
-            Calculate totals
-          </md-button>
         </content-card>
+
+        <div v-if="activePage === 'results'">
+          <p class="md-subheading">Results for totals of {{ activeHazardTitle }}</p>
+        </div>
       </div>
       <nuxt-child/>
     </div>
@@ -90,10 +87,11 @@ export default {
         default: INFRASTRUCTURE_DEFAULT_COLOR,
         highlight: INFRASTRUCTURE_HIGHLIGHT_COLOR,
       }
+    },
+    activeHazardTitle() {
+      const activeHazard = this.hazards[this.selectedHazardIndex]
+      return activeHazard ? activeHazard.title : ''
     }
-  },
-  mounted() {
-    this.bootstrapHazardsList()
   },
   methods: {
     ...mapMutations({
@@ -105,7 +103,6 @@ export default {
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     ...mapActions({
-      bootstrapHazardsList: 'hazards/bootstrapHazards',
       addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
     }),
     completeInfrastructure() {
@@ -148,7 +145,6 @@ export default {
         susceptibilityIndex: index,
         weightFactor: value,
       })
-      this.updateSusceptibilityLayers({ susceptibilityIndex: index })
     },
     onUpdateClasses(classes, index) {
       this.updateClasses({
@@ -179,20 +175,6 @@ export default {
 
         default:
           break
-      }
-    },
-    toggleSusceptibilityLayer({ index, active }) {
-      const factor = this.currentSusceptibilityFactors[index]
-      this.$store.commit('hazards/updateFactorVisibility', {
-        hazardIndex: this.selectedHazardIndex, index, visible: active ? true : false
-      })
-      if(factor.factorLayers) {
-        factor.factorLayers.forEach(layer => {
-          this.$store.dispatch('mapbox/wms/setOpacity', {
-            id: layer,
-            opacity: active ? 1 : 0
-          })
-        })
       }
     },
     async updateSusceptibilityLayers({ susceptibilityIndex }) {
