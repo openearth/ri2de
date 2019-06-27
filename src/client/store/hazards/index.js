@@ -34,25 +34,21 @@ export const mutations = {
   updateClasses(state, { hazardIndex, susceptibilityIndex, classes }) {
     const newFactors = [ ...state.susceptibilityFactors ]
     newFactors[hazardIndex][susceptibilityIndex].classes = [ ...classes ]
-
     state.susceptibilityFactors = newFactors
   },
   updateFactorLayers(state, { hazardIndex, factorLayers, index }) {
     const newFactors = [ ...state.susceptibilityFactors ]
     newFactors[hazardIndex][index].factorLayers = factorLayers
-
     state.susceptibilityFactors = newFactors
   },
   updateFactorVisibility(state, { hazardIndex, index, visible }) {
     const newFactors = [ ...state.susceptibilityFactors ]
     newFactors[hazardIndex][index].visible = visible
-
     state.susceptibilityFactors = newFactors
   },
   updateWeightFactor(state, { hazardIndex, susceptibilityIndex, weightFactor }) {
     const newFactors = [ ...state.susceptibilityFactors ]
     newFactors[hazardIndex][susceptibilityIndex].weightFactor = Number(weightFactor)
-
     state.susceptibilityFactors = newFactors
   },
   updateFactorLayer(state,{hazardIndex, susceptibilityIndex, layer }){

@@ -16,4 +16,3 @@ export default function({ functionId, requestData, polygon, roadsIdentifier, fil
     })
 }
 
-//https://ri2de.openearth.eu/wps
