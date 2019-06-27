@@ -1,12 +1,5 @@
 <template>
-  <div>
-    <md-subheader>Weight Factor</md-subheader>
-    <md-button
-      class="md-icon-button input-control"
-      @click="decreaseValue"
-    >
-      <md-icon>remove</md-icon>
-    </md-button>
+  <div class="weight-factor">
     <input
       v-model="value"
       :min="min"
@@ -15,12 +8,6 @@
       type="number"
       class="input"
     >
-    <md-button
-      class="md-icon-button input-control"
-      @click="increaseValue"
-    >
-      <md-icon>add</md-icon>
-    </md-button>
   </div>
 </template>
 
@@ -58,39 +45,24 @@ export default {
       this.$emit('onChange', val)
     },
   },
-  methods: {
-    increaseValue() {
-      const newValue = Number(Number(this.value) + Number(this.step)).toFixed(1)
-
-      if (newValue <= this.max) {
-        this.value = newValue
-      }
-    },
-    decreaseValue() {
-      const newValue = Number(Number(this.value) - Number(this.step)).toFixed(1)
-
-      if (newValue >= this.min) {
-        this.value = newValue
-      }
-    }
-  }
 }
 </script>
 
 <style>
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  appearance: none;
-  margin: 0;
+.weight-factor {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
 }
 
 input[type=number] {
   -moz-appearance: textfield;
+  border: none;
+  border-radius: 4px;
 }
 
 .input {
-  height: 40px;
+  height: 30px;
   width: 40px;
   font-size: var(--font-size-default);
   text-align: center;

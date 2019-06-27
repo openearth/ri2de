@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="calculateTotals">
     <ul class="hazards-list">
       <li
         v-for="(hazard, hazardIndex) in hazards"
@@ -9,6 +9,7 @@
         <button
           :class="{'hazard-list__hazard-button--active': selectedHazardIndex === hazardIndex}"
           class="hazard-list__hazard-button"
+          type="button"
           @click="onHazardClick(hazardIndex)"
         >
           {{ hazard.title }}
@@ -30,8 +31,17 @@
             >
               <button
                 class="hazards-list__susceptiblity-button"
+                type="button"
                 @click="onFactorClick(factorIndex)"
               >{{ factor.title }}</button>
+
+              <weight-factor
+                :min="factor.min"
+                :max="factor.max"
+                :step="factor.step"
+                :weight-factor="factor.weightFactor"
+                @onChange="(value) => $emit('setWeightFactor', { value, index: factorIndex })"
+              />
             </div>
             <portal
               to="susceptibility-settings"
@@ -51,6 +61,7 @@
           <li>
             <md-button
               class="md-primary hazard-list__add-layer"
+              type="button"
               @click="isLayerFormVisible = !isLayerFormVisible"
             >
               <md-icon class="md-primary hazard-list__add-layer__icon">add_circle_outline</md-icon>
@@ -72,7 +83,6 @@
     <button
       :disabled="calculatingSusceptibilityLayers || errorCalculatingSusceptibilityLayers"
       class="button button--primary button--full-width"
-      @click="calculateTotals"
     >
       Calculate: {{ activeHazardTitle }}
     </button>
@@ -87,13 +97,14 @@
         type="error"
       />
     </portal>
-  </div>
+  </form>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
 import SusceptibilitySettings from '../susceptibility-settings'
 import LayerForm from '../layer-form'
+import WeightFactor from '../weight-factor'
 import MapNotification from '../map-notification'
 import { selectionToCustomFactorLayer, generateWmsLayer, resetLayers } from '../../lib/project-layers'
 
@@ -101,6 +112,7 @@ export default {
   components: {
     SusceptibilitySettings,
     LayerForm,
+    WeightFactor,
     MapNotification
   },
   props: {
@@ -315,6 +327,8 @@ export default {
 .hazards-list__susceptiblity {
   background-color: #585657;
   color: var(--text-color);
+  display: flex;
+  align-items: center;
 }
 
 .hazards-list__susceptiblity-button {

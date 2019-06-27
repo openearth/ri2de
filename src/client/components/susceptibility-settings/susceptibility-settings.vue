@@ -3,13 +3,8 @@
     class="susceptibility-settings"
   >
     <div class="susceptibility-settings__wrapper">
-      <weight-factor
-        :min="factor.min"
-        :max="factor.max"
-        :step="factor.step"
-        :weight-factor="factor.weightFactor"
-        @onChange="(value) => $emit('weightFactorChange', { value, index: factorIndex })"
-      />
+      <span class="md-title">{{ factor.title }}</span>
+
       <input-range
         v-if="factor.classes && (factor.classes.length === 4)"
         :key="factor.title"
@@ -35,15 +30,12 @@
 </template>
 
 <script>
-import WeightFactor from '../weight-factor'
 import InputRange from '../input-range'
 import LayerLegend from '../layer-legend'
 import AddSourceButton from '../add-source-button'
 
-
 export default {
   components: {
-    WeightFactor,
     InputRange,
     LayerLegend,
     AddSourceButton
@@ -101,7 +93,7 @@ export default {
   margin: 0 !important;
 }
 
-.susceptibility-settings__layer-legend { 
+.susceptibility-settings__layer-legend {
   margin-bottom: 1rem;
 }
 </style>
