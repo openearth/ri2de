@@ -45,22 +45,6 @@ export default {
       this.$emit('onChange', val)
     },
   },
-  methods: {
-    increaseValue() {
-      const newValue = Number(Number(this.value) + Number(this.step)).toFixed(1)
-
-      if (newValue <= this.max) {
-        this.value = newValue
-      }
-    },
-    decreaseValue() {
-      const newValue = Number(Number(this.value) - Number(this.step)).toFixed(1)
-
-      if (newValue >= this.min) {
-        this.value = newValue
-      }
-    }
-  }
 }
 </script>
 

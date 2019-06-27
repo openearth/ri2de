@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.prevent="calculateTotals">
     <ul class="hazards-list">
       <li
         v-for="(hazard, hazardIndex) in hazards"
@@ -78,7 +78,6 @@
     <button
       :disabled="calculatingSusceptibilityLayers || errorCalculatingSusceptibilityLayers"
       class="button button--primary button--full-width"
-      @click="calculateTotals"
     >
       Calculate: {{ activeHazardTitle }}
     </button>
@@ -93,7 +92,7 @@
         type="error"
       />
     </portal>
-  </div>
+  </form>
 </template>
 
 <script>
