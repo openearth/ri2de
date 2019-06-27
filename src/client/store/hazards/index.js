@@ -85,7 +85,11 @@ export const actions = {
     commit('setSusceptibilityFactors',
     state.susceptibilityFactors.length
         ? state.susceptibilityFactors
-        : hazardsList.map(({ layers }) => layers.map(layer => ({ ...layer, weightFactor: 1, visible: false })) )
+        : hazardsList.map(
+          ({ layers }) => layers.map(
+            (layer, index) => ({ ...layer, weightFactor: 1, visible: index === 0 ? true : false  })
+          )
+        )
     )
   },
   async addSusceptibilityFactor({ commit }, newLayer) {
