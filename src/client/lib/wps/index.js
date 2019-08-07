@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { xmlRequestTemplate } from './template'
 
-export default function({ functionId, requestData, polygon, roadsIdentifier, filterData, cswUrls, bufferDist, segmentLength }) {
-  const template = xmlRequestTemplate({ functionId, requestData, polygon, roadsIdentifier, filterData, cswUrls, bufferDist, segmentLength })
+export default function({ functionId, requestData, polygon, roadsIdentifier, filterData, cswUrls }) {
+  const template = xmlRequestTemplate({ functionId, requestData, polygon, roadsIdentifier, filterData, cswUrls })
   return axios({
     method: 'post',
     url: 'https://ri2de.openearth.eu/wps',
@@ -16,4 +16,3 @@ export default function({ functionId, requestData, polygon, roadsIdentifier, fil
     })
 }
 
-//url: 'https://ri2de.openearth.eu/wps',
