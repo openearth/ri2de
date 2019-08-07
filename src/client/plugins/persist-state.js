@@ -11,7 +11,6 @@ export default ({ store }) => {
         'hazards',
         'mapbox.features',
         'mapbox.selections',
-        'results'
       ],
   })(store)
 }

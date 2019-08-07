@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters  } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 import { generateWmsLayer } from '../../lib/project-layers'
 import initMapState from '../../lib/mixins/init-map-state'
@@ -45,25 +45,21 @@ export default {
     this.$store.commit('susceptibility-layers/resetTotalsLayers')
   },
   mounted() {
-    
     this.$store.dispatch('mapbox/wms/resetLayers')
-        
+
     if(Object.keys(this.layersPerSelection).length) {
       this.$store.commit('setActivePage', 'results')
       this.calculateTotals()
-      
     } else {
       this.$router.replace({ path: '/susceptibilities' })
     }
   },
   methods: {
     async calculateTotals() {
-      
       const selectionsToRequest = Object.keys(this.layersPerSelection).map(key => {
         return {
           layers: this.layersPerSelection[key],
           roadsIdentifier: this.selectionsToRoadIds[key]
-          
         }
       })
       .map(selections => {
@@ -80,31 +76,27 @@ export default {
       })
 
       try {
-        const totals = await Promise.all(selectionsToRequest.map(async selection => {
-          const layers = selection.layers.map( layer => ({ ...layer, layername: layer.layer, owsurl: layer.url }))
-          const {baseUrl, layerName, style} = await wps({
+        const totals = await Promise.all(selectionsToRequest.map(selection => {
+          const layers = selection.layers.map(layer => ({ ...layer, layername: layer.layer, owsurl: layer.url }))
+          return wps({
             functionId: 'ri2de_calc_total',
             requestData: layers,
             roadsIdentifier: selection.roadsIdentifier
           })
-          const layerObject = {
-             url:baseUrl,
-             layer: layerName,
-             id: layerName,
-             style,
-             roadsId:selection.roadsIdentifier
-
-           }
-          return layerObject
         }))
-        
-        totals.forEach(total => {
-          
-          const wmsLayer = generateWmsLayer(total)
-          this.$store.dispatch('mapbox/wms/add', wmsLayer)
-          this.$store.commit('susceptibility-layers/addTotalsLayer', total)
-          this.$store.commit('susceptibility-layers/addLayersForRisk',total)
 
+        totals.forEach(total => {
+          const { baseUrl, layerName, style } = total
+          const layerObject = {
+            url: baseUrl,
+            layer: layerName,
+            id: layerName,
+            style,
+          }
+
+          const wmsLayer = generateWmsLayer(layerObject)
+          this.$store.dispatch('mapbox/wms/add', wmsLayer)
+          this.$store.commit('susceptibility-layers/addTotalsLayer', layerObject)
         })
       } catch(e) {
         this.errorMessage = 'Error fetching the total susceptibility maps, reload and try again'

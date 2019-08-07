@@ -6,8 +6,6 @@ export const state = () => ({
   completed: {
     infrastructure: false,
     hazards: false,
-    
-
   }
 })
 
@@ -69,7 +67,6 @@ export const actions = {
     dispatch('mapbox/selections/reset')
     dispatch('mapbox/moveMapToCenter')
     dispatch('susceptibility-layers/reset')
-    dispatch('mapbox/features/resetRiskFeatures')
     commit('hazards/reset')
   }
 }
