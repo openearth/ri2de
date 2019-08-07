@@ -14,6 +14,7 @@
         :bg-style="options.bgStyle"
         :min="min"
         :max="max"
+        :interval="interval"
         tooltip="always"
       />
     </div>
@@ -41,6 +42,11 @@ export default {
       type: Number,
       required: true
     },
+    interval:{
+      type: Number,
+      required:true
+    },
+    
   },
   data() {
     return {
@@ -64,7 +70,7 @@ export default {
   },
   watch: {
     val: debounce(function(value) {
-      this.$emit('updateClasses', [this.min, value[0], value[1], this.max])
+      this.$emit("updateClasses", [this.min, value[0], value[1], this.max])
     }, 1000)
   },
 }
