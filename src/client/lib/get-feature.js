@@ -3,7 +3,8 @@ import wps from './wps'
 export default function(polygon) {
   return wps({
     functionId: 'ri2de_calc_roads',
-    polygon
+    polygon,
+    bufferDist: '100'
   })
     .then(data => {
       return data.errMsg
