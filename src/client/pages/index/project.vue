@@ -80,7 +80,7 @@ export default {
             setTimeout(() => { this.errorMessage = undefined }, 4000)
             return
           }
-          
+
           this.$store.dispatch('mapbox/features/add', layers.geojson.line({
             id: selectionId,
             data: featureCollection,
