@@ -4,6 +4,10 @@ export const state = () => ({
   hazards: [],
   selectedHazardIndex: 0,
   susceptibilityFactors: [],
+  bufferDist:50,
+  segmentLength:500,
+  riskClasses:[0,0.2,0.7,3]
+
 })
 
 export const mutations = {
@@ -18,6 +22,15 @@ export const mutations = {
   },
   setHazards(state, hazards) {
     state.hazards = hazards
+  },
+  updateBufferDist(state, bufferDist) {
+    state.bufferDist = Number(bufferDist)
+  },
+  updateSegmentLength(state, segmentLength){
+    state.segmentLength = Number(segmentLength)
+  },
+  updateRiskClasses(state, riskclasses){
+    state.riskClasses = riskclasses
   },
   addSusceptibilityFactorForCurrentHazard(state, susceptibilityFactor) {
     const newFactors = [ ...state.susceptibilityFactors ]
@@ -58,6 +71,7 @@ export const mutations = {
     state.susceptibilityFactors = newFactors
 
   },
+  
   reset(state) {
     state.selectedHazardIndex = 0
     state.susceptibilityFactors = state.susceptibilityFactors.map(susceptibilityFactor =>
