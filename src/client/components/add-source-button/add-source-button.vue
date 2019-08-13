@@ -56,7 +56,7 @@ export default{
     required:true
    },
    csw:{
-     type:String,
+     type:Array,
     required:true
    },
   },
@@ -82,7 +82,9 @@ export default{
           keywords: keyword_array,
         },
         roadsIdentifier:identifier,
-        cswUrls:cswUrls
+        cswUrls:{
+          csw: cswUrls
+        }
       })
 
       this.records = wpsResponse
