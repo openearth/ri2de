@@ -4,9 +4,9 @@ export const state = () => ({
   hazards: [],
   selectedHazardIndex: 0,
   susceptibilityFactors: [],
-  bufferDist:50,
-  segmentLength:500,
-  riskClasses:[0,0.2,0.7,3]
+  bufferDist:120,
+  segmentLength:1000,
+  riskClasses:[0,1.5,2,3]
 
 })
 
