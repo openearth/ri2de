@@ -1,31 +1,30 @@
 <template>
-  <div class="translate-to-risk">        
-    <risk-slider
-      :value="bufferdist"
-      :min="50"
-      :max="250"
-      label="Buffer"
-      name="updateBufferDist"
-      @updateBufferDist="(buffer) => $emit('updateBufferDist', buffer)"
-    />
-    <risk-slider
-      :value="segmentlength"
-      :min="500"
-      :max="2000"
-      label="Segment length"
-      name="updateSegmentLength"
-      @updateSegmentLength="(length) => $emit('updateSegmentLength', length)"
-    />
-    
-    <div>
+  <div class="translate-to-risk">
+    <form @submit.prevent>
+      <risk-slider
+        :value="bufferdist"
+        :min="50"
+        :max="250"
+        label="Buffer"
+        name="updateBufferDist"
+        @updateBufferDist="(buffer) => $emit('updateBufferDist', buffer)"
+      />
+      <risk-slider
+        :value="segmentlength"
+        :min="500"
+        :max="2000"
+        label="Segment length"
+        name="updateSegmentLength"
+        @updateSegmentLength="(length) => $emit('updateSegmentLength', length)"
+      />
+
       <button
         class="button button--primary button--full-width"
         @click="wpsTranslateToRisk"
       >
         Translate to Risk
       </button>
-      
-    </div>
+    </form>
   </div>
 </template>
   
@@ -67,6 +66,12 @@ export default {
   } 
 }
 </script>
+
+<style>
+  .translate-to-risk {
+    padding-top: 16px;
+  }
+</style>
   
 
  
