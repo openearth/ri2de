@@ -7,7 +7,6 @@ export const state = () => ({
   bufferDist:120,
   segmentLength:1000,
   riskClasses:[0,1.5,2,3]
-
 })
 
 export const mutations = {

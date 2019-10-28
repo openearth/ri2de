@@ -87,7 +87,7 @@ export default {
             requestData: layers,
             roadsIdentifier: selection.roadsIdentifier
           })
-          
+
           const layerObject = {
             url: baseUrl,
             layer: layerName,
@@ -100,12 +100,10 @@ export default {
         }))
         
         totals.forEach(total => {
-          
           const wmsLayer = generateWmsLayer(total)
           this.$store.dispatch('mapbox/wms/add', wmsLayer)
           this.$store.commit('susceptibility-layers/addTotalsLayer', total)
           this.$store.commit('susceptibility-layers/addLayersForRisk',total)
-
         })
       } catch(e) {
         this.errorMessage = 'Error fetching the total susceptibility maps, reload and try again'

@@ -193,19 +193,14 @@ export default {
     },
     onUpdateBufferDist(buffer) {
       this.updateBufferDist(buffer)
-      
     },
     onUpdateSegmentLength(segment) {
       this.updateSegmentLength(segment)
-      
     },
     onUpdateRiskClasses(classes) {
-      
       this.updateRiskClasses(classes) 
       this.$store.dispatch('mapbox/features/updateRiskFeatures',classes)  
     },
-    
-
     selectCard(title) {
       switch (title) {
         case 'Infrastructure':

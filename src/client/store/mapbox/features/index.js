@@ -17,7 +17,6 @@ export const mutations = {
     if(!state.riskFeatures.some(storedFeature => storedFeature.id == features.id)) {
       state.riskFeatures = [ ...state.riskFeatures, features ]
     }
- 
   },
   updateRiskFeatures(state, classes){
     if (state.riskFeatures.length) {
@@ -31,14 +30,11 @@ export const mutations = {
               riskfeature.properties.color ="#fff565"
             } else {
               riskfeature.properties.color ="#ff0000"
-            } 
-  
-          })     
+            }
+          })
           return feature})
-       
-      state.riskFeatures = newfeatures 
-    }  
-     
+      state.riskFeatures = newfeatures
+    }
   },
   
   addEventHandler(state, { id, event, handler }) {
@@ -97,7 +93,6 @@ export const actions = {
         map.removeLayer(feature.id)
         map.removeSource(feature.id)
         map.addLayer(feature)
-        
       }
     })
     },
