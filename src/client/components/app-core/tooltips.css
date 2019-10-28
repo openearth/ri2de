@@ -1,0 +1,34 @@
+.mapboxgl-ctrl-group {
+  overflow: initial !important; /* Override or tooltip doesn't show */
+}
+
+.control-tooltip {
+  position: relative;
+}
+
+.control-tooltip::after {
+  display: none;
+  content: attr(title);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--text-color);
+  color: #fff;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  white-space: nowrap;
+}
+
+.control-tooltip--left::after {
+  right: calc(100% + 10px);
+}
+
+.control-tooltip--right::after {
+  left: calc(100% + 10px);
+}
+
+.control-tooltip:hover::after {
+  display: block;
+}

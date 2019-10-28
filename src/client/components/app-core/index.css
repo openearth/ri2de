@@ -4,6 +4,7 @@
 @import './mapbox-draw.css';
 @import './material-override.css';
 @import './buttons.css';
+@import './tooltips.css';
 
 body {
   margin: 0;

@@ -21,7 +21,7 @@
       </div>
 
       <md-dialog-content>
-Ri2de is a webGIS toolkit based on global road datasets [OpenStreetMap] in combination with raster data to calculate road susceptibility [slope, distance to water among others]. The tool is designed to be flexible and configurable to be adapted to every country's road infrastructure evaluation needs.
+        Ri2de is a webGIS toolkit based on global road datasets [OpenStreetMap] in combination with raster data to calculate road susceptibility [slope, distance to water among others]. The tool is designed to be flexible and configurable to be adapted to every country's road infrastructure evaluation needs.
       </md-dialog-content>
 
       <div class="page-index__actions">
