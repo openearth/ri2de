@@ -45,9 +45,9 @@ export default {
     this.$store.commit('susceptibility-layers/resetTotalsLayers')
   },
   mounted() {
-    
+
     this.$store.dispatch('mapbox/wms/resetLayers')
-        
+
     if(Object.keys(this.layersPerSelection).length) {
       this.$store.commit('setActivePage', 'results')
       this.calculateTotals()
@@ -87,14 +87,15 @@ export default {
             requestData: layers,
             roadsIdentifier: selection.roadsIdentifier
           })
+          
           const layerObject = {
-             url:baseUrl,
-             layer: layerName,
-             id: layerName,
-             style,
-             roadsId:selection.roadsIdentifier
+            url: baseUrl,
+            layer: layerName,
+            id: layerName,
+            style,
+            roadsId: selection.roadsIdentifier
+          }
 
-           }
           return layerObject
         }))
         
