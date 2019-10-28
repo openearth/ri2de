@@ -68,13 +68,12 @@
         </content-card> 
         
         <div v-if="activePage ==='classifyrisk'">
-          <p class="md-subheading"> Classify the risk </p>
-          <div>
-            <risk-class
-              :riskclasses="riskClasses"
-              @updateRiskClasses="onUpdateRiskClasses"              
-            />
-          </div>
+          <p class="md-title">Results for totals of {{ activeHazardTitle }}</p>
+          <p class="md-subheading">Classify the risk:</p>
+          <risk-class
+            :riskclasses="riskClasses"
+            @updateRiskClasses="onUpdateRiskClasses"              
+          />
         </div>             
       </div>
       <nuxt-child/>
