@@ -81,6 +81,7 @@
       </li>
     </ul>
     <button
+      v-if="hasActiveHazard"
       :disabled="calculatingSusceptibilityLayers || errorCalculatingSusceptibilityLayers"
       class="button button--primary button--full-width"
     >
@@ -144,10 +145,13 @@ export default {
     ...mapState('susceptibility-layers', [ 'layersPerSelection' ]),
     ...mapGetters('mapbox/selections', [ 'selectionsToRoadIds' ]),
     ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
+    hasActiveHazard() {
+      return this.selectedHazardIndex !== null
+    },
     activeHazardTitle() {
       const activeHazard = this.hazards[this.selectedHazardIndex]
       return activeHazard ? activeHazard.title : ''
-    }
+    },
   },
   async mounted() {
     this.getSelectionLayers()
@@ -167,9 +171,9 @@ export default {
       this.$router.push({ path: '/results' })
     },
     onHazardClick(index) {
-      if (index === this.selectedHazardIndex) { return }
+      const emitValue = index === this.selectedHazardIndex ? null : index
 
-      this.$emit('select', index)
+      this.$emit('select', emitValue)
       this.selectedFactorIndex = 0
       this.getSelectionLayers()
       this.showCurrentLayer()
@@ -218,24 +222,26 @@ export default {
       this.isLoadingLayer = false
     },
     async showCurrentLayer() {
-      const factorIndex = this.selectedFactorIndex
+      if (this.currentSusceptibilityFactors) {
+        const factorIndex = this.selectedFactorIndex
 
-      this.currentSusceptibilityFactors.forEach((factor, index) => {
-        const active = factorIndex === index
+        this.currentSusceptibilityFactors.forEach((factor, index) => {
+          const active = factorIndex === index
 
-        this.$store.commit('hazards/updateFactorVisibility', {
-          hazardIndex: this.selectedHazardIndex, index, visible: active
-        })
-
-        if(factor.factorLayers) {
-          factor.factorLayers.forEach(layer => {
-            this.$store.dispatch('mapbox/wms/setOpacity', {
-              id: layer,
-              opacity: active ? 1 : 0
-            })
+          this.$store.commit('hazards/updateFactorVisibility', {
+            hazardIndex: this.selectedHazardIndex, index, visible: active
           })
-        }
-      })
+
+          if(factor.factorLayers) {
+            factor.factorLayers.forEach(layer => {
+              this.$store.dispatch('mapbox/wms/setOpacity', {
+                id: layer,
+                opacity: active ? 1 : 0
+              })
+            })
+          }
+        })
+      }
     },
     getSelectionLayers() {
       const hazardIndex = this.selectedHazardIndex
@@ -275,6 +281,9 @@ export default {
             this.calculatingSusceptibilityLayers = false
           }
         })
+      }
+      else {
+        this.calculatingSusceptibilityLayers = false
       }
     },
   }
@@ -344,4 +353,3 @@ export default {
   display: flex;
 }
 </style>
-

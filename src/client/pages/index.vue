@@ -5,12 +5,12 @@
         <!-- Content Card for Infrastucture -->
         <content-card
           :is-expanded="activePage === 'index'"
-          :is-completed="Boolean(selections.length)"
+          :is-completed="hasActiveSelection"
           title="Infrastructure"
           @selectCard="selectCard"
         >
           <div
-            v-if="selections.length"
+            v-if="hasActiveSelection"
             slot="info"
           >
             {{ `${selections.length} selected area${selections.length > 1 ? 's' : ''}` }}
@@ -25,7 +25,7 @@
           />
           <md-button
             slot="actions"
-            :disabled="selections.length === 0"
+            :disabled="!hasActiveSelection"
             class="md-raised md-accent button--full-width"
             @click="completeInfrastructure"
           >
@@ -36,12 +36,13 @@
         <!-- Content Card for Hazards -->
         <content-card
           :is-expanded="activePage === 'hazards'"
-          :is-completed="Boolean(selections.length)"
+          :is-completed="hasActiveHazard"
+          :is-use-allowed="hasActiveSelection"
           title="Hazards"
           @selectCard="selectCard"
         >
           <div
-            v-if="activeHazardTitle.length"
+            v-if="hasActiveHazard"
             slot="info"
           >
             {{ activeHazardTitle }}
@@ -95,6 +96,12 @@ export default {
         highlight: INFRASTRUCTURE_HIGHLIGHT_COLOR,
       }
     },
+    hasActiveSelection() {
+      return !!this.selections.length
+    },
+    hasActiveHazard() {
+      return this.selectedHazardIndex !== null
+    },
     activeHazardTitle() {
       const activeHazard = this.hazards[this.selectedHazardIndex]
       return activeHazard ? activeHazard.title : ''
@@ -113,7 +120,7 @@ export default {
       addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
     }),
     completeInfrastructure() {
-      if(this.selections.length) {
+      if(this.hasActiveSelection) {
         this.$router.push({ path: '/hazards' })
       }
     },
