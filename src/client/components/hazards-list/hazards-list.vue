@@ -240,10 +240,9 @@ export default {
     },
     getSelectionLayers() {
       this.$store.dispatch('mapbox/wms/resetLayers')
+      this.calculatingSusceptibilityLayers = true
 
       if (this.currentSusceptibilityFactors) {
-        this.calculatingSusceptibilityLayers = true
-
         this.currentSusceptibilityFactors.forEach(async (factor, index) => {
           const factorLayers = this.selections.map(async selection => {
             const customFactorLayer = await selectionToCustomFactorLayer({ polygon: selection.polygon, factor, identifier: selection.identifier })
@@ -272,10 +271,13 @@ export default {
             console.log('Error: ', e)
           }
 
-          if(index === this.currentSusceptibilityFactors.length - 1) {
+          if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
             this.calculatingSusceptibilityLayers = false
           }
         })
+      }
+      else {
+        this.calculatingSusceptibilityLayers = false
       }
     },
   }

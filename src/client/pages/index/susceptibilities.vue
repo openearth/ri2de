@@ -68,9 +68,9 @@ export default {
       this.$router.push({ path: '/results' })
     },
     getSelectionLayers() {
-      if(this.currentSusceptibilityFactors) {
-        this.calculatingSusceptibilityLayers = true
+      this.calculatingSusceptibilityLayers = true
 
+      if(this.currentSusceptibilityFactors) {
         this.currentSusceptibilityFactors.forEach(async (factor, index) => {
           const factorLayers = this.selections.map(async selection => {
             const customFactorLayer = await selectionToCustomFactorLayer({ polygon: selection.polygon, factor, identifier: selection.identifier })
@@ -101,10 +101,13 @@ export default {
             this.errorCalculatingSusceptibilityLayers = true
             console.log('Error: ', e)
           }
-          if(index === this.currentSusceptibilityFactors.length - 1) {
+          if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
             this.calculatingSusceptibilityLayers = false
           }
         })
+      }
+      else {
+        this.calculatingSusceptibilityLayers = false
       }
     },
     initMapState() {
