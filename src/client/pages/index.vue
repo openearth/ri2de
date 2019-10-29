@@ -2,6 +2,7 @@
   <portal to="side-panel">
     <div>
       <div class="selection-steps">
+        <!-- Content Card for Infrastucture -->
         <content-card
           :is-expanded="activePage === 'index'"
           :is-completed="Boolean(selections.length)"
@@ -11,7 +12,6 @@
           <div
             v-if="selections.length"
             slot="info"
-            class="content-card__header__info"
           >
             {{ `${selections.length} selected area${selections.length > 1 ? 's' : ''}` }}
           </div>
@@ -32,12 +32,20 @@
             Next
           </md-button>
         </content-card>
+
+        <!-- Content Card for Hazards -->
         <content-card
           :is-expanded="activePage === 'hazards'"
           :is-completed="Boolean(selections.length)"
           title="Hazards"
           @selectCard="selectCard"
         >
+          <div
+            v-if="activeHazardTitle.length"
+            slot="info"
+          >
+            {{ activeHazardTitle }}
+          </div>
           <hazards-list
             slot="content"
             :hazards="hazards"
