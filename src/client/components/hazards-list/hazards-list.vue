@@ -121,11 +121,6 @@ export default {
       type: Array,
       required: true,
     },
-    initialSelection: {
-      type: Number,
-      required: false,
-      default: undefined
-    }
   },
   data() {
     return {
@@ -141,7 +136,7 @@ export default {
   },
   computed: {
     ...mapState('mapbox/selections', [ 'selections' ]),
-    ...mapState('hazards', [ 'susceptibilityFactors', 'selectedHazardIndex', 'currentSusceptibilityFactors' ]),
+    ...mapState('hazards', [ 'susceptibilityFactors', 'selectedHazardIndex' ]),
     ...mapState('susceptibility-layers', [ 'layersPerSelection' ]),
     ...mapGetters('mapbox/selections', [ 'selectionsToRoadIds' ]),
     ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
@@ -244,12 +239,11 @@ export default {
       }
     },
     getSelectionLayers() {
-      const hazardIndex = this.selectedHazardIndex
-      this.calculatingSusceptibilityLayers = true
-
       this.$store.dispatch('mapbox/wms/resetLayers')
 
       if (this.currentSusceptibilityFactors) {
+        this.calculatingSusceptibilityLayers = true
+
         this.currentSusceptibilityFactors.forEach(async (factor, index) => {
           const factorLayers = this.selections.map(async selection => {
             const customFactorLayer = await selectionToCustomFactorLayer({ polygon: selection.polygon, factor, identifier: selection.identifier })
@@ -268,6 +262,7 @@ export default {
           })
 
           try {
+            const hazardIndex = this.selectedHazardIndex
             this.$store.commit('hazards/updateFactorLayers', {
               index, hazardIndex, factorLayers: await Promise.all(factorLayers)
             })
@@ -277,13 +272,10 @@ export default {
             console.log('Error: ', e)
           }
 
-          if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
+          if(index === this.currentSusceptibilityFactors.length - 1) {
             this.calculatingSusceptibilityLayers = false
           }
         })
-      }
-      else {
-        this.calculatingSusceptibilityLayers = false
       }
     },
   }

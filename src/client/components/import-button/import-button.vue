@@ -23,7 +23,6 @@ export default {
   },
   computed: {
     ...mapState('mapbox/selections', [ 'selections' ]),
-    ...mapState('hazards', [ 'selectedHazardIndex' ]),
   },
   methods: {
     ...mapActions({

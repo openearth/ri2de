@@ -50,7 +50,6 @@
           <hazards-list
             slot="content"
             :hazards="hazards"
-            :initial-selection="selectedHazardIndex"
             @select="selectHazard"
             @setWeightFactor="onSetWeightFactor"
             @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
@@ -124,6 +123,7 @@ export default {
         this.$router.push({ path: '/hazards' })
       }
     },
+    // @REFACTOR :: Is this computed prop needed in the deploy--51 or is this redundant?
     completeHazards() {
       if(typeof this.selectedHazardIndex !== 'undefined' && this.selectedHazardIndex >= 0) {
         this.$router.push({ path: '/susceptibilities' })
