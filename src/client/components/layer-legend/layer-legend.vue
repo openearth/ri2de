@@ -7,6 +7,7 @@
       class="layer-legend__item"
     >
       <input
+        v-if="classes && (classes.length === 4)"
         :disabled="index === 0"
         :value="classes[index]"
         :min="classes[index - 1]"
@@ -19,7 +20,8 @@
         :style="`background-color: ${item.color}`"
         class="layer-legend__square"
       />
-      <input 
+      <input
+        v-if="classes && (classes.length === 4)"
         :value="classes[index + 1]"
         :disabled="index === legend.length - 1"
         :min="classes[index]"
@@ -28,7 +30,7 @@
         class="layer-legend__input"
         @input="onChange($event, index)"
       >
-      <span class="md-body">{{ item.label }}</span>
+      <span class="layer-legend__label md-body">{{ item.label }}</span>
     </div>
   </div>
 </template>
@@ -56,17 +58,27 @@ export default {
       ]
     }
   },
+  watch: {
+    classes(val) {
+      console.log(val);
+    }
+  },
   methods: {
     onChange: debounce(function(e, index) {
       const value = Number(e.target.value)
       const { min, max } = e.target
 
-      this.legend[index].value = value
-      const classes = [this.classes[0], ...this.legend.map(item => item.value)].sort((a, b) => a - b)
-      // sort classes from low to high so values in array are not higher then their predecessors
-      const sortedClasses = classes.sort((a, b) => a - b)
+      if (value >= min, value <= max) {
+        this.legend[index].value = value
+        const classes = [this.classes[0], ...this.legend.map(item => item.value)].sort((a, b) => a - b)
+        // sort classes from low to high so values in array are not higher then their predecessors
+        const sortedClasses = classes.sort((a, b) => a - b)
+        this.$emit('updateClasses', sortedClasses)
+      } else {
+        // when number is too high/low reset the component so the right props get rendered
+        this.$forceUpdate()
+      }
 
-      this.$emit('updateClasses', sortedClasses)
     }, 1000)
   }
 }
@@ -80,13 +92,19 @@ export default {
 }
 
 .layer-legend__square {
-  width: 20px;
-  height: 20px;
-  margin-right: var(--spacing-half);
+  width: 40px;
+  height: 28px;
+  margin: 0 var(--spacing-half);
 }
 
-.layer-legend__input {
-  width: 2rem;
-  border: 1px solid black;
+.layer-legend__label {
+  margin-left: var(--spacing-half);
+}
+
+.layer-legend__input[type="number"] {
+  border: 1px solid #ededed;
+  width: 3.5rem;
+  font-size: 1rem;
+  padding: 0.25rem;
 }
 </style>
