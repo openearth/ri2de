@@ -50,12 +50,11 @@
         </content-card>
 
         <content-card
-          :is-expanded="activePage ==='results'"
-          :is-completed="Boolean(selections.length)"
+          :is-expanded="activePage === 'results'"
+          :is-completed="activePage === 'results' || activePage === 'classifyrisk'"
           title="Translate to risk"
           @selectCard="selectCard"
         >
-          
           <translate-to-risk
             slot="content"
             :bufferdist="bufferDist"
