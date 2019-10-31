@@ -17,7 +17,9 @@
       />
 
       <layer-legend
+        :classes="factor.classes"
         class="susceptibility-settings__layer-legend"
+        @updateClasses="onUpdateClasses"
       />
       <add-source-button
         v-if="factor.keywords && factor.keywords.length"

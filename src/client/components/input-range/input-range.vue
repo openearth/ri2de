@@ -6,7 +6,7 @@
 
     <div class="input-range__input">
       <vue-slider
-        v-model="val"
+        :value="value"
         :width="options.width"
         :height="options.height"
         :process="showLegendColors ? options.process : false"
@@ -16,6 +16,7 @@
         :max="max"
         :class="{ 'input-range__slider--show-colors': showLegendColors }"
         tooltip="always"
+        @change="onInput"
       />
     </div>
   </div>
@@ -71,11 +72,11 @@ export default {
       },
     }
   },
-  watch: {
-    val: debounce(function(value) {
+  methods: {
+    onInput: debounce(function(value) {
       this.$emit('updateClasses', [this.min, value[0], value[1], this.max])
     }, 1000)
-  },
+  }
 }
 </script>
 
