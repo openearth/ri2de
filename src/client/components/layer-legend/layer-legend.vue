@@ -58,11 +58,6 @@ export default {
       ]
     }
   },
-  watch: {
-    classes(val) {
-      console.log(val);
-    }
-  },
   methods: {
     onChange: debounce(function(e, index) {
       const value = Number(e.target.value)
