@@ -12,6 +12,7 @@
         :min="factor.classes[0]"
         :max="factor.classes[3]"
         label="Classes"
+        show-legend-colors
         @updateClasses="onUpdateClasses"
       />
 

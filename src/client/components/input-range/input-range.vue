@@ -9,11 +9,12 @@
         v-model="val"
         :width="options.width"
         :height="options.height"
+        :process="showLegendColors ? options.process : false"
         :tooltip-style="options.tooltipStyle"
         :process-style="options.processStyle"
-        :bg-style="options.bgStyle"
         :min="min"
         :max="max"
+        :class="{ 'input-range__slider--show-colors': showLegendColors }"
         tooltip="always"
       />
     </div>
@@ -41,6 +42,10 @@ export default {
       type: Number,
       required: true
     },
+    showLegendColors: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -53,6 +58,10 @@ export default {
           "backgroundColor": "#008FC5",
           "borderColor": "#008FC5",
         },
+        process: dotsPos => [
+          [0, dotsPos[0], { backgroundColor: '#2a7221' }],
+          [dotsPos[0], dotsPos[1], { backgroundColor: '#ffce4b' }]
+        ],
         processStyle: {
           "backgroundColor": "#ccc",
         },
@@ -78,5 +87,9 @@ export default {
 .input-range__range {
   flex-grow: 1;
   margin-right: var(--spacing-default);
+}
+
+.input-range__slider--show-colors .vue-slider-rail {
+  background-color: #df2935;
 }
 </style>
