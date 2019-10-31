@@ -5,7 +5,7 @@
   >
     <md-card-header
       class="content-card__header"
-      @click.native="$emit('selectCard', title)"
+      @click.native="onClick(title)"
     >
       <div class="md-body-2">{{ title }}</div>
       <slot
@@ -55,6 +55,13 @@ export default {
       default: false,
     },
   },
+  methods: {
+    onClick(title) {
+      if (this.isCompleted) (
+        this.$emit('selectCard', title)
+      )
+    }
+  }
 }
 </script>
 
