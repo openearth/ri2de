@@ -40,10 +40,6 @@ import debounce from 'lodash.debounce'
 import { INPUT_UPDATE_INTERVAL } from '../../lib/constants'
 
 export default {
-  model: {
-    prop: 'value',
-    event: 'change'
-  },
   props: {
     classes: {
       type: Array,
