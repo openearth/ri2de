@@ -1,23 +1,24 @@
 <template>
-  <div class="input-range">
-    <span class="md-subheader md-theme-default">
+  <div class="risk-slider">
+    <label
+      :for="name"
+      class="risk-slider__label md-theme-default"
+    >
       {{ label }}
-    </span>
+    </label>
 
-    <div class="input-range__input">
+    <div class="risk-slider__input">
       <vue-slider
-        :value="value"
+        v-model="val"
         :width="options.width"
         :height="options.height"
-        :process="showLegendColors ? options.process : false"
         :tooltip-style="options.tooltipStyle"
         :process-style="options.processStyle"
+        :bg-style="options.bgStyle"
         :min="min"
         :max="max"
-        :class="{ 'input-range__slider--show-colors': showLegendColors }"
-        :interval="interval"
+        :id="name"
         tooltip="always"
-        @change="onInput"
       />
     </div>
   </div>
@@ -34,7 +35,7 @@ export default {
       required: true,
     },
     value: {
-      type: Array,
+      type: Number,
       required: true,
     },
     min: {
@@ -43,15 +44,11 @@ export default {
     },
     max: {
       type: Number,
-      required: true
+      required: true,
     },
-    showLegendColors: {
-      type: Boolean,
-      default: false
-    },
-    interval:{
-      type: Number,
-      required:true
+    name: {
+      type: String,
+      required: true,
     },
   },
   data() {
@@ -65,10 +62,6 @@ export default {
           "backgroundColor": "#008FC5",
           "borderColor": "#008FC5",
         },
-        process: dotsPos => [
-          [0, dotsPos[0], { backgroundColor: '#2a7221' }],
-          [dotsPos[0], dotsPos[1], { backgroundColor: '#ffce4b' }]
-        ],
         processStyle: {
           "backgroundColor": "#ccc",
         },
@@ -78,25 +71,30 @@ export default {
       },
     }
   },
-  methods: {
-    onInput: debounce(function(value) {
-      this.$emit('updateClasses', [this.min, value[0], value[1], this.max])
+  watch: {
+    val: debounce(function(value) {
+      this.$emit(this.name, value)
     }, INPUT_UPDATE_INTERVAL)
-  }
+  },
 }
 </script>
 
 <style>
-.input-range__input {
+.risk-slider {
+  margin-bottom: 16px;
+}
+
+.risk-slider__input {
   margin-top: 35px;
 }
 
-.input-range__range {
+.risk-slider__range {
   flex-grow: 1;
   margin-right: var(--spacing-default);
 }
 
-.input-range__slider--show-colors .vue-slider-rail {
-  background-color: #df2935;
+.risk-slider__label {
+  padding: 0 8px;
+  color: var(--md-theme-default-text-accent-on-background, rgba(0, 0, 0, 0.54));
 }
 </style>

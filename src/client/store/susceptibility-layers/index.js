@@ -1,7 +1,8 @@
 export const state = () => {
   return {
     layersPerSelection: {},
-    totalsLayers: []
+    totalsLayers: [],
+    LayersForRisk:[],
   }
 }
 
@@ -21,17 +22,30 @@ export const mutations = {
       layer
     ]
   },
+  addLayersForRisk(state, layer) {
+    state.LayersForRisk = [
+      ...state.LayersForRisk,
+      layer
+    ]
+
+  },
   resetLayersPerSelection(state) {
     state.layersPerSelection = {}
   },
   resetTotalsLayers(state) {
     state.totalsLayers = []
-  }
+  },
+  resetLayersForRisk(state){
+    state.LayersForRisk = []
+  },
 }
 
 export const actions = {
   reset({ commit }) {
     commit('resetLayersPerSelection')
     commit('resetTotalsLayers')
+  },
+  resetLayersForRisk({commit}){
+    commit('resetLayersForRisk')
   }
 }

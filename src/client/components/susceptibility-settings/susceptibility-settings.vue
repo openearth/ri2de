@@ -11,12 +11,16 @@
         :value="[factor.classes[1], factor.classes[2]]"
         :min="factor.classes[0]"
         :max="factor.classes[3]"
+        :interval="1"
         label="Classes"
+        show-legend-colors
         @updateClasses="onUpdateClasses"
       />
 
       <layer-legend
+        :classes="factor.classes"
         class="susceptibility-settings__layer-legend"
+        @updateClasses="onUpdateClasses"
       />
       <add-source-button
         v-if="factor.keywords && factor.keywords.length"
