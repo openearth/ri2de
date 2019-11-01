@@ -25,6 +25,7 @@
 
 <script>
 import debounce from 'lodash.debounce'
+import { INPUT_UPDATE_INTERVAL } from '../../lib/constants'
 
 export default {
   props: {
@@ -80,7 +81,7 @@ export default {
   methods: {
     onInput: debounce(function(value) {
       this.$emit('updateClasses', [this.min, value[0], value[1], this.max])
-    }, 1000)
+    }, INPUT_UPDATE_INTERVAL)
   }
 }
 </script>

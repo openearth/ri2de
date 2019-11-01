@@ -37,6 +37,7 @@
 
 <script>
 import debounce from 'lodash.debounce'
+import { INPUT_UPDATE_INTERVAL } from '../../lib/constants'
 
 export default {
   model: {
@@ -73,8 +74,7 @@ export default {
         // when number is too high/low reset the component so the right props get rendered
         this.$forceUpdate()
       }
-
-    }, 1000)
+    }, INPUT_UPDATE_INTERVAL)
   }
 }
 </script>
