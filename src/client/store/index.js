@@ -67,6 +67,7 @@ export const actions = {
     dispatch('mapbox/selections/reset')
     dispatch('mapbox/moveMapToCenter')
     dispatch('susceptibility-layers/reset')
+    dispatch('mapbox/features/resetRiskFeatures')
     commit('hazards/reset')
   }
 }

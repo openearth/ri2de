@@ -14,13 +14,22 @@
         </div>
 
         <md-dialog-content>
-          <div>
-            <records-list
-              :recordslist="records"
-              :openstate="open"
-              @updateFactorLayer="onUpdateFactorLayer"
+          <div
+            v-if="loading"
+            class="add-source__loader"
+          >
+            <md-progress-spinner
+              :md-diameter="30"
+              :md-stroke="3"
+              md-mode="indeterminate"
             />
           </div>
+          <records-list
+            v-else
+            :recordslist="records"
+            :openstate="open"
+            @updateFactorLayer="onUpdateFactorLayer"
+          />
         </md-dialog-content>
 
         <md-dialog-actions>
@@ -56,7 +65,7 @@ export default{
     required:true
    },
    csw:{
-     type:String,
+     type:Array,
     required:true
    },
   },
@@ -64,6 +73,7 @@ export default{
     return {
       open: false,
       records: [],
+      loading: false
     }
   },
   methods: {
@@ -76,15 +86,19 @@ export default{
       const keyword_array=this.keywords
       const identifier=this.roadsid
       const cswUrls=this.csw
+      this.loading = true
       const wpsResponse = await wps({
         functionId: "getrecords_url",
         filterData: {
           keywords: keyword_array,
         },
         roadsIdentifier:identifier,
-        cswUrls:cswUrls
+        cswUrls:{
+          csw: cswUrls
+        }
       })
 
+      this.loading = false
       this.records = wpsResponse
     },
     onUpdateFactorLayer(data){
@@ -101,12 +115,18 @@ export default{
   font-size: 16px;
   font-weight: bold;
   color:white;
-  text-align: center;
-  padding: 1rem;
+  padding: 1rem 0;
 }
 
 .add-source__actions {
   padding-top: 1rem;
+}
+
+.add-source__loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2rem;
 }
 </style>
 

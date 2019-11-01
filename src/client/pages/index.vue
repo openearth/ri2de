@@ -49,9 +49,31 @@
           />
         </content-card>
 
-        <div v-if="activePage === 'results'">
-          <p class="md-subheading">Results for totals of {{ activeHazardTitle }}</p>
-        </div>
+        <content-card
+          :is-expanded="activePage === 'results'"
+          :is-completed="activePage === 'results' || activePage === 'classifyrisk'"
+          title="Translate to risk"
+          @selectCard="selectCard"
+        >
+          <translate-to-risk
+            slot="content"
+            :bufferdist="bufferDist"
+            :segmentlength="segmentLength"
+            :vulnerabilitylayer="totalsLayers"
+            :selections="selections"
+            @updateBufferDist="onUpdateBufferDist"
+            @updateSegmentLength="onUpdateSegmentLength"            
+          />
+        </content-card> 
+        
+        <div v-if="activePage ==='classifyrisk'">
+          <p class="md-title">Results for totals of {{ activeHazardTitle }}</p>
+          <p class="md-subheading">Classify the risk:</p>
+          <risk-class
+            :riskclasses="riskClasses"
+            @updateRiskClasses="onUpdateRiskClasses"              
+          />
+        </div>             
       </div>
       <nuxt-child/>
     </div>
@@ -66,20 +88,20 @@ import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
 
-import { InfrastructureList, ContentCard, HazardsList, SusceptibilityList } from '../components'
+import { InfrastructureList, ContentCard, HazardsList, SusceptibilityList, TranslateToRisk, RiskClass } from '../components'
 
 const INFRASTRUCTURE_DEFAULT_COLOR = '#502D56'
 const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 
 export default {
-  components: { InfrastructureList, ContentCard, HazardsList, SusceptibilityList },
+  components: { InfrastructureList, ContentCard, HazardsList, SusceptibilityList, TranslateToRisk, RiskClass },
   mixins: [ initMapState ],
   computed: {
     ...mapState([ 'activePage' ]),
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
-    ...mapState('susceptibility-layers', [ 'totalsLayers' ]),
-    ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors' ]),
+    ...mapState('susceptibility-layers', [ 'totalsLayers', 'LayersForRisk' ]),
+    ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors', 'bufferDist', 'segmentLength', 'riskClasses' ]),
     ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
     infrastructureStyles() {
       return {
@@ -99,19 +121,26 @@ export default {
       updateWeightFactor: 'hazards/updateWeightFactor',
       updateClasses: 'hazards/updateClasses',
       updateFactorLayer:'hazards/updateFactorLayer',
+      updateBufferDist: 'hazards/updateBufferDist',
+      updateSegmentLength: 'hazards/updateSegmentLength',
+      updateRiskClasses: 'hazards/updateRiskClasses',
       addSusceptibilityFactorForCurrentHazard: 'hazards/addSusceptibilityFactorForCurrentHazard'
     }),
     ...mapActions({
       addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
     }),
     completeInfrastructure() {
+      
       if(this.selections.length) {
         this.$router.push({ path: '/hazards' })
+        
       }
     },
     completeHazards() {
+      
       if(typeof this.selectedHazardIndex !== 'undefined' && this.selectedHazardIndex >= 0) {
         this.$router.push({ path: '/susceptibilities' })
+        
       }
     },
     deleteInfrastructure(index) {
@@ -161,6 +190,16 @@ export default {
       })
       this.updateSusceptibilityLayers({ susceptibilityIndex: index })
     },
+    onUpdateBufferDist(buffer) {
+      this.updateBufferDist(buffer)
+    },
+    onUpdateSegmentLength(segment) {
+      this.updateSegmentLength(segment)
+    },
+    onUpdateRiskClasses(classes) {
+      this.updateRiskClasses(classes) 
+      this.$store.dispatch('mapbox/features/updateRiskFeatures',classes)  
+    },
     selectCard(title) {
       switch (title) {
         case 'Infrastructure':
@@ -170,7 +209,11 @@ export default {
         case 'Hazards':
           this.$router.push({ path: '/hazards' })
           break
-
+        
+        case 'Translate to risk':
+          this.$router.push({ path: '/results' })          
+          break
+          
         default:
           break
       }
@@ -181,7 +224,6 @@ export default {
 
       const customFactorLayers = await Promise.all(this.selections.map( async selection => {
         this.$store.dispatch('mapbox/wms/remove', `${selection.polygon.id}-${susceptibility.title}`)
-
         const customLayer = await selectionToCustomFactorLayer({ ...selection, factor: susceptibility })
         this.$store.dispatch('mapbox/wms/add', generateWmsLayer({
           ...customLayer,
