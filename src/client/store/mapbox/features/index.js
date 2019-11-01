@@ -4,6 +4,7 @@ import { featureCollection } from '@turf/helpers'
 export const state = () => ({
   eventHandlers: {},
   features: [],
+  riskFeatures:[],
 })
 
 export const mutations = {
@@ -12,6 +13,30 @@ export const mutations = {
       state.features = [ ...state.features, feature ]
     }
   },
+  addRiskFeatures(state, features){
+    if(!state.riskFeatures.some(storedFeature => storedFeature.id == features.id)) {
+      state.riskFeatures = [ ...state.riskFeatures, features ]
+    }
+  },
+  updateRiskFeatures(state, classes){
+    if (state.riskFeatures.length) {
+      const newfeatures = state.riskFeatures.map(feature =>{
+          
+          const riskfeatures = feature.source.data.features
+          riskfeatures.forEach(riskfeature => {
+            if (riskfeature.properties.mean >= classes[0] && riskfeature.properties.mean < classes[1]) { 
+              riskfeature.properties.color = "#89fa32"
+            } else if (riskfeature.properties.mean >= classes[1] && riskfeature.properties.mean < classes[2]) {
+              riskfeature.properties.color ="#fff565"
+            } else {
+              riskfeature.properties.color ="#ff0000"
+            }
+          })
+          return feature})
+      state.riskFeatures = newfeatures
+    }
+  },
+  
   addEventHandler(state, { id, event, handler }) {
     state.eventHandlers = {
       ...state.eventHandlers,
@@ -37,10 +62,40 @@ export const mutations = {
   },
   resetFeatures(state) {
     state.features = []
+  },
+  resetRiskFeatures(state){
+    state.riskFeatures = []
   }
 }
 
 export const actions = {
+  addRiskFeatures({ commit, rootGetters }, features){
+    const map = rootGetters['mapbox/map']
+    map.addLayer(features)
+    commit('addRiskFeatures', features)
+  },
+  resetRiskFeatures({ commit, state, rootGetters }) {
+    const map = rootGetters['mapbox/map']
+
+    state.riskFeatures.forEach(feature => {
+      map.removeLayer(feature.id)
+      map.removeSource(feature.id)
+    })
+    
+    commit('resetRiskFeatures')
+  },
+
+  updateRiskFeatures({commit, state, rootGetters}, classes) {
+    const map = rootGetters['mapbox/map']
+    commit('updateRiskFeatures', classes)
+    state.riskFeatures.forEach(feature => {
+     if(map.getLayer(feature.id)){
+        map.removeLayer(feature.id)
+        map.removeSource(feature.id)
+        map.addLayer(feature)
+      }
+    })
+    },
   add({ commit, rootGetters }, feature) {
     const map = rootGetters['mapbox/map']
 
@@ -108,4 +163,5 @@ export const actions = {
     map.off(event, featureId, state.eventHandlers[featureId][event])
     commit('removeEventHandler', { event, featureId })
   }
+  
 }

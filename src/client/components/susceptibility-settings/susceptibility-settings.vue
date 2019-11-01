@@ -11,6 +11,7 @@
         :value="[factor.classes[1], factor.classes[2]]"
         :min="factor.classes[0]"
         :max="factor.classes[3]"
+        :interval="1"
         label="Classes"
         show-legend-colors
         @updateClasses="onUpdateClasses"
