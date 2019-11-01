@@ -49,3 +49,5 @@ After installing dependencies using `npm install` the following scripts are avai
 ## License
 
 [GNU General Public License v3.0](license) (GNU GPLv3) © [Deltares](https://www.deltares.nl) and [De Voorhoede](https://www.voorhoede.nl)
+
+s
