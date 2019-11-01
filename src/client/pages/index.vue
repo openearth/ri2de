@@ -88,13 +88,13 @@ import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
 
-import { InfrastructureList, ContentCard, HazardsList, SusceptibilityList, TranslateToRisk, RiskClass } from '../components'
+import { InfrastructureList, ContentCard, HazardsList, TranslateToRisk, RiskClass } from '../components'
 
 const INFRASTRUCTURE_DEFAULT_COLOR = '#502D56'
 const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 
 export default {
-  components: { InfrastructureList, ContentCard, HazardsList, SusceptibilityList, TranslateToRisk, RiskClass },
+  components: { InfrastructureList, ContentCard, HazardsList, TranslateToRisk, RiskClass },
   mixins: [ initMapState ],
   computed: {
     ...mapState([ 'activePage' ]),
