@@ -6,7 +6,7 @@
   position: relative;
 }
 
-.control-tooltip::after {
+.control-tooltip::before {
   display: none;
   content: attr(title);
   position: absolute;
@@ -21,14 +21,14 @@
   white-space: nowrap;
 }
 
-.control-tooltip--left::after {
+.control-tooltip--left::before {
   right: calc(100% + 10px);
 }
 
-.control-tooltip--right::after {
+.control-tooltip--right::before {
   left: calc(100% + 10px);
 }
 
-.control-tooltip:hover::after {
+.control-tooltip:hover::before {
   display: block;
 }
