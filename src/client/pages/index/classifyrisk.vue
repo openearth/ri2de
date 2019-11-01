@@ -10,7 +10,7 @@
       type="error"
     />
   </portal>
-</template> 
+</template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'

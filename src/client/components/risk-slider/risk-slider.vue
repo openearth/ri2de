@@ -26,6 +26,7 @@
 
 <script>
 import debounce from 'lodash.debounce'
+import { INPUT_UPDATE_INTERVAL } from '../../lib/constants'
 
 export default {
   props: {
@@ -73,7 +74,7 @@ export default {
   watch: {
     val: debounce(function(value) {
       this.$emit(this.name, value)
-    }, 1000)
+    }, INPUT_UPDATE_INTERVAL)
   },
 }
 </script>

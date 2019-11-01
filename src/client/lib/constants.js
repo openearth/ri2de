@@ -1,0 +1,1 @@
+export const INPUT_UPDATE_INTERVAL = 500
