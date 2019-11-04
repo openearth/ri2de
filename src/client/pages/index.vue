@@ -113,6 +113,7 @@ export default {
     ...mapState('susceptibility-layers', [ 'totalsLayers', 'LayersForRisk' ]),
     ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors', 'bufferDist', 'segmentLength', 'riskClasses' ]),
     ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
+    ...mapGetters('mapbox', [ 'map' ]),
     infrastructureStyles() {
       return {
         default: INFRASTRUCTURE_DEFAULT_COLOR,
@@ -147,8 +148,8 @@ export default {
     }),
     completeInfrastructure() {
       if(this.hasActiveSelection) {
+        this.map.fire('fitbounds', undefined)
         this.$router.push({ path: '/hazards' })
-        
       }
     },
     // @REFACTOR :: Is this computed prop needed in the deploy--51 or is this redundant?
