@@ -22,6 +22,9 @@ export const mutations = {
   setHazards(state, hazards) {
     state.hazards = hazards
   },
+  addHazard(state, hazard) {
+    state.hazards.push(hazard)
+  },
   updateBufferDist(state, bufferDist) {
     state.bufferDist = Number(bufferDist)
   },
@@ -42,6 +45,9 @@ export const mutations = {
   },
   setSusceptibilityFactors(state, susceptibilityFactors) {
     state.susceptibilityFactors = susceptibilityFactors
+  },
+  addSusceptibilityFactors(state, susceptibilityFactors) {
+    state.susceptibilityFactors.push(susceptibilityFactors)
   },
   updateClasses(state, { hazardIndex, susceptibilityIndex, classes }) {
     const newFactors = [ ...state.susceptibilityFactors ]
@@ -90,6 +96,12 @@ export const actions = {
     const hazards = hazardsList.map(({ name }) => ({ name, title: name, id: name }))
 
     commit('setHazards', hazards)
+
+    console.log( hazardsList.map(
+      ({ layers }) => layers.map(
+        (layer, index) => ({ ...layer, weightFactor: 1, visible: index === 0 ? true : false  })
+      )
+    ))
 
     commit('setSusceptibilityFactors',
     state.susceptibilityFactors && state.susceptibilityFactors.length
