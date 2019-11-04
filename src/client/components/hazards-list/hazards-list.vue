@@ -4,16 +4,19 @@
       <li
         v-for="(hazard, hazardIndex) in hazards"
         :key="hazard.title"
+        :class="{'hazard-list__hazard--disabled': hazard.status === 'under_construction'}"
         class="hazard-list__hazard md-primary"
       >
         <button
           :class="{'hazard-list__hazard-button--active': selectedHazardIndex === hazardIndex}"
+          :disabled="hazard.status === 'under_construction'"
           class="hazard-list__hazard-button"
           type="button"
           @click="onHazardClick(hazardIndex)"
         >
           {{ hazard.title }}
-          <md-icon>chevron_left</md-icon>
+          <span v-if="hazard.status === 'under_construction'">(under construction)</span>
+          <md-icon v-if="hazard.status !== 'under_construction'">chevron_left</md-icon>
         </button>
         <ul
           v-if="selectedHazardIndex === hazardIndex"
@@ -297,6 +300,10 @@ export default {
   margin-bottom: 0.5rem;
 }
 
+.hazard-list__hazard--disabled {
+  opacity: 0.5;
+}
+
 .hazard-list__hazard-button, .hazards-list__susceptiblity-button {
   width: 100%;
   padding: 1rem;
@@ -312,6 +319,10 @@ export default {
 .hazard-list__hazard-button {
   display: flex;
   justify-content: space-between;
+}
+
+.hazard-list__hazard-button:disabled {
+  cursor: auto;
 }
 
 .hazard-list__hazard-button .md-icon {
@@ -342,6 +353,7 @@ export default {
 .hazards-list__susceptiblity--active {
   background-color: var(--primary-color);
 }
+
 
 .hazard-list__add-layer .md-button-content {
   display: flex;
