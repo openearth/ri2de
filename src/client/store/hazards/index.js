@@ -97,12 +97,6 @@ export const actions = {
 
     commit('setHazards', hazards)
 
-    console.log( hazardsList.map(
-      ({ layers }) => layers.map(
-        (layer, index) => ({ ...layer, weightFactor: 1, visible: index === 0 ? true : false  })
-      )
-    ))
-
     commit('setSusceptibilityFactors',
     state.susceptibilityFactors && state.susceptibilityFactors.length
         ? state.susceptibilityFactors
