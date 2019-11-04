@@ -103,6 +103,7 @@ export default {
     ...mapState('susceptibility-layers', [ 'totalsLayers', 'LayersForRisk' ]),
     ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors', 'bufferDist', 'segmentLength', 'riskClasses' ]),
     ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
+    ...mapGetters('mapbox', [ 'map' ]),
     infrastructureStyles() {
       return {
         default: INFRASTRUCTURE_DEFAULT_COLOR,
@@ -132,6 +133,7 @@ export default {
     completeInfrastructure() {
       
       if(this.selections.length) {
+        this.map.fire('fitbounds', undefined)
         this.$router.push({ path: '/hazards' })
         
       }
