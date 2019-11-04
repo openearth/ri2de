@@ -45,6 +45,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import wps from '../../lib/wps'
 
 export default {
   data() {
@@ -53,69 +54,89 @@ export default {
       name: '',
       selectedSusceptibilities: [],
       susceptibilities: [{
-          "classes": [
+          title: "Slope",
+          wpsFunctionId: "ri2de_calc_slope",
+          classes: [
             0,
             5,
             10,
             90
           ],
-          "cswUrls": [
-            "https://fast.openearth.eu/geonetwork/srv/eng/csw?"
-          ],
-          "keywords": [
+          layerName: "Global_Base_Maps:merit_gebco",
+          owsUrl: "https://fast.openearth.eu/geoserver/ows?",
+          keywords: [
             "elevation",
             "dem",
             "ahn"
           ],
-          "layerName": "Global_Base_Maps:merit_gebco",
-          "owsUrl": "https://fast.openearth.eu/geoserver/ows?",
-          "title": "Slope",
-          "wpsFunctionId": "ri2de_calc_slope"
+          cswUrls: [
+            "https://fast.openearth.eu/geonetwork/srv/eng/csw?"
+          ]
         },
         {
-          "classes": [
+          title: "Culverts presence",
+          wpsFunctionId: "ri2de_calc_culverts",
+          classes: [
             0,
             50,
             100,
             1000
           ],
-          "cswUrls": [
+          layerName: "limburg:culverts_4326",
+          owsUrl: "https://ri2de.openearth.eu/geoserver/ows?",
+          keywords: [],
+          cswUrls: [
             "https://fast.openearth.eu/geonetwork/srv/eng/csw?"
-          ],
-          "keywords": [],
-          "layerName": "limburg:culverts_4326",
-          "owsUrl": "https://ri2de.openearth.eu/geoserver/ows?",
-          "title": "Culverts presence",
-          "wpsFunctionId": "ri2de_calc_culverts"
+          ]
         },
         {
-          "classes": [
+          title: "Distance to water",
+          wpsFunctionId: "ri2de_calc_water",
+          classes: [
             0,
             100,
             200,
             1000
           ],
-          "cswUrls": [
+          layerName: "global_water_extent:global_water_jrc",
+          owsUrl: "https://ri2de.openearth.eu/geoserver/ows?",
+          keywords: [],
+          cswUrls: [
             "https://fast.openearth.eu/geonetwork/srv/eng/csw?"
-          ],
-          "keywords": [],
-          "layerName": "global_water_extent:global_water_jrc",
-          "owsUrl": "https://ri2de.openearth.eu/geoserver/ows?",
-          "title": "Distance to water",
-          "wpsFunctionId": "ri2de_calc_water"
+          ]
         },
         {
-          "classes": [],
-          "cswUrls": [
+          title: "Soil type",
+          wpsFunctionId: "ri2de_calc_soil",
+          classes: [],
+          layerName: ":",
+          owsUrl: "https://fast.openearth.eu/geoserver/ows?",
+          keywords: [],
+          cswUrls: [
             "https://fast.openearth.eu/geonetwork/srv/eng/csw?"
-          ],
-          "keywords": [],
-          "layerName": ":",
-          "owsUrl": "https://fast.openearth.eu/geoserver/ows?",
-          "title": "Soil type",
-          "wpsFunctionId": "ri2de_calc_soil"
+          ]
+        },
+        {
+          title: "Land use",
+          wpsFunctionId: "ri2de_calc_landuse",
+          classes: [],
+          layerName: "global_landuse:GLOBCOVER_2009_wgs84",
+          owsUrl: "https://ri2de.openearth.eu/geoserver/ows?",
+          keywords: [],
+          cswUrls: [
+            "https://fast.openearth.eu/geonetwork/srv/eng/csw?"
+          ]
         }
       ]
+    }
+  },
+  async mounted() {
+    try {
+      const susceptibilities = await wps({ functionId: 'ri2de_susceptibilities' })
+
+      console.log(susceptibilities)
+    } catch (err) {
+      console.log(err)
     }
   },
   methods: {
