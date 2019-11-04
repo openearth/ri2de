@@ -19,6 +19,7 @@
       />
 
       <button
+        :disabled="!totalsLayers.length"
         class="button button--primary button--full-width"
         @click="wpsTranslateToRisk"
       >
@@ -29,15 +30,14 @@
 </template>
   
 <script>
-import { mapGetters, mapState, mapMutations, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import RiskSlider from '../risk-slider'
 import wps from '../../lib/wps'
 import layers from '../../lib/_mapbox/layers'
+
 export default {
   components: {
-    
     RiskSlider,
-    
   },
   props:{
     bufferdist:{
@@ -58,11 +58,13 @@ export default {
       required: true
     }
   },
+  computed: {
+    ...mapState('susceptibility-layers', ['totalsLayers']),
+  },
   methods:{                 
     async wpsTranslateToRisk() {
-      this.$router.push({ path: '/classifyrisk'})  
-              
-    } 
+      this.$router.push({ path: '/classifyrisk'})           
+    }
   } 
 }
 </script>
