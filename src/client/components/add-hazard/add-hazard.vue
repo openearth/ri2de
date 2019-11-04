@@ -1,6 +1,9 @@
 <template>
   <div class="add-hazard">
-    <button @click="showDialog = true">Add hazard</button>
+    <md-button
+      class="md-raised md-primary"
+      @click="showDialog = true"
+    >Add hazard</md-button>
 
     <md-dialog
       :md-active.sync="showDialog"
@@ -137,6 +140,15 @@ export default {
 </script>
 
 <style>
+.add-hazard {
+  padding: 1rem 0 0.25rem;
+}
+
+.add-hazard .md-button {
+  width: 100%;
+  margin: 0;
+}
+
 .add-hazard__checkbox.md-checkbox {
   width: 100%;
   display: flex;
