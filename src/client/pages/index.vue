@@ -57,9 +57,11 @@
           />
         </content-card>
 
+        <!-- Content Card for Translate to risk -->
         <content-card
           :is-expanded="activePage === 'results'"
-          :is-completed="activePage === 'results' || activePage === 'classifyrisk'"
+          :is-completed="activePage === 'classifyrisk'"
+          :is-use-allowed="activePage === 'results' || activePage === 'classifyrisk'"
           title="Translate to risk"
           @selectCard="selectCard"
         >
