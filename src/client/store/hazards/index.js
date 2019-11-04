@@ -2,7 +2,7 @@ import wps from '../../lib/wps'
 
 export const state = () => ({
   hazards: [],
-  selectedHazardIndex: 0,
+  selectedHazardIndex: null,
   susceptibilityFactors: [],
   bufferDist:120,
   segmentLength:1000,
@@ -72,7 +72,7 @@ export const mutations = {
   },
   
   reset(state) {
-    state.selectedHazardIndex = 0
+    state.selectedHazardIndex = null
     state.susceptibilityFactors = state.susceptibilityFactors.map(susceptibilityFactor =>
       susceptibilityFactor
         .filter(layer => !layer.isCustom)

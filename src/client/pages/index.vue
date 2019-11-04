@@ -2,16 +2,16 @@
   <portal to="side-panel">
     <div>
       <div class="selection-steps">
+        <!-- Content Card for Infrastucture -->
         <content-card
           :is-expanded="activePage === 'index'"
-          :is-completed="Boolean(selections.length)"
+          :is-completed="hasActiveSelection"
           title="Infrastructure"
           @selectCard="selectCard"
         >
           <div
-            v-if="selections.length"
+            v-if="hasActiveSelection"
             slot="info"
-            class="content-card__header__info"
           >
             {{ `${selections.length} selected area${selections.length > 1 ? 's' : ''}` }}
           </div>
@@ -25,23 +25,31 @@
           />
           <md-button
             slot="actions"
-            :disabled="selections.length === 0"
+            :disabled="!hasActiveSelection"
             class="md-raised md-accent button--full-width"
             @click="completeInfrastructure"
           >
             Next
           </md-button>
         </content-card>
+
+        <!-- Content Card for Hazards -->
         <content-card
           :is-expanded="activePage === 'hazards'"
-          :is-completed="Boolean(selections.length)"
+          :is-completed="hasActiveHazard"
+          :is-use-allowed="hasActiveSelection"
           title="Hazards"
           @selectCard="selectCard"
         >
+          <div
+            v-if="hasActiveHazard"
+            slot="info"
+          >
+            {{ activeHazardTitle }}
+          </div>
           <hazards-list
             slot="content"
             :hazards="hazards"
-            :initial-selection="selectedHazardIndex"
             @select="selectHazard"
             @setWeightFactor="onSetWeightFactor"
             @updateClasses="({ classes, index }) => onUpdateClasses(classes, index)"
@@ -49,9 +57,11 @@
           />
         </content-card>
 
+        <!-- Content Card for Translate to risk -->
         <content-card
           :is-expanded="activePage === 'results'"
-          :is-completed="activePage === 'results' || activePage === 'classifyrisk'"
+          :is-completed="activePage === 'classifyrisk'"
+          :is-use-allowed="activePage === 'results' || activePage === 'classifyrisk'"
           title="Translate to risk"
           @selectCard="selectCard"
         >
@@ -110,6 +120,12 @@ export default {
         highlight: INFRASTRUCTURE_HIGHLIGHT_COLOR,
       }
     },
+    hasActiveSelection() {
+      return !!this.selections.length
+    },
+    hasActiveHazard() {
+      return this.selectedHazardIndex !== null
+    },
     activeHazardTitle() {
       const activeHazard = this.hazards[this.selectedHazardIndex]
       return activeHazard ? activeHazard.title : ''
@@ -131,13 +147,12 @@ export default {
       addSusceptibilityFactor: 'hazards/addSusceptibilityFactor'
     }),
     completeInfrastructure() {
-      
-      if(this.selections.length) {
+      if(this.hasActiveSelection) {
         this.map.fire('fitbounds', undefined)
         this.$router.push({ path: '/hazards' })
-        
       }
     },
+    // @REFACTOR :: Is this computed prop needed in the deploy--51 or is this redundant?
     completeHazards() {
       
       if(typeof this.selectedHazardIndex !== 'undefined' && this.selectedHazardIndex >= 0) {

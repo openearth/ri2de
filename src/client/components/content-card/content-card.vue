@@ -1,11 +1,11 @@
 <template>
   <md-card
-    :class="{'content-card--completed' : isCompleted, 'content-card--expanded' : isExpanded }"
+    :class="{ 'content-card--allowed' : isUseAllowed, 'content-card--expanded' : isExpanded }"
     class="content-card card"
   >
     <md-card-header
       class="content-card__header"
-      @click.native="onClick(title)"
+      @click.native="onHeaderClick"
     >
       <div class="md-body-2">{{ title }}</div>
       <slot
@@ -54,12 +54,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    isUseAllowed: {
+      type: Boolean,
+      default: true
+    }
   },
   methods: {
-    onClick(title) {
-      if (this.isCompleted) (
-        this.$emit('selectCard', title)
-      )
+    onHeaderClick() {
+      if(this.isUseAllowed) this.$emit('selectCard', this.title)
     }
   }
 }
@@ -77,12 +79,13 @@ export default {
   background-color: var(--neutral-color);
   color: #fff;
   border-radius: var(--border-radius--small);
-  cursor: pointer;
+  cursor: not-allowed;
 }
 
-.content-card--completed .content-card__header,
+.content-card--allowed .content-card__header,
 .content-card--expanded .content-card__header {
   background-color: var(--primary-color);
+  cursor: pointer;
 }
 
 .content-card--expanded .content-card__header {

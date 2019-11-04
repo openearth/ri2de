@@ -70,40 +70,45 @@ export default {
     getSelectionLayers() {
       this.calculatingSusceptibilityLayers = true
 
-      this.currentSusceptibilityFactors.forEach(async (factor, index) => {
-        const factorLayers = this.selections.map(async selection => {
-          const customFactorLayer = await selectionToCustomFactorLayer({ polygon: selection.polygon, factor, identifier: selection.identifier })
-          const wmsLayer = generateWmsLayer(customFactorLayer)
+      if(this.currentSusceptibilityFactors) {
+        this.currentSusceptibilityFactors.forEach(async (factor, index) => {
+          const factorLayers = this.selections.map(async selection => {
+            const customFactorLayer = await selectionToCustomFactorLayer({ polygon: selection.polygon, factor, identifier: selection.identifier })
+            const wmsLayer = generateWmsLayer(customFactorLayer)
 
-          this.$store.dispatch('mapbox/wms/add', {
-            ...wmsLayer,
-            paint: { 'raster-opacity': index === 0 ? 1 : 0 },
+            this.$store.dispatch('mapbox/wms/add', {
+              ...wmsLayer,
+              paint: { 'raster-opacity': index === 0 ? 1 : 0 },
+            })
+            this.$store.commit('susceptibility-layers/addLayerToSelection', {
+              selectionId: selection.id,
+              layer: { ...customFactorLayer, susceptibility: factor.title },
+            })
+
+            return wmsLayer.id
           })
-          this.$store.commit('susceptibility-layers/addLayerToSelection', {
-            selectionId: selection.id,
-            layer: { ...customFactorLayer, susceptibility: factor.title },
-           })
 
-          return wmsLayer.id
+          try {
+            const hazardIndex = this.selectedHazardIndex
+            this.$store.commit('hazards/updateFactorVisibility', {
+              index, hazardIndex, visible: index === 0 ? true : false
+            })
+            this.$store.commit('hazards/updateFactorLayers', {
+              index, hazardIndex, factorLayers: await Promise.all(factorLayers)
+            })
+          } catch(e) {
+            this.errorMessage = 'Error fetching the layers, reload and try again'
+            this.errorCalculatingSusceptibilityLayers = true
+            console.log('Error: ', e)
+          }
+          if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
+            this.calculatingSusceptibilityLayers = false
+          }
         })
-
-        try {
-          const hazardIndex = this.selectedHazardIndex
-          this.$store.commit('hazards/updateFactorVisibility', {
-            index, hazardIndex, visible: index === 0 ? true : false
-          })
-          this.$store.commit('hazards/updateFactorLayers', {
-            index, hazardIndex, factorLayers: await Promise.all(factorLayers)
-          })
-        } catch(e) {
-          this.errorMessage = 'Error fetching the layers, reload and try again'
-          this.errorCalculatingSusceptibilityLayers = true
-          console.log('Error: ', e)
-        }
-        if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
-          this.calculatingSusceptibilityLayers = false
-        }
-      })
+      }
+      else {
+        this.calculatingSusceptibilityLayers = false
+      }
     },
     initMapState() {
       this.$store.dispatch('mapbox/selections/setMode', 'static')
