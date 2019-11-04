@@ -4,6 +4,8 @@ import { MAP_BASELAYERS } from './map-config'
 
 import { BaselayerControl, DrawControl, FitboundsControl, GeocoderControl } from './controls'
 
+import initControlTooltips from './controls/control-tooltips'
+
 export default function(map) {
   map.__draw = DrawControl()
 
@@ -12,4 +14,6 @@ export default function(map) {
   map.addControl(new mapboxgl.NavigationControl(), 'bottom-right')
   map.addControl(new BaselayerControl(MAP_BASELAYERS), 'bottom-right')
   map.addControl(new FitboundsControl(), 'top-left')
+
+  initControlTooltips();
 }

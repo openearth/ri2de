@@ -1,6 +1,7 @@
 <template>
   <button
-    class="baselayer-control"
+    title="Toggle map layer style"
+    class="baselayer-control control-tooltip control-tooltip--left"
     @click="switchBaseLayer"
   >
     <svg
@@ -58,5 +59,10 @@ export default {
     border: 0;
     border-radius: var(--border-radius);
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-}
+    cursor: pointer;
+  }
+
+  .baselayer-control:hover {
+    background-color: #f2f2f2; /* #ffffff + rgba(0, 0, 0, 0.05) */
+  }
 </style>

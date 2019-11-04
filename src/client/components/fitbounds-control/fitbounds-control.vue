@@ -1,6 +1,7 @@
 <template>
   <button
-    class="fitbounds-control"
+    title="Zoom to selected area"
+    class="fitbounds-control control-tooltip control-tooltip--right"
     @click="fitToBounds"
   >
     <svg
@@ -41,5 +42,10 @@ export default {
     border: 0;
     border-radius: 4px;
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
+  .fitbounds-control:hover {
+    background-color: #f2f2f2; /* #ffffff + rgba(0, 0, 0, 0.05) */
   }
  </style>
