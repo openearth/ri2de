@@ -64,8 +64,6 @@ export default {
       if(this.isUseAllowed) this.$emit('selectCard', this.title)
     }
   }
-    }
-  }
 }
 </script>
 
