@@ -10,27 +10,35 @@
     >
       <form @submit.prevent="onSubmit">
         <md-dialog-content>
-          <md-field>
-            <label>Hazard name</label>
-            <md-input
-              v-model="name"
-              type="text"
-              required
-            />
-          </md-field>
+          <md-progress-spinner
+            v-if="loading"
+            :md-diameter="30"
+            :md-stroke="3"
+            md-mode="indeterminate"
+          />
+          <template v-else>
+            <md-field>
+              <label>Hazard name</label>
+              <md-input
+                v-model="name"
+                type="text"
+                required
+              />
+            </md-field>
 
-          <div>
-            <label>Choose susceptibilities</label>
             <div>
-              <md-checkbox
-                v-for="susceptibility in susceptibilities"
-                :key="susceptibility.wpsFunctionId"
-                :value="susceptibility"
-                v-model="selectedSusceptibilities"
-                class="add-hazard__checkbox"
-              >{{ susceptibility.title }}</md-checkbox>
+              <label>Choose susceptibilities</label>
+              <div>
+                <md-checkbox
+                  v-for="susceptibility in susceptibilities"
+                  :key="susceptibility.wpsFunctionId"
+                  :value="susceptibility"
+                  v-model="selectedSusceptibilities"
+                  class="add-hazard__checkbox"
+                >{{ susceptibility.title }}</md-checkbox>
+              </div>
             </div>
-          </div>
+          </template>
         </md-dialog-content>
         <md-dialog-actions>
           <md-button
@@ -53,6 +61,7 @@ export default {
       showDialog: false,
       name: '',
       selectedSusceptibilities: [],
+      loading: false,
       susceptibilities: [{
           title: "Slope",
           wpsFunctionId: "ri2de_calc_slope",
@@ -131,13 +140,15 @@ export default {
     }
   },
   async mounted() {
+    this.loading = true
     try {
       const susceptibilities = await wps({ functionId: 'ri2de_susceptibilities' })
 
-      console.log(susceptibilities)
+      this.susceptibilities = susceptibilities
     } catch (err) {
       console.log(err)
     }
+    this.loading = false
   },
   methods: {
     ...mapMutations({
