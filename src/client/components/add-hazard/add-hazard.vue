@@ -12,12 +12,16 @@
       <md-dialog-title class="add-hazard__dialog-title">Add custom hazard</md-dialog-title>
       <form @submit.prevent="onSubmit">
         <md-dialog-content>
-          <md-progress-spinner
+          <div
             v-if="loading"
-            :md-diameter="30"
-            :md-stroke="3"
-            md-mode="indeterminate"
-          />
+            class="add-hazard__loader"
+          >
+            <md-progress-spinner
+              :md-diameter="30"
+              :md-stroke="3"
+              md-mode="indeterminate"
+            />
+          </div>
           <template v-else>
             <md-field>
               <label>Hazard name</label>
@@ -106,6 +110,12 @@ export default {
 <style>
 .add-hazard {
   padding: 1rem 0 0.25rem;
+}
+
+.add-hazard__loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-hazard__dialog.md-dialog {
