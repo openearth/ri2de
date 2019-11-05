@@ -20,6 +20,7 @@ export const actions = {
     const loadedProject = await getLoadedFileContents(event)
     const { selections } = loadedProject.mapbox.selections
     const { features } = loadedProject.mapbox
+    const { customHazards } = loadedProject
     const { selectedHazardIndex, hazards, susceptibilityFactors } = loadedProject.hazards
 
     if (!selections && !features) {
@@ -44,14 +45,21 @@ export const actions = {
       commit('hazards/setHazards', hazards)
       commit('hazards/setSusceptibilityFactors', susceptibilityFactors)
     }
+    
+    if (customHazards) {
+      customHazards.forEach(hazard => {
+        commit('hazards/addHazard', hazard)
+      })
+    }
 
     if (selectedHazardIndex !== undefined) {
       commit('hazards/selectHazard', selectedHazardIndex)
     }
   },
-  saveProject ({ state }) {
+  saveProject ({ state, getters }) {
     const project = {
       hazards: state.hazards,
+      customHazards: getters.customHazards,
       mapbox: {
         selections: state.mapbox.selections,
         features: state.mapbox.features.features
