@@ -7,7 +7,9 @@
 
     <md-dialog
       :md-active.sync="showDialog"
+      class="add-hazard__dialog"
     >
+      <md-dialog-title class="add-hazard__dialog-title">Add custom hazard</md-dialog-title>
       <form @submit.prevent="onSubmit">
         <md-dialog-content>
           <md-progress-spinner
@@ -104,6 +106,14 @@ export default {
 <style>
 .add-hazard {
   padding: 1rem 0 0.25rem;
+}
+
+.add-hazard__dialog.md-dialog {
+  min-width: 25rem;
+}
+
+.add-hazard__dialog-title.md-dialog-title {
+  margin-bottom: 0;
 }
 
 .add-hazard .md-button {
