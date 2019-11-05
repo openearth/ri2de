@@ -42,6 +42,10 @@
         </md-dialog-content>
         <md-dialog-actions>
           <md-button
+            class="md-raised"
+            @click="showDialog = false"
+          >Cancel</md-button>
+          <md-button
             type="submit"
             class="md-raised md-primary"
           >Save</md-button>
@@ -166,6 +170,7 @@ export default {
       this.addHazard(hazard)
       this.addSusceptibilityFactors(this.selectedSusceptibilities)
       this.showDialog = false
+      this.name = ''
     }
   }
 }
