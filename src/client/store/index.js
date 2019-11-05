@@ -20,8 +20,7 @@ export const actions = {
     const loadedProject = await getLoadedFileContents(event)
     const { selections } = loadedProject.mapbox.selections
     const { features } = loadedProject.mapbox
-    const { customHazards } = loadedProject
-    const { selectedHazardIndex, hazards, susceptibilityFactors } = loadedProject.hazards
+    const { selectedHazardIndex, hazards, customHazards, susceptibilityFactors } = loadedProject.hazards
 
     if (!selections && !features) {
       throw new Error()
