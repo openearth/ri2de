@@ -1,6 +1,10 @@
+.mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon {
+  border-radius: 4px;
+  transition: box-shadow .2s ease;
+}
+
 .mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon.active {
-  border: solid 3px #008FC5;
-  transition: background .1s ease;
+  box-shadow: inset 0 0 0 3px #008FC5;
 }
 
 .mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon:disabled {
@@ -8,6 +12,7 @@
   cursor: not-allowed;
   position: relative;
 }
+
 .mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon:disabled:after {
   content: '';
   position: absolute;
