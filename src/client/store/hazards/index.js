@@ -2,6 +2,7 @@ import wps from '../../lib/wps'
 
 export const state = () => ({
   hazards: [],
+  customHazards: [],
   selectedHazardIndex: null,
   susceptibilityFactors: [],
   bufferDist:120,
@@ -10,9 +11,6 @@ export const state = () => ({
 })
 
 export const mutations = {
-  addHazard(state, hazard) {
-    state.hazards = [ ...state.hazards, hazard ]
-  },
   addSusceptibilityFactor(state, susceptibilityFactor) {
     state.susceptibilityFactors = [ ...state.susceptibilityFactors, susceptibilityFactor ]
   },
@@ -23,7 +21,7 @@ export const mutations = {
     state.hazards = hazards
   },
   addHazard(state, hazard) {
-    state.hazards.push(hazard)
+    state.customHazards.push(hazard)
   },
   updateBufferDist(state, bufferDist) {
     state.bufferDist = Number(bufferDist)
@@ -130,4 +128,7 @@ export const getters = {
       return {}
     }
   },
+  hazards(state) {
+    return [...state.hazards, ...state.customHazards]
+  }
 }

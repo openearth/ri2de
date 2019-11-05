@@ -119,8 +119,8 @@ export default {
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
     ...mapState('susceptibility-layers', [ 'totalsLayers', 'LayersForRisk' ]),
-    ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors', 'bufferDist', 'segmentLength', 'riskClasses' ]),
-    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
+    ...mapState('hazards', ['selectedHazardIndex', 'susceptibilityFactors', 'bufferDist', 'segmentLength', 'riskClasses' ]),
+    ...mapGetters('hazards', [ 'hazards', 'currentSusceptibilityFactors' ]),
     ...mapGetters('mapbox', [ 'map' ]),
     infrastructureStyles() {
       return {
