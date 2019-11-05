@@ -242,20 +242,72 @@ export default {
         })
       }
     },
-    getSelectionLayers() {
+    // getSelectionLayers() {
+    //   this.$store.dispatch('mapbox/wms/resetLayers')
+    //   this.calculatingSusceptibilityLayers = true
+    //   getSelectionLayers(this.$store)
+    //     .then(res => {
+    //       this.calculatingSusceptibilityLayers = false
+    //       this.errorCalculatingSusceptibilityLayers = false
+    //     })
+    //     .catch(e => {
+    //       this.errorMessage = 'Error fetching the layers, reload and try again'
+    //       this.calculatingSusceptibilityLayers = false
+    //       this.errorCalculatingSusceptibilityLayers = true
+    //       console.log(e)
+    //     })
+    // },
+    getSelectionLayersNew() {
       this.$store.dispatch('mapbox/wms/resetLayers')
       this.calculatingSusceptibilityLayers = true
       getSelectionLayers(this.$store)
-        .then(res => {
-          this.calculatingSusceptibilityLayers = false
-          this.errorCalculatingSusceptibilityLayers = false
+        // .then(() => {
+        //   this.calculatingSusceptibilityLayers = false
+        //   this.errorCalculatingSusceptibilityLayers = false
+        // })
+    },
+    getSelectionLayers() {
+      this.$store.dispatch('mapbox/wms/resetLayers')
+      this.calculatingSusceptibilityLayers = true
+
+      if (this.currentSusceptibilityFactors) {
+        this.currentSusceptibilityFactors.forEach(async (factor, index) => {
+          const factorLayers = this.selections.map(async selection => {
+            const customFactorLayer = await selectionToCustomFactorLayer({ polygon: selection.polygon, factor, identifier: selection.identifier })
+            const wmsLayer = generateWmsLayer(customFactorLayer)
+
+            this.$store.dispatch('mapbox/wms/add', {
+              ...wmsLayer,
+              paint: { 'raster-opacity': index === 0 ? 1 : 0 },
+            })
+            this.$store.commit('susceptibility-layers/addLayerToSelection', {
+              selectionId: selection.id,
+              layer: { ...customFactorLayer, susceptibility: factor.title },
+            })
+
+            return wmsLayer.id
+          })
+          console.log(factorLayers)
+
+          try {
+            const hazardIndex = this.selectedHazardIndex
+            this.$store.commit('hazards/updateFactorLayers', {
+              index, hazardIndex, factorLayers: await Promise.all(factorLayers)
+            })
+          } catch(e) {
+            this.errorMessage = 'Error fetching the layers, reload and try again'
+            this.errorCalculatingSusceptibilityLayers = true
+            console.log('Error: ', e)
+          }
+
+          if(this.currentSusceptibilityFactors && index === this.currentSusceptibilityFactors.length - 1) {
+            this.calculatingSusceptibilityLayers = false
+          }
         })
-        .catch(e => {
-          this.errorMessage = 'Error fetching the layers, reload and try again'
-          this.calculatingSusceptibilityLayers = false
-          this.errorCalculatingSusceptibilityLayers = true
-          console.log(e)
-        })
+      }
+      else {
+        this.calculatingSusceptibilityLayers = false
+      }
     },
   }
 }
