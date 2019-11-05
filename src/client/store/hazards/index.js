@@ -77,6 +77,7 @@ export const mutations = {
   
   reset(state) {
     state.selectedHazardIndex = null
+    state.customHazards = []
     state.susceptibilityFactors = state.susceptibilityFactors.map(susceptibilityFactor =>
       susceptibilityFactor
         .filter(layer => !layer.isCustom)

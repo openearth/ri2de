@@ -55,10 +55,10 @@ export const actions = {
       commit('hazards/selectHazard', selectedHazardIndex)
     }
   },
-  saveProject ({ state, getters }) {
+  saveProject ({ state }) {
     const project = {
       hazards: state.hazards,
-      customHazards: getters.customHazards,
+      customHazards: state.customHazards,
       mapbox: {
         selections: state.mapbox.selections,
         features: state.mapbox.features.features
