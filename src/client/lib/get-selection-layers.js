@@ -46,13 +46,8 @@ const getSelectionLayers = async (store) => {
   }))
 
   const buildError = buildResults.find(res => res instanceof Error)
-  if(buildError) throw new Error(buildError)
+  if(buildError) throw buildError
   return
-}
-
-// @TODO move .map logic here
-const createFactorLayerFromSelection = async selection => {
-
 }
 
 export default getSelectionLayers

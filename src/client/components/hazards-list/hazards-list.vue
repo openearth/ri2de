@@ -248,15 +248,14 @@ export default {
       getSelectionLayers(this.$store)
         .then(res => {
           this.calculatingSusceptibilityLayers = false
+          this.errorCalculatingSusceptibilityLayers = false
         })
         .catch(e => {
           this.errorMessage = 'Error fetching the layers, reload and try again'
-          // this.calculatingSusceptibilityLayers = false
+          this.calculatingSusceptibilityLayers = false
           this.errorCalculatingSusceptibilityLayers = true
-          console.log('errerrerrerrerrerrerr', e)
+          console.log(e)
         })
-
-      // Check how error handling worked in old version
     },
   }
 }
