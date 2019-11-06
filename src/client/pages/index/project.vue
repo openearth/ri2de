@@ -108,6 +108,11 @@ export default {
 
           this.fetchingRoads = false
         })
+        .catch(err => {
+          const message = err.response.data
+          this.errorMessage = `Server unavailable. Message: ${message}`
+          this.fetchingRoads = false
+        })
     },
     deleteSelection(event) {
       const selectionId = event.features[0].id
