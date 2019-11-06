@@ -1,3 +1,4 @@
+export { default as AddHazard } from './add-hazard'
 export { default as AppHeader } from './app-header'
 export { default as BaselayerControl } from './baselayer-control'
 export { default as ContentCard } from './content-card'
