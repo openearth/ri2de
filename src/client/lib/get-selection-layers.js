@@ -1,6 +1,6 @@
 import { selectionToCustomFactorLayer, generateWmsLayer } from './project-layers'
 
-const getSelectionLayers = async (store) => {
+const getSelectionLayersFactory = (store, updateFactorVisibility) => async (successCb, errorCb) => {
   const currentSusceptibilityFactors = store.getters['hazards/currentSusceptibilityFactors']
 
   if (currentSusceptibilityFactors) {
@@ -21,28 +21,32 @@ const getSelectionLayers = async (store) => {
 
         return wmsLayer.id
       })
-      console.log(factorLayers)
 
       try {
         const hazardIndex = store.state.hazards.selectedHazardIndex
-        console.log(hazardIndex)
+        if(updateFactorVisibility) {
+          store.commit('hazards/updateFactorVisibility', {
+            index, hazardIndex, visible: index === 0 ? true : false
+          })
+        }
         store.commit('hazards/updateFactorLayers', {
           index, hazardIndex, factorLayers: await Promise.all(factorLayers)
         })
       } catch(e) {
         // this.errorMessage = 'Error fetching the layers, reload and try again'
         // this.errorCalculatingSusceptibilityLayers = true
+        errorCb(e);
         console.log('Error: ', e)
       }
 
       if(currentSusceptibilityFactors && index === currentSusceptibilityFactors.length - 1) {
-        // this.calculatingSusceptibilityLayers = false
+        successCb();
       }
     })
   }
   else {
-    // this.calculatingSusceptibilityLayers = false
+    successCb();
   }
 }
 
-export default getSelectionLayers
+export default getSelectionLayersFactory
