@@ -4,9 +4,9 @@
     :min="0"
     :max="3"
     :interval="0.1"
+    show-legend-colors
     label="Classes"
     @updateClasses="(classes) =>$emit('updateRiskClasses', classes)"
-    
   />
 </template>
 

@@ -47,6 +47,7 @@
           >
             {{ activeHazardTitle }}
           </div>
+          <add-hazard slot="content" />
           <hazards-list
             slot="content"
             :hazards="hazards"
@@ -98,21 +99,28 @@ import initMapState from '../lib/mixins/init-map-state'
 import layers from '../lib/_mapbox/layers'
 import { getHazards, getSusceptibilityFactors } from '../lib/mock-api'
 
-import { InfrastructureList, ContentCard, HazardsList, TranslateToRisk, RiskClass } from '../components'
+import { InfrastructureList, ContentCard, HazardsList, TranslateToRisk, RiskClass, AddHazard } from '../components'
 
 const INFRASTRUCTURE_DEFAULT_COLOR = '#502D56'
 const INFRASTRUCTURE_HIGHLIGHT_COLOR = '#FF0000'
 
 export default {
-  components: { InfrastructureList, ContentCard, HazardsList, TranslateToRisk, RiskClass },
+  components: {
+    InfrastructureList,
+    ContentCard,
+    HazardsList,
+    TranslateToRisk,
+    RiskClass,
+    AddHazard
+  },
   mixins: [ initMapState ],
   computed: {
     ...mapState([ 'activePage' ]),
     ...mapState('mapbox/features', [ 'features' ]),
     ...mapState('mapbox/selections', [ 'selections' ]),
     ...mapState('susceptibility-layers', [ 'totalsLayers', 'LayersForRisk' ]),
-    ...mapState('hazards', [ 'hazards', 'selectedHazardIndex', 'susceptibilityFactors', 'bufferDist', 'segmentLength', 'riskClasses' ]),
-    ...mapGetters('hazards', [ 'currentSusceptibilityFactors' ]),
+    ...mapState('hazards', ['selectedHazardIndex', 'susceptibilityFactors', 'bufferDist', 'segmentLength', 'riskClasses' ]),
+    ...mapGetters('hazards', [ 'hazards', 'currentSusceptibilityFactors' ]),
     ...mapGetters('mapbox', [ 'map' ]),
     infrastructureStyles() {
       return {
