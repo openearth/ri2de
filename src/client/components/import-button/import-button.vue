@@ -1,6 +1,9 @@
 <template>
   <div class="export-button">
-    <md-button class="md-raised md-primary">
+    <md-button 
+      :disabled="!accepted" 
+      class="md-raised md-primary"
+    >
       Open from disk
     </md-button>
     <input
@@ -16,6 +19,12 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
+  props: {
+    accepted: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       showSnackBar: true
